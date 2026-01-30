@@ -1,0 +1,105 @@
+############################
+# .NET / ASP.NET Core
+############################
+
+# Build results
+**/bin/
+**/obj/
+
+# Compiled binaries
+*.dll
+*.exe
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+
+############################
+# .NET Core / EF / MSBuild
+############################
+
+# MSBuild generated files
+*.csproj.nuget.*
+*.sln.nuget.*
+*.AssemblyInfo.cs
+*.AssemblyInfoInputs.cache
+*.GeneratedMSBuildEditorConfig.editorconfig
+*.GlobalUsings.g.cs
+*.assets.cache
+*.BuildWithSkipAnalyzers
+*.FileListAbsolute.txt
+*.CoreCompileInputs.cache
+*.Up2Date
+*.sourcelink.json
+project.assets.json
+project.nuget.cache
+
+############################
+# Visual Studio
+############################
+
+.vs/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+
+############################
+# Rider / VS Code
+############################
+
+.idea/
+.vscode/
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+############################
+# Logs & temp
+############################
+
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.lock
+
+############################
+# OS generated
+############################
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+############################
+# Docker
+############################
+
+**/docker-data/
+**/.docker/
+
+############################
+# Node (si usas frontend)
+############################
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+############################
+# IMPORTANTES (NO IGNORAR)
+############################
+
+# EF Core Migrations (SE VERSIONAN)
+!**/Migrations/**
+!**/Migrations/**/*.cs
+
+# Configuraciones (SE VERSIONAN)
+!**/appsettings*.json
+!**/*.config
+!**/*.env
+
+# README
+!README.md

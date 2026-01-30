@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "IWnNJI00sC8=",
+  "success": true,
+  "projectFilePath": "C:\\proyectos\\CristoRey2026\\Backend\\Resources.Domain\\Resources.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\aleja\\.nuget\\packages\\mediatr\\11.1.0\\mediatr.11.1.0.nupkg.sha512",
+    "C:\\Users\\aleja\\.nuget\\packages\\mediatr.contracts\\1.0.1\\mediatr.contracts.1.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
