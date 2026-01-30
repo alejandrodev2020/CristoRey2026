@@ -1,0 +1,114 @@
+<div class="m-4 w-80">
+    <div class="flex items-center justify-between  dark:bg-gray-700">
+        <div>
+            <div class="w-full">
+                <div class="text-2xl font-semibold tracking-tight leading-6">Cierre de Caja</div>
+            </div>
+        </div>
+        <div>
+            <mat-icon (click)="close()" svgIcon="heroicons_outline:x"></mat-icon>
+         </div>
+     </div>
+     <mat-divider></mat-divider>
+    <form  
+        [formGroup]="form"
+        ngNativeValidate
+        autocomplete="off"
+        (ngSubmit)="save()"
+    >
+<!-------------------------------------------------------------------------------------------------------------------------------->
+    <div class="flex items-center justify-center">
+        <img class="w-30" src="assets/images/ui/close-pettyCash.png" alt="">
+    </div>
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+        <div class="sm:col-span-4">
+            <mat-form-field
+                class="w-full"
+                [subscriptSizing]="'dynamic'">
+                <mat-label>Dinero Entregado:</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:cash'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'amountSale'"
+                    matInput>
+            </mat-form-field>
+        </div>
+    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------------------------------------------------------->
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+        <div class="sm:col-span-4">
+            <mat-form-field  class="w-full">
+                <mat-label>Administrador Responsable:</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_outline:user-circle'"
+                    matPrefix></mat-icon>
+                <input type="text"
+                       placeholder="Nombre administrador.."
+                       aria-label="Number"
+                       matInput
+                       [formControlName]="'userName'"
+                       (focus)="changeEmployee()"
+                       [matAutocomplete]="auto">
+                <mat-autocomplete  #auto="matAutocomplete" (optionSelected)='getPosts($event.option.value)'  >
+                  <mat-option [value]="option" *ngFor="let option of filteredOptions | async">
+                    {{option.firstName}} {{option?.lastName}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+        </div>
+    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------------------------------------------------------->      
+        <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+            <div class="sm:col-span-4">
+                    <mat-form-field
+                    [ngClass]="'formFieldHelpers'"
+                    class="w-full flex-auto">
+                    <mat-label>Nota:</mat-label>
+                    <textarea
+                        matInput
+                        [formControlName]="'note'"
+                        
+                        cdkTextareaAutosize
+                        [cdkAutosizeMinRows]="3"></textarea>
+                    <mat-icon
+                        class="icon-size-5"
+                        matSuffix
+                        [svgIcon]="'heroicons_outline:annotation'"></mat-icon>
+                </mat-form-field>
+            </div>
+
+        </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->                          
+
+            <div class="flex items-center justify-between  dark:bg-gray-700">
+            <div></div>
+            <div>
+                <button
+                    (click)="cancelStore()"
+                    class="bg-accent"
+                    mat-flat-button
+                    [color]="'accent'">
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                    <span class="ml-2">Cancelar</span>
+                 </button>         
+                 <button
+                 class="px-6 ml-3"
+                 mat-flat-button
+                 [color]="'primary'"
+                 type="submit"
+                 >
+                 Guardar
+                 <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="save"></mat-icon>
+  
+                 </button>
+             </div>
+         </div>
+    </form>
+</div>

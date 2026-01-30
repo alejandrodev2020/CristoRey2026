@@ -1,0 +1,138 @@
+<div class="base-content">
+    <div class="contenido">
+<!---------------------------------------------------------------------------------------------------------------------------->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between sm:py-6  border-b bg-card dark:bg-transparent">
+        <div>
+            <div class="text-4xl font-extrabold tracking-tight leading-none">Seguridad</div>
+            <div class="flex items-center mt-0.5 font-medium text-secondary">
+            </div>
+        </div>
+        <div class="mt-4 sm:mt-0"></div>
+    </div>
+<!---------------------------------------------------------------------------------------------------------------------------->
+    <ng-container>
+        <div class="mb-3">
+            <div class="font-medium">Personal</div>
+            <div
+                class="flex flex-wrap -m-2 mt-2">
+                <ng-container >
+                    <div *ngFor="let item of listClassifier"  class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+                        <a
+                            class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8"
+
+                            [routerLink]="['./details/']"
+                            mat-icon-button>
+                            <mat-icon
+                                class="icon-size-5"
+                                [svgIcon]="'heroicons_solid:information-circle'"></mat-icon>
+                        </a>
+                        <a (click)="redirect(item.path)" class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer">
+                            <div class="aspect-[9/6]">
+                                <div class="flex items-center justify-center h-full">
+                                    <!-- Icon -->
+                                    <mat-icon
+                                        class="icon-size-14 text-hint opacity-50"
+                                        [svgIcon]="'heroicons_solid:folder'"></mat-icon>
+                                </div>
+                            </div>
+                            <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                                <ng-container >
+                                    <div class="text-secondary truncate">{{item.label}}</div>
+                                </ng-container>
+                            </div>
+                        </a>
+                    </div>
+                </ng-container>
+                <br>
+            </div>
+        </div>
+    </ng-container>
+<div class="mb-3 border-b"></div>
+<!------------------------------------------------------------------------------------------------------------------------------------>
+<!---------------------------------------------------------------------------------------------------------------------------->
+<!-- <ng-container>
+    <div class="mb-3">
+        <div class="font-medium">Modulos</div>
+        <div
+            class="flex flex-wrap -m-2 mt-2">
+            <ng-container >
+                <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+                    <a
+                        class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8"
+
+                        [routerLink]="['./details/']"
+                        mat-icon-button>
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:information-circle'"></mat-icon>
+                    </a>
+                    <a
+                        class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
+                        [routerLink]="['/apps/file-manager/folders/']">
+                        <div class="aspect-[9/6]">
+                            <div class="flex items-center justify-center h-full">
+
+                                <mat-icon
+                                    class="icon-size-14 text-hint opacity-50"
+                                    [svgIcon]="'heroicons_solid:folder'"></mat-icon>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                            <ng-container >
+                                <div class="text-secondary truncate">Modulos</div>
+                            </ng-container>
+                        </div>
+                    </a>
+                </div>
+            </ng-container>
+            <br>
+        </div>
+    </div>
+</ng-container>
+<div class="mb-3 border-b"></div> -->
+<!----------------------------------------------------------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------------------------------------------------------->
+<!-- <ng-container>
+    <div class="mb-3">
+        <div class="font-medium">Roles & Permisos</div>
+        <div
+            class="flex flex-wrap -m-2 mt-2">
+            <ng-container >
+                <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+                    <a
+                        class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8"
+
+                        [routerLink]="['./details/']"
+                        mat-icon-button>
+                        <mat-icon
+                            class="icon-size-5"
+                            [svgIcon]="'heroicons_solid:information-circle'"></mat-icon>
+                    </a>
+                    <a
+                        class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
+                        [routerLink]="['/apps/file-manager/folders/']">
+                        <div class="aspect-[9/6]">
+                            <div class="flex items-center justify-center h-full">
+
+                                <mat-icon
+                                    class="icon-size-14 text-hint opacity-50"
+                                    [svgIcon]="'heroicons_solid:folder'"></mat-icon>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                            <ng-container >
+                                <div class="text-secondary truncate">Reportes</div>
+                            </ng-container>
+                        </div>
+                    </a>
+                </div>
+            </ng-container>
+            <br>
+        </div>
+    </div>
+</ng-container>
+<div class="mb-3 border-b"></div> -->
+<!---------------------------------------------------------------------------------------------------------------------------->
+
+    </div>
+</div>

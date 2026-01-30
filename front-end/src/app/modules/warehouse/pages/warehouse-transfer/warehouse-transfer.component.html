@@ -1,0 +1,91 @@
+<div class="contenido">
+    <!-------------------------------------------->
+    <div class="w-full mt-4">
+        <div class="text-2xl font-semibold tracking-tight leading-6">Solicitudes Pendientes 1</div>
+         <div class="font-medium tracking-tight text-secondary">Movimientos de Productos Soliciados</div>
+    </div>
+    <!-- <filter-warehouse></filter-warehouse> -->
+    <br>
+    <div class="flex items-center justify-between  dark:bg-gray-700">
+      <div></div>
+      <div>
+       </div>
+   </div>
+    <br>
+    <div class="mat-elevation-z0 table-responsive">
+        <table mat-table [dataSource]="dataSource"  class="table">
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> No. </th>
+            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="movementDateRequest">
+            <th mat-header-cell *matHeaderCellDef> Fecha de Solicitud </th>
+            <td mat-cell *matCellDef="let element"> {{element.movementDateRequest | dateFormatHours }} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="noteRequest">
+            <th mat-header-cell *matHeaderCellDef> Nota </th>
+            <td mat-cell *matCellDef="let element"> {{element.noteRequest}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="warehouseOriginId">
+            <th mat-header-cell *matHeaderCellDef> Almacen Origen </th>
+            <td mat-cell *matCellDef="let element"> {{element.warehouseOriginId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="userRequestId">
+            <th mat-header-cell *matHeaderCellDef> Usuario </th>
+            <td mat-cell *matCellDef="let element"> {{element.userRequestId}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let element">
+              <chips-faam *ngIf="element.isActive"
+                [color]="'green'"
+                [label]="'Activo'"></chips-faam>
+              <chips-faam *ngIf="!element.isActive"
+                [color]="'orange'"
+                [label]="'Inactivo'"></chips-faam>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let element">
+                <chips-faam *ngIf="element?.status?.name == 'Solicitado'" [color]="'blue'" [label]=[element?.status?.name]></chips-faam>
+                <chips-faam *ngIf="element?.status?.name == 'Cancelado'" [color]="'red'" [label]=[element?.status?.name]></chips-faam>
+                <chips-faam *ngIf="element?.status?.name == 'Aceptado'" [color]="'green'" [label]=[element?.status?.name]></chips-faam>
+            </td>
+          </ng-container>
+
+
+          <ng-container matColumnDef="gestionary">
+            <th mat-header-cell *matHeaderCellDef> Gestionar </th>
+            <td mat-cell *matCellDef="let element">
+              <div (click)="gestioinaryProduct(element.id)" class=" flex items-center justify-center p-1 pl-2 pr-2" style="border-radius: 4px; background: #0f172a;width: fit-content; color: aliceblue;">
+                    Gestionar
+              </div>
+            </td>
+          </ng-container>
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                       showFirstLastButtons
+                       aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    <!-------------------------------------------->
+</div>
+

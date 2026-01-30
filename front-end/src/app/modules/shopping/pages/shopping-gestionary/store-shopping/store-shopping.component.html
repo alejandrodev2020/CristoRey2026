@@ -1,0 +1,160 @@
+<div class="base-content">
+    <div class="contenido">
+        <div class="grid grid-cols-1 sm:grid-cols-12 w-full h-full min-w-0">
+            <div class="sm:col-span-8 lg:col-span-8" style="overflow: hidden;">
+                <div class="w-full pl-2 pr-2" style="height: 90px; background: #e2e8f0;">
+                    <br>
+                    <form [formGroup]="form" class="w-full">
+                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                            <mat-icon matPrefix class="icon-size-5" [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                            <input [formControlName]="'search'" placeholder="Buscar por nombre.." matInput>
+                        </mat-form-field>
+                    </form>
+                </div>
+                <cdk-virtual-scroll-viewport class="example-viewport  h-full" itemSize="100">
+                    <div class="grid grid-cols-1 sm:grid-cols-8 w-full min-w-0">
+                        <div *ngFor="let product of productList | filter:busqueda"
+                            class="custom-shadow sm:col-span-2 flex flex-col flex-auto p-0 bg-card shadow rounded overflow-hidden p-1 m-1"
+                            (click)="selectProduct(product)" style="background: #fff !important;">
+                            <div class="p-2">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <div
+                                            class="py-0.4 pt-1 pl-2 pr-2 h-6 w-full px-1 rounded-full text-xs text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                            {{ product?.unitMeasurement?.name }}
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <mat-icon *ngIf="!product?.check" class="icon-size-5 text-danger-600"
+                                            [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
+                                        <mat-icon *ngIf="product?.check" class="icon-size-5 text-green-600"
+                                            [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div style="font-weight: 800; padding-right: 10px;">
+                                        cod:{{product?.id}}
+                                    </div>
+                                    <div></div>
+                                </div>
+                            </div>
+                            <div style="width: 100%; text-align: -webkit-center;">
+                                <img 
+                                *ngIf="product.picture; else noImage" 
+                                style="max-width: 230px; max-height: 230px;" 
+                                [src]="'data:image/png;base64,' + product.picture" />
+                              
+                              <ng-template #noImage>
+                                <img 
+                                  style="max-width: 230px; max-height: 230px;" 
+                                  [src]="'data:image/png;base64,' + MyPhoto" />
+                              </ng-template>
+                              
+                            </div>
+                            <div class="text-center mt-1 mb-1">
+                                <div class="text-lg font-bold leading-none">{{product?.name | truncate:15}}</div>
+                                <div class="text-secondary">{{product?.description | truncate:15}}</div>
+                            </div>
+                            <div class="price-product">
+                                <div class="price-product-label text-center" style="background: #A2C747;">
+                                    <label for="" style="color: #fff; font-weight: 700;">Bs.- {{
+                                        product?.suggestedPriceShopping | number : '1.2-2'}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </cdk-virtual-scroll-viewport>
+            </div>
+            <div class="sm:col-span-4 lg:col-span-4"
+                style="overflow: hidden;     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); ">
+                <div class="p-2" style="background: #e2e8f0; height: 89px;">
+                    <div class="text-center">
+                        <div style="color: #fff;" class="text-lg font-bold leading-none">Detalle de Compra </div>
+                        <div style="color: #fff;" class="text-secondary">Carrito</div>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <btn-generic
+                            [color]="'secondary'"
+                            [label]="'Cancelar'"
+                            [icon]="'close'"
+                            [withFull]="false"
+                            [disabled]="false"
+                            (buttonClick)="cancelStore()">
+                        </btn-generic>
+
+                        <btn-generic
+                            [color]="'green'"
+                            [label]="'Bs. ' + (totalDinner || 0 | number : '1.0-2') + ' Pagar'"
+                            [icon]="'add_shopping_cart'"
+                            [withFull]="false"
+                            [disabled]="false"
+                            (buttonClick)="previewStore()">
+                        </btn-generic>
+                    </div>
+                </div>
+                <cdk-virtual-scroll-viewport class="example-viewport h-full " itemSize="100">
+
+                    <mat-divider></mat-divider>
+                    <div *ngIf="productListSelect.length === 0" class="center">
+                        <img style="width: 200px !important;" src="assets/images/ui/empty_cart_icon.svg" />
+                    </div>
+                    <div class="listProduct">
+                        <div *ngFor="let item of productListSelect">
+                            <div class="itemSelect">
+                                <div class="flex items-center justify-between">
+                                    <div (click)="updateSelect(item)">
+                                        <p style="font-weight: 700;
+                                    font-size: 20px;">{{item?.name | truncate:25 }}</p>
+                                        <p>{{item?.description | truncate:20 }}</p>
+                                    </div>
+
+                                    <div class="flex items-center" (click)="removeItem(item)">
+                                        <mat-icon class="icon-size-7 text-red-600" [svgIcon]="'heroicons_solid:trash'">
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                                <div class="" (click)="updateSelect(item)">
+
+                                    <div class="flex items-center justify-between">
+                                        <p>Precio: Bs.{{item?.price | number : '1.2-2'}}</p>
+                                        <!-- <div class="py-1.5 px-3 rounded-full text-sm font-semibold text-black-800 bg-red-100 dark:text-red-50 dark:bg-red-500 m-1">  -->
+                                        <p>Descuento : {{item?.discount | number : '1.2-2'}}</p>
+                                        <!-- </div> -->
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <p>Cantidad : {{item?.count | number : '1.2-2'}}</p>
+                                        <div
+                                            class="py-1.5 px-3 rounded-full text-sm font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500 mt-1">
+                                            {{item.unitMeasurementSelect.name}}
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between">
+                                        <div
+                                            class="py-1.5 px-3 rounded-full text-sm font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500 mt-1">
+                                            <p>Descuento : {{item?.discount | number : '1.2-2'}}</p>
+                                        </div>
+                                        <div
+                                            class="py-1.5 px-3 rounded-full text-sm font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500 mt-1">
+                                            Sub Total : Bs. {{item?.subTotal | number : '1.2-2'}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </cdk-virtual-scroll-viewport>
+            </div>
+        </div>
+        <!---------------------------------------------------------------------------------------------------------------------------->
+    </div>
+</div>

@@ -1,0 +1,24 @@
+.banner{
+    background-size: cover;
+    // background-image: url('assets/images/ui/unit.png');
+}
+
+.close{
+    margin: 10px;
+    cursor: pointer;
+    background: #fff;
+    color : #000;
+    height: 24px;
+    border-radius: 60px;
+}
+
+.w-max-500{
+    max-width: 600px;
+}
+
+.btn-success{
+
+    background:  #5FB960;
+    color : #fff;
+    width: 100%;
+}

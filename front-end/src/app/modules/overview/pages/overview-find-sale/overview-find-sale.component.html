@@ -1,0 +1,91 @@
+<div *ngIf="!preload" id="contenido" class="overview-sale  p-0 rounded-2xl bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent">
+    <div class="grid grid-cols-12">
+        <div class="col-span-3">
+            <div class="p-4  flex flex-col flex-auto">
+                <img class="max-w-20" [src]=[logoClient]>
+            </div>
+        </div>
+        <div class="col-span-6">
+            <div class="center-item">
+                <div>
+
+                    <div class="text-2xl font-semibold tracking-tight leading-6">Nota de Venta  N° {{saleOrder?.order}} </div>
+
+                </div>
+            </div>
+            <div class="flex center-item">
+
+
+            </div>
+        </div>
+        <div class="col-span-3">
+            <div class="flex flex-col flex-auto m-4" style="justify-self: self-end;">
+                <p><strong>Estado</strong> {{saleOrder?.saleStatus?.name }}</p>
+             </div>
+        </div>
+    </div>
+    <div class="m-4 grid grid-cols-12">
+        <div class="col-span-6">
+            <div class="flex flex-col flex-auto">
+                <p><strong>Cod Venta:</strong> SALE - {{saleOrder?.id}}</p>
+                <p><strong>Cliente:</strong> {{saleOrder?.client?.firstName}} {{saleOrder?.client?.lastName}}</p>
+                <p><strong>Vendedor:</strong> Carlos E..</p>
+            </div>
+        </div>
+        <div class="col-span-6">
+            <div class="flex flex-col flex-auto">
+                <p><strong>Fecha Venta:</strong> {{saleOrder?.saleDate | dateFormatHours}}</p>
+                <p><strong>Tipo Pago:</strong> {{saleOrder?.saleType.name}} </p>
+                <p><strong>Monto Total:</strong> {{saleOrder?.amountTotal  | number : '1.2-2'}}</p>
+             </div>
+        </div>
+    </div>
+      <div class="pl-4">
+
+
+      </div>
+      <div class="mt-2 mb-2 pl-4 pr-4">
+      <mat-divider class="mb-3"></mat-divider>
+         <div *ngFor="let item of saleOrder?.details">
+            <div class="item-preview mb-2 grid grid-cols-1 sm:grid-cols-12 gap-4 w-full h-full min-w-0">
+                <div class="sm:col-span-3 lg:col-span-3" style="">
+                    <div class="background-white center-items flex flex-col flex-auto text-center">
+                        <mat-icon svgIcon="heroicons_outline:shopping-bag"></mat-icon>
+                     </div>
+                </div>
+                <div class="sm:col-span-6 lg:col-span-6" style="">
+                    <div class="flex flex-col flex-auto">
+                         <div >
+                            <div class="text-3x2 font-semibold tracking-tight leading-6">{{item.product?.name}}</div>
+                             <div class="font-medium tracking-tight text-secondary">{{item?.unitMeasurenment?.name }} x{{item.amountOrigin}}    ------    Precio:{{item.price}}</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="sm:col-span-3 lg:col-span-3 pr-3" style=" width: 100% !important; text-align: end;">
+                    <div class="text-3x2 font-semibold tracking-tight leading-6" style="color: #C0D222;">Bs {{item.subTotal}}</div>
+                </div>
+            </div>
+         </div>
+      <mat-divider></mat-divider>
+     </div>
+      <div style="margin: 0px 11px;" class="center-items">
+          <img  style="width: 125px; height: 125px;" [src]="'data:image/png;base64,' + saleOrder?.codeQrLink" alt="">
+        </div>
+        <div class="m-4 center-items" style="max-width: 500px;">
+
+            <p><strong>Nota:</strong>Nota: Esta nota de venta, generada por takysoft.com, es auténtica. Escanea el código QR para previsualizar. La adulteración será penada por ley.</p>
+        </div>
+  <br>
+</div>
+
+<div *ngIf="preload" class="preload center-items">
+    <div>
+        <div class="center-items">
+            <img style="width: 25vw; max-width: 350px;" src="assets/images/logo/logo-2.png" alt="" srcset="">
+        </div>
+        <div class="m4 text-container">
+            <span class="text" [ngClass]="{ 'show': displayText.length === text.length }">{{ displayText }}</span>
+        </div>
+    </div>
+</div>

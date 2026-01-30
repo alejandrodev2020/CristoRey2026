@@ -1,0 +1,17 @@
+<input
+  type="tel"
+  (keyup)="onKeyUpEvent($event)"
+  (blur)="onBlurEvent($event)"
+  class="form-control"
+  [formControl]="control"
+  [class.is-invalid]="
+    ngControl.invalid && (ngControl.dirty || ngControl.touched)
+  "
+  placeholder="{{ placeholderValue }}"
+/>
+<div
+  class="text-danger invalid-feedback text-left"
+  *ngIf="ngControl.invalid && (ngControl.dirty || ngControl.touched)"
+  [innerHTML]="showErrors()"
+></div>
+

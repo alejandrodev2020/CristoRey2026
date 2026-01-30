@@ -1,0 +1,45 @@
+.backgoud-page{
+    background: #F9F9F9;
+}
+
+.card-item{
+    background-color: #EAEDED;
+    border-radius: 6px;
+    padding: 5px;
+    margin-top: 5px;
+    height: 70px;
+}
+
+.center-items{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-white{
+    background: white;
+    border-radius: 4px;
+    height: 100%;
+}
+
+.background-green{
+    background: #22C55E;
+    border-radius: 4px;
+    height: 100%;
+}
+
+.title{
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.label-total{
+    display: flex;
+    margin-top: 10px;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.footet-text{
+    background-image: url('/assets/images/flags/footer-sale-note.png');
+}

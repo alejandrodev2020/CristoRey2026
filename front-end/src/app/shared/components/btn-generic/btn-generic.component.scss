@@ -1,0 +1,40 @@
+.btn-warning-faam{
+    background: #F39C12;
+    color: #fff;
+    border-radius: 18px !important;
+}
+.btn-success-faam{
+    background-color: var(--fuse-primary-600) !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+}
+
+.btn-bad-faam{
+    background: #1e293b !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+}
+.btn-secondary-faam{
+    background: #b4beca !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+}
+
+.btn-danger-faam{
+    background: #ff5227 !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+}
+
+
+
+
+.btn-disabled-faam {
+    background: #D3D3D3 !important; /* Color de fondo para deshabilitado */
+    color: #1e293b !important; /* Color de texto para deshabilitado */
+    border-radius: 18px !important; /* Mantén el mismo border-radius */
+    cursor: not-allowed; /* Cambia el cursor */
+}
+.btn-shadow-faam {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);  /* Puedes modificar esta sombra a tu gusto */
+}

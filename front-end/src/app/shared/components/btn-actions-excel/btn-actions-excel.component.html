@@ -1,0 +1,8 @@
+<button (click)="handleClick()"
+    class="btn-action"
+    [ngClass]="{'btn-warning-faam': color === 'orange', 'btn-success-faam' : color === 'green', 'btn-secondary-faam' : color === 'secondary','btn-bad-faam' : color === 'black','btn-disabled-faam': disabled }"
+    [disabled]="disabled" [class.w-full]="withFull === true" mat-flat-button
+    type="button">
+    {{label}}
+        <mat-icon  *ngIf="icon !== null" class="mr-2"  icon aria-hidden="false" aria-label="Example share icon" fontIcon="{{icon}}"></mat-icon>
+</button>

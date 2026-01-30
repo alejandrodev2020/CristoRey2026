@@ -1,0 +1,470 @@
+<div class="p-6">
+    <div class="flex items-center justify-between dark:bg-gray-700">
+        <div>
+            Actualizar Producto
+        </div>
+        <div (click)="close()">
+            <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>
+<mat-tab-group (selectedTabChange)="selectTab($event)">
+    <mat-tab label="Datos">
+        <div class="content">
+            <div class="flex items-center justify-between dark:bg-gray-700">
+                <div>
+                    <div>
+                        <label style="font-size:20px !important;" class="text-lg">{{product?.product?.name | truncate: 25}}</label>
+                        <div style="font-size: 12px;" class="text-secondary">{{product?.product?.description | truncate: 25}}</div>
+                        <div style="font-weight: 800; padding-right: 10px;">
+                            cod:{{product?.product?.id}}
+                         </div>
+                    </div>
+                </div>
+                <div></div>
+            </div>
+            <div class="flex items-center justify-center ">
+                <img style="width: 200px;" src="data:image/png;base64,{{product.product.picture}}">
+            </div>
+            <div  class="flex items-center justify-center mb-2 ">
+                <btn-actions
+                    class="mt-2 mr-2"
+                    [color]="'orange'"
+                    [label]="'Precios & Equivalencias'"
+                    [icon]="'tune'"
+                    [withFull]="false"
+                    [disabled]="false"
+                    (buttonClick)="gestionaryEquivalences()">
+                </btn-actions>
+            </div>
+    
+            <div>
+                <div style="display: ruby;">
+                    <chips-info-label *ngFor="let unit of listUnitMeasurement"
+                        [title]="unit?.unitMeasurement?.name" (click)="addQuantity(unit)"
+                        [active]="unit?.check"></chips-info-label>
+                </div>
+                <div class="available mt-1 w-full px-3 py-1 font-bold">
+                    Disponible: {{ amountAvailable | number : '1.0-2' }} {{ labelUnitMeasurement}}
+                </div>
+                <mat-divider class="mt-2 mb-2"></mat-divider>
+            </div>
+            <form [formGroup]="form" ngNativeValidate autocomplete="off" #aForm2>
+                <!-------------------------------------------------------------------------------------------------------------------------------->
+                <div class="grid sm:grid-cols-4">
+                    <div class="sm:col-span-2">
+                        <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                            <mat-label>Compra: </mat-label>
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'" matPrefix></mat-icon>
+                            <input [formControlName]="'SuggestPriceShopping'" matInput name="SuggestPriceShopping">
+                        </mat-form-field>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                            <mat-label>Venta:</mat-label>
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:currency-dollar'"
+                                matPrefix></mat-icon>
+                            <input [formControlName]="'SuggestPriceSale'" matInput name="SuggestPriceSale">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="grid grid-cols-12  mt-4">
+                    <div class="col-span-4 pr-2">
+                        <div class="flex flex-col flex-auto">
+                            <btn-generic [color]="'red'" [label]="'Eliminar'" [icon]="'remove'" [withFull]="true"
+                            [disabled]="false" (buttonClick)="removeItem()">
+                        </btn-generic>
+                         </div>  
+                    </div>
+                    <div class="col-span-8 pl-2">
+                        <div class="flex flex-col flex-auto">
+                         
+                                    <btn-generic [color]="'green'" [label]="'Actualizar'" [icon]="'update'" [withFull]="true"
+                                    [disabled]="false" (buttonClick)="save()">
+                                </btn-generic>
+                        </div>
+                    </div>
+                </div>
+        
+            </form>
+        </div>
+    </mat-tab>
+
+
+    <mat-tab label="Historial">
+          <label style="font-size:15px !important;" class="text-lg">Historial de Ingreso</label>
+          <br>
+          <label style="font-size:20px !important; font-weight: 600;" class="text-lg">{{product?.product?.name | truncate :20}}</label>
+        <div class="body-transfer">
+            <div *ngFor="let item of listHistory" class="card-history mt-2">
+                <div class="grid grid-cols-12">
+                    <div class="col-span-6">
+                        <div class="flex flex-col flex-auto">
+                            <p><strong>Nro Compra :  {{item.shoppingId}}</strong></p>
+                        </div>
+                    </div>
+                    <div class="col-span-6">
+                        <div class="flex text-right" style="justify-content: right;">
+                            <label class="mr-2">Ver Compra:</label><mat-icon (click)="overViewShopping(item.shoppingId)" class="color-green" >visibility</mat-icon>
+                         </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-12 mt-2">
+                    <div class="col-span-6">
+                        <div class="text-left">
+                           <div class="py-0.5 px-3 rounded-full text-sm font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                Cant. Disponible:  {{item?.amountAvailable | number : '1.0-2' }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-6">
+                        <div class="flex text-right" style="justify-content: right;">
+                           <div class="py-0.5 px-3 rounded-full text-sm font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                                Cant. Disponible:  {{item?.amountOut | number : '1.0-2' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <label class="font-bold mt-4 mb-2">Detalle:</label>
+
+                <mat-divider class="mt-2"></mat-divider>
+                <div class="grid grid-cols-12 mt-1">
+                    <div class="col-span-3">
+                        <div class="text-center">
+                             <p style="font-weight:600"> Cantidad</p>
+                             <p>{{item.amountOrigin  }} </p>
+                        </div>
+                    </div>
+                    <div class="col-span-3">
+                        <div class="text-center">
+                             <p style="font-weight:600"> Medida</p>
+                             <p>{{item.unitMeasurement.name}} </p>
+                        </div>
+                    </div>
+                    <div class="col-span-3">
+                        <div class="text-center">
+                           <p style="font-weight:600"> P.U.</p>
+                           <p>{{item.purchasePrice}} </p>
+                        </div>
+                    </div>
+                    <div class="col-span-3">
+                        <div class="text-center">
+                            <p style="font-weight:600">Vencimiento</p>
+                            <p>  {{item.expirationDate | dateFormat }} </p>
+                        </div>
+                    </div>
+                </div>
+                <mat-divider></mat-divider>
+            </div>
+            <br>
+        </div>
+    </mat-tab>
+    <mat-tab label="Stock">
+        <label style="font-size:15px !important;" class="text-lg">Modificar Stock</label>
+        <br>
+        <label style="font-size:15px !important; font-weight: 600;" class="text-lg">{{product?.product?.name | truncate :20}}</label>
+      <div class="body-transfer">
+
+         <!----------------------------------------------------------------------------------------------------->
+         <mat-expansion-panel class="mb-3 mat-elevation-z0" style="background: #A2C747; border-radius: 15px !important; padding: 0px !important;">
+            
+             <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                 <mat-panel-title style="color: #fff !important;">
+                    <mat-icon class="mr-2"  icon aria-hidden="false" aria-label="Example share icon" fontIcon="'input'"></mat-icon>
+                    Agregar cantidad de {{product?.product?.name | truncate : 20}}?
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="flex">
+                <form [formGroup]="formAdd" ngNativeValidate autocomplete="off">
+                <div style="background: #f4f4f4; border-radius: 10px; padding: 20px;">
+                    <div style="display: ruby;">
+                        <chips-info-label *ngFor="let unit of listUnitMeasurement"
+                            [title]="unit?.unitMeasurement?.name" (click)="addQuantity(unit)"
+                            [active]="unit?.check"></chips-info-label>
+                    </div>
+                    <div class="available mt-1 w-full px-3 py-1 font-bold">
+                        Stock Actual: {{ amountAvailable | number : '1.0-2' }} {{ labelUnitMeasurement}}
+                    </div>
+                    <mat-divider class="mt-2 mb-2"></mat-divider>
+
+                    <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Aumentar en {{labelUnitMeasurement}}: </mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'" matPrefix></mat-icon>
+                        <input [formControlName]="'amount'" matInput name="amount" (keyup)="keyUpAddStock()" >
+                    </mat-form-field>
+                    <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Precio en {{labelUnitMeasurement}}: </mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'" matPrefix></mat-icon>
+                        <input [formControlName]="'price'" matInput name="amount" (keyup)="keyUpAddStock()" >
+                    </mat-form-field>
+                    <mat-form-field class="w-full pr-3">
+                        <mat-label>Motivo</mat-label>
+                        <mat-select [formControlName]="'motiveId'">
+                          <mat-option value="1">Re Ajuste</mat-option>
+                          <mat-option value="2">Aumento </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    <mat-divider class="mt-2 mb-2"></mat-divider>
+                    <div class="available-future mt-1 w-full px-3 py-1 font-bold">
+                        Stock Futuro: {{ amountAvailableFuture | number : '1.0-2' }} {{ labelUnitMeasurement}}
+                    </div>
+                    <mat-divider class="mt-2 mb-2"></mat-divider>
+                    <div>
+                        <p> <strong>Nota:</strong> Recuerda que al agregar desde aquí,  se generará una alerta.</p>
+                    </div>
+                    <btn-generic
+                        [color]="'green'"
+                        [label]="'Aumentar'"
+                        [icon]="'update'"
+                        [withFull]="true"
+                        [disabled]="false"
+                        (buttonClick)="saveAddStock()">
+                    </btn-generic>
+                </div>
+               </form>
+            </div>
+        </mat-expansion-panel>
+        <!----------------------------------------------------------------------------------------------------->
+        <!----------------------------------------------------------------------------------------------------->
+           <mat-expansion-panel class="mb-3  mat-elevation-z0" style="background: #b4beca; border-radius: 15px !important; padding: 0px !important;">
+            
+            <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                <mat-panel-title style="color: #fff !important;">
+                   <mat-icon class="mr-2"  icon aria-hidden="false" aria-label="Example share icon" fontIcon="'subdirectory_arrow_left'"></mat-icon>
+                   Quitar cantidad de  {{product?.product?.name | truncate : 20}}?
+               </mat-panel-title>
+           </mat-expansion-panel-header>
+           <div class="flex">
+               <form [formGroup]="formAdd" ngNativeValidate autocomplete="off">
+               <div style="background: #f4f4f4; border-radius: 10px; padding: 20px;">
+                   <div style="display: ruby;">
+                       <chips-info-label *ngFor="let unit of listUnitMeasurement"
+                           [title]="unit?.unitMeasurement?.name" (click)="addQuantity(unit)"
+                           [active]="unit?.check"></chips-info-label>
+                   </div>
+                   <div class="available mt-1 w-full px-3 py-1 font-bold">
+                       Stock Actual: {{ amountAvailable | number : '1.0-2' }} {{ labelUnitMeasurement}}
+                   </div>
+                   <mat-divider class="mt-2 mb-2"></mat-divider>
+
+                   <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                       <mat-label>Quitar en {{labelUnitMeasurement}}: </mat-label>
+                       <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'" matPrefix></mat-icon>
+                       <input [formControlName]="'amount'" matInput name="amount" (keyup)="keyUpAddStock()" >
+                   </mat-form-field>
+                   <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                       <mat-label>Precio en {{labelUnitMeasurement}}: </mat-label>
+                       <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'" matPrefix></mat-icon>
+                       <input [formControlName]="'price'" matInput name="amount" (keyup)="keyUpAddStock()" >
+                   </mat-form-field>
+                   <mat-form-field class="w-full pr-3">
+                       <mat-label>Motivo</mat-label>
+                       <mat-select [formControlName]="'motiveId'">
+                         <mat-option value="1">Re Ajuste</mat-option>
+                         <mat-option value="2">Perdida </mat-option>
+                         <mat-option value="3">Vencidos </mat-option>
+                         <mat-option value="3">Faltante </mat-option>
+                       </mat-select>
+                     </mat-form-field>
+                   <mat-divider class="mt-2 mb-2"></mat-divider>
+                   <div class="available-future mt-1 w-full px-3 py-1 font-bold">
+                       Stock Futuro: {{ amountAvailableFuture | number : '1.0-2' }} {{ labelUnitMeasurement}}
+                   </div>
+                   <mat-divider class="mt-2 mb-2"></mat-divider>
+                   <div>
+                       <p> <strong>Nota:</strong> Recuerda que al agregar desde aquí,  se generará una alerta.</p>
+                   </div>
+                   <btn-generic
+                       [color]="'green'"
+                       [label]="'Aumentar'"
+                       [icon]="'update'"
+                       [withFull]="true"
+                       [disabled]="false"
+                       (buttonClick)="saveAddStock()">
+                   </btn-generic>
+               </div>
+              </form>
+           </div>
+       </mat-expansion-panel>
+       <!----------------------------------------------------------------------------------------------------->
+       <!----------------------------------------------------------------------------------------------------->
+       <mat-expansion-panel class="mb-3  mat-elevation-z0" style="background: #F39C12; border-radius: 15px !important; padding: 0px !important;">
+            
+            <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                <mat-panel-title style="color: #fff !important;">
+                   <mat-icon class="mr-2"  icon aria-hidden="false" aria-label="Example share icon" fontIcon="'update'"></mat-icon>
+                       Resetear  cantidad de  {{product?.product?.name | truncate : 20}}?
+               </mat-panel-title>
+           </mat-expansion-panel-header>
+           <div class="flex">
+               <form [formGroup]="formAdd" ngNativeValidate autocomplete="off">
+               <div style="background: #f4f4f4; border-radius: 10px; padding: 20px;">
+                   <div style="display: ruby;">
+                       <chips-info-label *ngFor="let unit of listUnitMeasurement"
+                           [title]="unit?.unitMeasurement?.name" (click)="addQuantity(unit)"
+                           [active]="unit?.check"></chips-info-label>
+                   </div>
+
+                   <mat-divider class="mt-2 mb-2"></mat-divider>
+
+                   <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                       <mat-label>Aumentar en {{labelUnitMeasurement}}: </mat-label>
+                       <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'" matPrefix></mat-icon>
+                       <input [formControlName]="'amount'" matInput name="amount" (keyup)="keyUpAddStock()" >
+                   </mat-form-field>
+                   <mat-form-field style="    padding: 2px;" class="w-full" [subscriptSizing]="'dynamic'">
+                       <mat-label>Precio en {{labelUnitMeasurement}}: </mat-label>
+                       <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:plus'" matPrefix></mat-icon>
+                       <input [formControlName]="'price'" matInput name="amount" (keyup)="keyUpAddStock()" >
+                   </mat-form-field>
+                   <mat-form-field class="w-full pr-3">
+                       <mat-label>Motivo</mat-label>
+                       <mat-select [formControlName]="'motiveId'">
+                         <mat-option value="1">Re Ajuste</mat-option>
+                         <mat-option value="2">Perdida </mat-option>
+                         <mat-option value="3">Vencidos </mat-option>
+                         <mat-option value="3">Faltante </mat-option>
+                       </mat-select>
+                     </mat-form-field>
+                   <mat-divider class="mt-2 mb-2"></mat-divider>
+                   <div class="available-future mt-1 w-full px-3 py-1 font-bold">
+                       Stock Futuro: {{ amountAvailableFuture | number : '1.0-2' }} {{ labelUnitMeasurement}}
+                   </div>
+                   <mat-divider class="mt-2 mb-2"></mat-divider>
+                   <div>
+                       <p> <strong>Nota:</strong> Recuerda que al agregar desde aquí,  se generará una alerta.</p>
+                   </div>
+                   <btn-generic
+                       [color]="'green'"
+                       [label]="'Aumentar'"
+                       [icon]="'update'"
+                       [withFull]="true"
+                       [disabled]="false"
+                       (buttonClick)="saveAddStock()">
+                   </btn-generic>
+               </div>
+              </form>
+           </div>
+       </mat-expansion-panel>
+       <!----------------------------------------------------------------------------------------------------->
+
+        <!-- <btn-actions
+          class="mt-2 mr-2"
+          [color]="'orange'"
+          [label]="'Ingreso Nuevo'"
+          [icon]="'tune'"
+          [withFull]="false"
+          [disabled]="false"
+          (buttonClick)="gestionaryEquivalences()">
+        </btn-actions> -->
+        
+         
+      </div>
+  </mat-tab>
+  <mat-tab label="Traspasos">
+    <div class="flex items-center justify-between dark:bg-gray-700">
+        <div>
+            <label style="font-size:15px !important;" class="text-lg">Historial de Traspasos</label>
+            <br>
+            <label style="font-size:20px !important; font-weight: 600;" class="text-lg">{{product?.product?.name | truncate : 20}}</label>
+        </div>
+        <div>
+            <btn-generic
+                [color]="'green'"
+                [label]="'Traspasar'"
+                [icon]="'filter_list'"
+                [withFull]="true"
+                [disabled]="false"
+                (buttonClick)="movementItem()">
+            </btn-generic>
+        </div>
+    </div>
+    <div class="body-transfer">
+        <div *ngFor="let item of listWarehouseMovement">
+            <mat-divider></mat-divider>
+            <div class="card-movement mt-2 mb-2">
+                <div class="flex items-center justify-between dark:bg-gray-700">
+                    <div>
+                       <strong>Cod: {{item.id}}</strong>
+                    </div>
+                    <div>
+                        <ng-container *ngFor="let status of [{ id: 1, text: 'Solicitado', color: 'blue' }, { id: 2, text: 'Aceptado', color: 'green' }, { id: 3, text: 'Cancelado', color: 'red' }]">
+                            <div *ngIf="item.status.id === status.id"
+                                 class="p-1 pl-2 pr-2 w-full px-1 rounded-full text-xs text-center font-semibold text-{{status.color}}-800 bg-{{status.color}}-100 dark:text-{{status.color}}-50 dark:bg-{{status.color}}-500">
+                                {{ status.text }}
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+
+
+
+            <div class="item-movement grid grid-cols-12">
+                <div class="col-span-12">
+                    <div class="flex flex-col flex-auto">
+                        <p><strong> Fecha Solcitud: </strong>{{ item?.movementDateRequest | dateFormatHours}}</p>
+                    </div>
+                </div>
+                <div class="col-span-12">
+                    <div class="flex flex-col flex-auto">
+                        <p><strong> Fecha Aceptada: </strong>{{ item?.movementDateAccept | dateFormatHours}}</p>
+                    </div>
+                </div>
+                <div class="col-span-12">
+                    <div class="flex flex-col flex-auto">
+                        <p><strong>Nota de Solicitud : </strong>{{ item?.noteRequest}}</p>
+                    </div>
+                </div>
+                <div class="col-span-12" *ngIf="item?.status?.id===3">
+                    <div class="flex flex-col flex-auto">
+                        <p><strong>Nota de Cancelacion : </strong>{{ item?.noteCancelled}}</p>
+                    </div>
+                </div>
+                <div class="col-span-12" *ngIf="item?.status?.id===2">
+                    <div class="flex flex-col flex-auto">
+                        <p><strong>Nota de Aceptación : </strong>{{ item?.noteAccept}}</p>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <div class="flex flex-col flex-auto">
+                        <p><strong>Tipo : </strong></p>
+                    </div>
+                </div>
+                <div class="col-span-3">
+                    <div class="flex flex-col flex-auto">
+                          <div *ngIf="item.warehouseOriginId === product.warehouseId"  class="p-1 pl-2 pr-2 w-full px-1 rounded-full text-xs text-center font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                                Salida
+                          </div>
+                          <div *ngIf="item.warehouseOriginId !== product.warehouseId"  class="p-1 pl-2 pr-2 w-full px-1 rounded-full text-xs text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                               Ingreso
+                          </div>
+                    </div>
+                </div>
+                <div class="col-span-7">
+                    <div class="flex flex-col flex-auto">
+
+                    </div>
+                </div>
+                <div class="col-span-12 mt-2">
+                    <mat-divider class="mt-2 mb-2"></mat-divider>
+                    <div class="flex flex-col flex-auto">
+                         <btn-generic
+                            class="px-6 ml-3"
+                            [color]="'secondary'"
+                            [label]="'Gestionar'"
+                            [icon]="'vertical_split'"
+                            [withFull]="true"
+                            [disabled]="false"
+                            (buttonClick)="gestioinaryProduct(item.id)">
+                          </btn-generic>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</mat-tab>
+</mat-tab-group>

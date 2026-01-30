@@ -1,0 +1,59 @@
+<div class="flex flex-col flex-auto min-w-10">
+    <div class="flex flex-col bg-card">
+        <div class="banner h-20 lg:h-40 object-cover">
+            <div class="flex items-center justify-between dark:bg-gray-700">
+                <div>
+        
+                </div>
+                <div class="close" (click)="close()">
+                     <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+                 </div>
+             </div>
+        </div>
+
+        <div class="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-8 lg:h-18 bg-card">
+
+            <div class="shadow -mt-26 lg:-mt-22 rounded-full">
+                <img
+                    class="w-32 h-32 rounded-full ring-4 ring-bg-card"
+                    [src]="imageSource" 
+                    alt="User avatar">
+            </div>
+
+
+            <div class="flex flex-col items-center lg:items-start mt-4 lg:mt-0 lg:ml-8">
+                <div class="text-lg font-bold leading-none">{{ myProvider?.userName}}</div>
+                <div class="text-secondary">{{myProvider?.firstName}}</div>
+            </div>
+
+            <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+
+            <div class="flex items-center mt-6 lg:mt-0 space-x-6">
+                <div class="flex flex-col items-center">
+                    <span class="font-bold">Estado</span>
+                    <span *ngIf="myProvider?.isActive" class="text-sm font-medium text-secondary">Activo</span>
+                    <span *ngIf="!myProvider?.isActive" class="text-sm font-medium text-secondary">Inactivo</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="pl-5">
+        <br>
+        <div class="text-lg font-bold leading-none">Nombre Completo:</div>
+        <div class="text-secondary">{{myProvider?.firstName}} {{myProvider?.lastName}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none">Celular:</div>
+        <div class="text-secondary">{{myProvider?.phone}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none">N° Carnet:</div>
+        <div class="text-secondary">{{myProvider?.ci}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none">Usuario</div>
+        <div class="text-secondary">{{myProvider?.userName}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none"> Rol:</div>
+        <div class="text-secondary">{{myProvider?.authRole?.name}} </div>
+        <br>
+    </div>
+</div>

@@ -1,0 +1,278 @@
+<div class="w-full max-w-3xl">
+
+    <!-- Form -->
+    <form [formGroup]="form"  #aForm2>
+        <br>
+        <br>
+        <br>
+
+<!--========================================================================================-->
+        <div *ngIf="!isEdit" class="flex flex-auto items-end -mt-16">
+            <div class="flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
+                <img class="object-cover w-full h-full"
+                    [src]="imageSource">
+                <div
+                    class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                </div>
+            </div>
+            <div class="flex items-center ml-auto mb-1">
+                <button mat-stroked-button (click)="updateProfile()">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'"></mat-icon>
+                    <span class="ml-2">Editar</span>
+                </button>
+            </div>
+        </div>
+<!--========================================================================================-->
+     <div *ngIf="isEdit" class="flex flex-auto items-end -mt-16">
+        <div class="relative flex items-center justify-center w-32 h-32 rounded-full overflow-hidden ring-4 ring-bg-card">
+            <div class="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+            <div class="absolute inset-0 flex items-center justify-center z-20">
+                <div>
+                    <input
+                        id="avatar-file-input"
+                        class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                        type="file"
+                        [multiple]="false"
+                        [accept]="'image/jpeg, image/png'"
+                        (change)="uploadAvatar(avatarFileInput.files)"
+                        #avatarFileInput>
+                    <label
+                        class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                        for="avatar-file-input"
+                        matRipple>
+                        <mat-icon
+                            class="text-white"
+                            [svgIcon]="'heroicons_outline:camera'"></mat-icon>
+                    </label>
+                </div>
+                <div>
+                    <button
+                        mat-icon-button
+                        (click)="removeAvatar()">
+                        <mat-icon
+                            class="text-white"
+                            [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <img  class="object-cover w-full h-full"  [src]="imageSource" alt="Image Source">
+            <div class="flex items-center justify-center w-full h-full rounded overflow-hidden uppercase text-8xl font-bold leading-none bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+            </div>
+        </div>
+        <div class="flex items-center ml-auto mb-1">
+            <button mat-stroked-button (click)="cancelUpdate()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'"></mat-icon>
+                <span class="ml-2">Cancelar</span>
+            </button>
+        </div>
+    </div>
+<!--========================================================================================-->
+
+        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+            <!-- Name -->
+            <div class="sm:col-span-4">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'"
+                   >
+                    <mat-label>Nombres</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:user'"
+                        matPrefix></mat-icon>
+                    <input
+                        name="firstName"
+                        [formControlName]="'firstName'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <div class="sm:col-span-4">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Apellidos</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:user'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'lastName'"
+                        matInput>
+                </mat-form-field>
+            </div>
+
+            <!-- Title -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Celular</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:briefcase'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'phone'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Company -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>N° Carnet</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:office-building'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'ci'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Title -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Nit</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:briefcase'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'nit'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Company -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Usuario</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:office-building'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'userName'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- About -->
+            <div class="sm:col-span-4">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Sobre Mí</mat-label>
+                    <textarea
+                        matInput
+                        [formControlName]="'about'"
+                        cdkTextareaAutosize
+                        [cdkAutosizeMinRows]="5"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="my-10 border-t"></div>
+
+        <!-- Section -->
+        <div class="w-full">
+            <div class="text-xl">Información Adicional</div>
+            <div class="text-secondary">Esta sección es opcional, en caso de que quieras formar parte del equipo tomaremos en cuenta estos datos!</div>
+        </div>
+        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+            <!-- Email -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Correo</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:mail'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'email'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Phone -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Telefono</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:phone'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'phoneWork'"
+                        matInput>
+                </mat-form-field>
+            </div>
+            <!-- Country -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Ubicacion</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:location-marker'"
+                        matPrefix></mat-icon>
+                    <mat-select [formControlName]="'country'">
+                        <mat-option [value]="'usa'">Santa Cruz</mat-option>
+                        <mat-option [value]="'canada'">Cochabamba</mat-option>
+                        <mat-option [value]="'mexico'">Oruro</mat-option>
+                        <mat-option [value]="'france'">La Paz</mat-option>
+                        <mat-option [value]="'germany'">Tarija</mat-option>
+                        <mat-option [value]="'italy'">Beni</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <!-- Language -->
+            <div class="sm:col-span-2">
+                <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Idomas</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:globe-alt'"
+                        matPrefix></mat-icon>
+                    <mat-select [formControlName]="'language'">
+                        <mat-option [value]="'english'">Ingles</mat-option>
+                        <mat-option [value]="'french'">Frances</mat-option>
+                        <mat-option [value]="'spanish'">Español</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="mt-11 mb-10 border-t"></div>
+
+        <!-- Actions -->
+        <div *ngIf="isEdit" class="flex items-center justify-end">
+            <button
+                (click)="cancelUpdate()"
+                mat-stroked-button
+                type="button">
+                Cancelar
+            </button>
+            <button
+                (click)="UpdateUser()"
+                class="ml-4"
+                mat-flat-button
+                type="button"
+                [color]="'primary'">Actualizar
+            </button>
+        </div>
+    </form>
+
+</div>

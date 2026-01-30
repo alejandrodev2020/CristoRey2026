@@ -1,0 +1,88 @@
+<div class="contenido">
+  <div class="flex items-center justify-between  dark:bg-gray-700">
+    <div class="w-full mt-4">
+      <div class="text-2xl font-semibold tracking-tight leading-6">Listado de ventas al credito</div>
+      <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para cobransas</div>
+    </div>
+    <div> 
+      <btn-generic class="px-6 ml-3" [color]="'green'" [label]="' Crear Nuevo'" [icon]="'add'" [withFull]="false"
+      [disabled]="false" (buttonClick)="createNew()">
+    </btn-generic>
+    </div>
+  </div>
+  
+  <!-- <div class="flex items-center justify-between mt-2" style="color:#a2c747 !important">
+    <button (click)="toggleFilter()" class="flex items-center">
+      <mat-icon style="color:#a2c747 !important">{{ isFilterVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+      <span style="color:#a2c747 !important" class="ml-2 font-bold text-black">{{ isFilterVisible ? 'Ocultar filtros' :
+        'Mostrar filtros' }}</span>
+    </button>
+  </div>
+
+  <div *ngIf="isFilterVisible">
+    <filter-collection-gestionary (emitQuery)="senfilter($event)"></filter-collection-gestionary>
+  </div> -->
+
+  <div class="mat-elevation-z0 table-responsive mt-8">
+    <div class="overflow-x-auto">
+    <table mat-table [dataSource]="dataSource" class="table">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Id</th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+      <ng-container matColumnDef="client">
+        <th mat-header-cell *matHeaderCellDef> Cliente </th>
+        <td mat-cell *matCellDef="let element"> {{element?.sale?.client?.firstName}} {{
+          element?.sale?.client?.lastName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="saleCreditDate">
+        <th mat-header-cell *matHeaderCellDef> Fecha </th>
+        <td mat-cell *matCellDef="let element"> {{element.saleCreditDate | dateFormatHours }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="amountCredit">
+        <th mat-header-cell *matHeaderCellDef> Monto Credito </th>
+        <td mat-cell *matCellDef="let element"> Bs. {{element.amountCredit | number : '1.2-2'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Estado </th>
+        <td mat-cell *matCellDef="let element">
+          <div *ngIf="element.status.id === 1"
+            class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+            {{element.status.name}}
+          </div>
+          <div *ngIf="element.status.id === 2"
+            class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+            {{element.status.name}}
+          </div>
+          <div *ngIf="element.status.id === 3"
+            class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-500">
+            {{element.status.name}}
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="sale">
+        <th mat-header-cell *matHeaderCellDef> Venta </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon class="mr-2" (click)="overView(element)">visibility</mat-icon>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let element">
+          <btn-actions [color]="'secondary'" [label]="' Gestionar'" [icon]="'dvr'" [withFull]="false"
+            [disabled]="element.status.id == 3" (buttonClick)="gestionaryCredit(element)">
+          </btn-actions>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="listOptionsPage" showFirstLastButtons [length]="totalLength" [pageIndex]="page"
+      [pageSize]="limit" (page)="pageEvent($event)" aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+  <!-------------------------------------------->
+</div>

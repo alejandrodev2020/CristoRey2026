@@ -1,0 +1,21 @@
+<mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+    <mat-label>{{ label }}</mat-label>
+    <mat-icon
+    class="icon-size-5"
+    *ngIf="icon"
+    [svgIcon]="icon"
+    matPrefix></mat-icon>
+    <input
+        [formControl]="control"
+        [maxLength]="maxLength"
+        [minLength]="minLength"
+        [disabled]="disabled"
+        [placeholder]="placeholder"
+        (keyup)="onKeyUpEvent($event)"
+        (blur)="onBlurEvent($event)"
+         matInput>
+</mat-form-field>
+
+<div *ngIf="ngControl.invalid && (ngControl.dirty || ngControl.touched)" class="text-danger invalid-feedback">
+    <div *ngIf="ngControl.errors" [innerHTML]="showErrors()"></div>
+</div>

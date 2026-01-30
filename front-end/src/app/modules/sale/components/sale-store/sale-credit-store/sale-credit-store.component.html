@@ -1,0 +1,76 @@
+<div class="m-4">
+    <div class="flex items-center justify-between  dark:bg-gray-700">
+        <div>
+            <div class="w-full">
+                <div class="text-2xl font-semibold tracking-tight leading-6">VENTA AL CREDITO</div>
+                
+            </div>
+        </div>
+        <div>
+            <mat-icon (click)="close()" svgIcon="heroicons_outline:x"></mat-icon>
+         </div>
+     </div>
+     <mat-divider></mat-divider>
+     <form  
+     [formGroup]="form"
+     ngNativeValidate
+     autocomplete="off"
+     (ngSubmit)="save()"
+ >
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<div class="text-center">
+    <img src="assets/images/ui/sale-credit.png">
+</div >
+  <div>
+    <p class="text-green">¿Cuanto de dinero te esta dejando de los <strong> {{paymentDelivered | number : '1.2-2' }} Bs.? </strong></p>
+  </div>
+  <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+     <div class="sm:col-span-4">
+         <mat-form-field
+             class="w-full"
+             [subscriptSizing]="'dynamic'">
+             <mat-label>Monto:</mat-label>
+             <mat-icon
+                 class="icon-size-5"
+                 [svgIcon]="'heroicons_solid:cash'"
+                 matPrefix></mat-icon>
+             <input
+                (keyup)="onKey($event)"
+                [formControlName]="'paymentDelivered'"
+                 matInput>
+         </mat-form-field>
+     </div>
+ </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+  <br> 
+   <div *ngIf="debt" style="background: #ff000047;border-radius: 7px;">
+     <p *ngIf="!messaje" class="text-red">SALDO A CUENTA :<strong> Bs {{debt | number : '1.2-2'}} </strong></p>
+     <p *ngIf="messaje" class="text-red"><strong>  {{messaje}} </strong></p>
+   </div>
+  <br>
+<!-------------------------------------------------------------------------------------------------------------------------------->                          
+
+         <div class="flex items-center justify-between  dark:bg-gray-700">
+         <div>
+            <button
+            (click)="cancelSaleCredit()"
+              class="px-6 btn-cancel"
+              mat-flat-button >
+              Cancelar
+            <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="save"></mat-icon>
+            </button>
+         </div>
+         <div>
+              <button
+              class="px-6 btn-sale-credit"
+              mat-flat-button
+              type="submit"
+              >
+              Guardar
+              <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="save"></mat-icon>
+              </button>
+          </div>
+      </div>
+ </form>
+   
+</div>

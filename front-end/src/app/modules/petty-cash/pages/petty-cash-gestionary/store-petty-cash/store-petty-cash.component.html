@@ -1,0 +1,128 @@
+<div class="base-content">
+    <div class="contenido">
+        <!-------------------------------------------->
+        <div class="pd-20 card-box mb-30">
+            <div class="">
+                <div class="">
+                    <div class="w-full mt-4">
+                        <div class="text-2xl font-semibold tracking-tight leading-6">Apertura de Caja Chica</div>
+                         <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para almacenes</div>
+                    </div>
+                    <br>
+                    <hr>
+                    <form
+                        [formGroup]="form"
+                        ngNativeValidate
+                        autocomplete="off"
+                    >
+
+<!--------------------------------------------------------------------------------------------------------------------------------->
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <div class="sm:col-span-2">
+
+                            <input-amount-cash
+                               [icon]="'add'"
+                               [label]="'Monto de Dinero Inicio:'"
+                               [formControlName]="'amountInit'">
+                            </input-amount-cash>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <div class="grid sm:grid-cols-4  w-full">
+                                <div class="sm:col-span-4">
+                                    <mat-form-field
+                                      class="w-full"
+                                      [subscriptSizing]="'dynamic'">
+                                      <mat-label>Fecha Inicio:</mat-label>
+                                      <mat-icon
+                                          matPrefix
+                                          class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:cube-transparent'"></mat-icon>
+                                      <input
+                                          matInput
+                                          format
+                                          [matDatepicker]="birthdayDatepicker"
+                                          [formControlName]="'pettyCashInit'"
+                                          datePickerFormat="DD/MM/YYYY"
+                                          [placeholder]="'Fecha apertura'">
+                                      <mat-datepicker-toggle
+                                          matSuffix
+                                          [for]="birthdayDatepicker">
+                                      </mat-datepicker-toggle>
+                                      <mat-datepicker #birthdayDatepicker></mat-datepicker>
+                                    </mat-form-field>
+                                 </div>
+                                 <div class="sm:col-span-4 mt-4">
+                                    <mat-form-field class="w-full">
+                                      <mat-label>Sucursal a Asignar:</mat-label>
+                                      <mat-select [formControlName]="'warehouseId'">
+                                        <mat-option *ngFor="let item of listWarehouse" [value]="item.id">
+                                          {{item.name}}
+                                        </mat-option>
+                                      </mat-select>
+                                      <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:library'"></mat-icon>
+                                      <!-- Mensaje de error -->
+                                      <mat-error *ngIf="form.get('warehouseId')?.hasError('required') && form.get('warehouseId')?.touched">
+                                        Obligatorio
+                                      </mat-error>
+                                    </mat-form-field>
+                                  </div>
+                                 <div class="sm:col-span-4">
+                                    <mat-form-field  class="w-full">
+                                        <mat-label>Vendedor Responsable:</mat-label>
+                                        <input type="text"
+                                               placeholder="Nombre Cliente.."
+                                               aria-label="Number"
+                                               matInput
+                                               [formControlName]="'clientName'"
+                                               (focus)="changeEmployee()"
+                                               [matAutocomplete]="auto">
+                                        <mat-autocomplete  #auto="matAutocomplete" (optionSelected)='getPosts($event.option.value)'  >
+                                          <mat-option [value]="option" *ngFor="let option of filteredOptions | async">
+                                            {{option.firstName}} {{option?.lastName}}
+                                          </mat-option>
+                                        </mat-autocomplete>
+                                        <mat-error *ngIf="form.get('clientName')?.hasError('required') && form.get('clientName')?.touched">
+                                            Obligatorio
+                                          </mat-error>
+                                          <mat-error *ngIf="form.get('clientName')?.hasError('maxlength') && form.get('clientName')?.touched">
+                                             maximo 50 caracteres.
+                                          </mat-error>
+                                      </mat-form-field>
+                                 </div>
+
+                            </div>
+                        </div>
+                    </div>
+<!--------------------------------------------------------------------------------------------------------------------------------->
+                        <div class="flex items-center justify-between py-5  dark:bg-gray-700">
+                            <div></div>
+                            <div>
+                                <btn-generic
+                                    class="px-6 ml-3"
+                                    [color]="'secondary'"
+                                    [label]="' Cancelar'"
+                                    [icon]="'close'"
+                                    [withFull]="false"
+                                    [disabled]="false"
+                                    (buttonClick)="cancelStore()">
+                                </btn-generic>
+                                <btn-generic
+                                    class="px-6 ml-3"
+                                    [color]="'green'"
+                                    [label]="'Guardar'"
+                                    [icon]="'save'"
+                                    [withFull]="false"
+                                    [disabled]="false"
+                                    [disabled]="isSaving"
+                                    (buttonClick)="save()"
+                                >
+                                </btn-generic>
+                             </div>
+                         </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+<mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+    <mat-label>{{label}}</mat-label>
+    <mat-icon class="icon-size-5" [svgIcon]="icon" matPrefix></mat-icon>
+    <input [formControl]="formControl" (keyup.enter)="onEnter()" (keyup)="onInputChange($event)" matInput
+        [value]="transcribedText" name="miname" type="text">
+    <button (mousedown)="startRecording()" (mouseup)="stopRecording()" mat-icon-button="" class="absolute right-0">
+        <mat-icon>mic</mat-icon>
+    </button>
+</mat-form-field>

@@ -1,0 +1,44 @@
+<div class="compoent-amount">
+    <div class="grid grid-cols-12">
+        <div class="col-span-12 p-1">
+            <input-invoice-decimal
+                [icon]="icon"
+                [label]="label"
+                [formControl]="control('amountMain')"
+                (keyup)="onKeyUp($event)" >
+            </input-invoice-decimal>
+        </div>
+        <div class="col-span-4 p-1">
+        <input-invoice-decimal
+            [icon]="'money'"
+            [label]="'Efectivo'"
+            [image]="'assets/images/ui/cash.png'"
+            [active]="isActive('amountCash')"
+            [justifyContent]="'center'"
+            [formControl]="control('amountCash')">
+
+        </input-invoice-decimal>
+        </div>
+        <div class="col-span-4 p-1">
+        <input-invoice-decimal
+            [icon]="'code'"
+            [label]="'QR'"
+            [image]="'assets/images/ui/qr.png'"
+            [active]="isActive('amountQr')"
+            [justifyContent]="'center'"
+            [formControl]="control('amountQr')">
+
+        </input-invoice-decimal>
+        </div>
+        <div class="col-span-4 p-1">
+        <input-invoice-decimal
+            [icon]="'credit_card'"
+            [label]="'Tarjeta'"
+            [image]="'https://cdn-icons-png.flaticon.com/512/5571/5571272.png'"
+            [active]="isActive('amountCard')"
+            [justifyContent]="'center'"
+            [formControl]="control('amountCard')">
+        </input-invoice-decimal>
+        </div>
+    </div>
+</div>

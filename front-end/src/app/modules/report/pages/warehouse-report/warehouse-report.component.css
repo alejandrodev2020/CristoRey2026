@@ -1,0 +1,17 @@
+.contenido{
+    width: 100%;
+    padding: 20px;
+    margin: 8px;
+    border-radius: 5px;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+}
+
+.btn-gestionary-product{
+    border-radius: 8px;
+    background: #b4beca;
+    width: fit-content;
+    color: aliceblue;
+    cursor: pointer;
+}

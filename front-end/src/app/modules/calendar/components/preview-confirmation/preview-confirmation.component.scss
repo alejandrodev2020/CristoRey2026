@@ -1,0 +1,158 @@
+
+.mdc-dialog__container .mat-mdc-dialog-surface {
+    padding: 0px !important;
+    background: red;
+}
+
+
+.fw-700{
+    color:#000;
+    font-weight: 900;
+    font-size: 1.4em !important;
+}
+.size-lg{
+  font-size: 18px;
+}
+
+.background-solid{
+    background: #D5D8DC  !important;
+}
+.container-botton{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-client{
+    background: #5FB960 ;
+    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    color: white;
+    margin-top: 3px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-quantity{
+  background: #5FB960 ;
+  border-radius: 10px;
+  width: 30px;
+  height: 30px;
+  color: white;
+  margin-top: 3px;
+}
+
+.btn-quantity-tab{
+  background: #5FB960 ;
+  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  color: white;
+  margin-top: 3px;
+}
+
+.icon-btn{
+    height: 21px;
+    width: 21px;
+}
+.visibility-component {
+    display: none; /* Ocultar por defecto */
+}
+
+.card-item-xs{
+    background: #fff;
+    margin: 0px 17px;
+
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 6px 10px rgba(0, 0, 0, 0.02) !important;
+}
+
+.shadow{
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 6px 10px rgba(0, 0, 0, 0.02) !important;
+}
+
+.item-product{
+  // background: red;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+
+.card-info{
+  background: #b4beca !important;
+  border-radius: 11px;
+  height: 40px !important;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.label-primary{
+  display: flex;
+  color: #fff;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+
+@media (max-width: 599px){
+    .hidden-component{
+      display: none;
+    }
+
+    .visibility-component{
+      display: block;
+    }
+    .card-product{
+      height: 100vh;
+    }
+  }
+
+  .card-info{
+    background: #a2c747;
+    border-radius: 11px;
+    height: 55px; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.label-primary{
+    display: flex;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+::ng-deep .swal2-popup{
+  border-radius: 30px !important; /* Usamos !important para asegurar que se aplique */
+  max-width: 80vw !important;
+  width: 300px !important;
+}
+
+::ng-deep  .confirm-btn {
+  background-color: #A2C747 !important;  /* Color de fondo rojo */
+  color: white !important;            /* Color de texto blanco */
+  border-radius: 10px !important;     /* Bordes redondeados */
+  padding: 10px 20px !important;      /* Espaciado interno */
+  font-weight: bold !important;       /* Fuente en negrita */
+}
+
+/* Estilo personalizado para el botón de cancelación */
+::ng-deep  .cancel-btn {
+  background-color: #b4beca !important; /* Color de fondo gris */
+  color: white !important;           /* Color de texto blanco */
+  border-radius: 10px !important;    /* Bordes redondeados */
+  padding: 10px 20px !important;     /* Espaciado interno */
+  font-weight: bold !important;      /* Fuente en negrita */
+}

@@ -1,0 +1,45 @@
+.contenido{
+    width: 100%;
+    padding: 20px;
+    margin: 8px;
+    border-radius: 5px;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+}
+
+.calendar-nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.nav-btn {
+  background: #4285f4;
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.nav-btn:hover {
+  background: #2f6cd6;
+}
+
+.current-date {
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  text-transform: capitalize;
+}

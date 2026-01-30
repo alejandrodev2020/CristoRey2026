@@ -1,0 +1,29 @@
+<div class="my-alert">
+    <div style="position: absolute;  top: 1rem; width: 100%; ">
+        <div style="display: flex; margin-top: 1.5em;">
+            <div style="width: 55%;"></div>
+            <div style="width: 45%;">
+                <button (click)="download()"
+                    class="btn-success-faam"
+                    [disabled]="disabled" 
+                    [class.w-full]="withFull === true" 
+                    mat-flat-button
+                    type="button">
+                    Descargar V1
+                    <mat-icon *ngIf="icon" icon aria-hidden="false" aria-label="Example share icon" fontIcon="add"></mat-icon>
+                </button>
+                <button (click)="hideModal()"
+                    class="btn-warning-faam mt-1"
+                    [disabled]="disabled" 
+                    [class.w-full]="withFull === true" 
+                    mat-flat-button
+                    type="button">
+                    No Mostrar
+                    <mat-icon *ngIf="icon" icon aria-hidden="false" aria-label="Example share icon" fontIcon="add"></mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </div>    
+    <img style="max-width: 500px;" src="assets/images/ui/dowload_app.png" />
+</div>

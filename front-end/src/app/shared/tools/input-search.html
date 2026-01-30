@@ -1,0 +1,42 @@
+<div class="sm:col-span-2">
+    <div class="grid grid-cols-9">
+        <div class="col-span-9 xs:col-span-9 sm:col-span-9" style="display: flex;">
+            <div class="flex flex-col flex-auto mr-1">
+                <mat-form-field  class="w-full">
+                    <mat-label>Cliente:</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:search'"
+                        matPrefix></mat-icon>
+                    <input type="text"
+                        class="w-full"
+                           placeholder="Nombre Cliente.."
+                           aria-label="Number"
+                           matInput
+                           [formControl]="control('myControl')"
+                           [matAutocomplete]="auto"
+                           required>
+
+                    <button mat-icon-button="" class="absolute right-0">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'" matPrefix></mat-icon>
+                    </button>
+
+
+
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)" required>
+                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option.firstName}} {{option.lastName}}
+                      </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="">
+                <div class="container-botton">
+                    <button class="add-client center" (click)="addClient()">
+                        <img class="icon-btn" src="assets/icons/add-user.svg" />
+                    </button>
+                </div>
+             </div> 
+        </div>
+    </div>
+</div>

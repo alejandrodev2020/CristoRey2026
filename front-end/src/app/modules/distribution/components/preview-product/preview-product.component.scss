@@ -1,0 +1,142 @@
+.btn-add{
+    background: #5FB960;
+    color:#fff;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    align-items: center;
+    place-content: center;
+}
+
+
+.btn-sub-total{
+    background: #f39c12;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    height: 47px;
+    width: 100%;
+    font-size: 23px;
+}
+
+
+
+
+
+
+
+
+.alert{
+  color: red;
+}
+
+.box{
+    width: 100%;
+    height: 25px;
+}
+.available{
+  background: #5FB960;
+  color:#fff;
+  height: 40px;
+  font-size: 1em;
+  display: flex;
+  justify-content: space-around;
+  place-items: center;
+  border-radius: 10px;
+}
+.parpadea {
+    animation-name: parpadeo;
+    animation-duration: 900ms;
+    animation-timing-function: linear;
+    animation-iteration-count: 3;
+
+    -webkit-animation-name:parpadeo;
+    -webkit-animation-duration: 900ms;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: 3;
+  }
+
+
+  .btn-quantity{
+    background: #5FB960 ;
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    color: white;
+    margin-top: 3px;
+    margin-left: 3px;
+    margin-right: 3px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 6px 10px rgba(0, 0, 0, 0.02) !important;
+  }
+  .btn-decimal-quantity{
+    background: #e4e6e4 ;
+    border-radius: 10px;
+    width: 35px;
+    height: 35px;
+    color: rgb(0, 0, 0);
+    margin-top: 3px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 6px 10px rgba(0, 0, 0, 0.02) !important;
+  }
+
+  .center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .visibility-component {
+    display: none; /* Ocultar por defecto */
+  }
+
+  .available{
+    background: #A2C747;
+    color:#fff;
+    height: 46px;
+    font-size: 20px;
+    display: flex;
+    justify-content: space-around;
+    place-items: center;
+    border-radius: 10px;
+  }
+.color-green{
+    color:#A2C747 !important;
+    cursor: pointer;
+}
+
+.card-movement{
+    background: #f4f6f7 !important;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+  @media (max-width: 599px){
+    .hidden-component{
+      display: none;
+    }
+
+    .visibility-component{
+      display: block;
+    }
+    .card-product{
+      height: 100vh;
+    }
+  }
+
+  @-moz-keyframes parpadeo{
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+  }
+
+  @-webkit-keyframes parpadeo {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.0; }
+     100% { opacity: 1.0; }
+  }
+
+  @keyframes parpadeo {
+    0% { opacity: 1.0; }
+     50% { opacity: 0.0; }
+    100% { opacity: 1.0; }
+  }

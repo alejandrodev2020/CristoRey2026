@@ -1,0 +1,97 @@
+<form [formGroup]="form">
+    <div class="pl-3 pr-3">
+        <div class="flex items-center justify-between dark:bg-gray-700">
+            <div> Venta / Compra por :
+                <div
+                    class="py-0.4  px-1 rounded-full text-sm text-center font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                    {{ itemSelect.name}}
+                </div>
+            </div>
+            <div class="close"
+                (click)="close()">
+                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+        <div>
+            <div class="grid sm:grid-cols-6 gap-6 w-full mt-1">
+                <div *ngIf="!unitMeasurementDefault" class="sm:col-span-2">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Origen</mat-label>
+                        <mat-select [formControlName]="'unitMeasurementFather'">
+                            <mat-option *ngFor="let unitMeasurement of listUnitMeasurement"
+                                [value]="unitMeasurement.id">
+                                {{unitMeasurement?.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+ 
+                </div>
+
+                <div *ngIf="!unitMeasurementDefault" class="sm:col-span-2">
+                    <input-decimal
+                        [formControl]="form.get('amount')"  
+                        [label]="'Contiene'"  
+                        nameInput="amount"
+                        numberDecimal="2">
+                    </input-decimal>
+                </div>
+                
+                <div *ngIf="!unitMeasurementDefault" class="sm:col-span-2">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Destino</mat-label>
+                        <mat-select formControlName="unitMeasurementChild">
+                            <mat-option *ngFor="let unitMeasurement of listUnitMeasurement"
+                                [value]="unitMeasurement.id">
+                                {{unitMeasurement?.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="unitMeasurementDefault" >
+                        <label>UNIDAD POR DEFECTO</label>
+                </div>
+
+                <div class="sm:col-span-6">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Precio para la Compra en  {{ itemSelect.name}} : </mat-label>
+                        <input formControlName="suggestedPricePurchase" matInput>
+                    </mat-form-field>
+                </div>
+
+                <div class="sm:col-span-6">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Precio para la venta en  {{ itemSelect.name }} : </mat-label>
+                        <input formControlName="suggestedPriceSale" matInput>
+                    </mat-form-field>
+                </div>
+
+            </div>
+        </div>
+        <br>
+        <mat-divider></mat-divider>
+        <div class="flex items-center justify-between mt-3 mb-2 dark:bg-gray-700">
+            <div></div>
+            <div>
+                <btn-generic
+                    class="ml-3"
+                    [color]="'secondary'"
+                    [label]="' Cancelar'"
+                    [icon]="'close'"
+                    [withFull]="false"
+                    [disabled]="false"
+                    (buttonClick)="cancelStore()">
+                </btn-generic>
+                <btn-generic
+                    class="ml-3"
+                    [color]="'green'"
+                    [label]="' Guardar'"
+                    [icon]="'save'"
+                    [withFull]="false"
+                    [disabled]="disabledButtoon"
+                    (buttonClick)="saveData()">
+                </btn-generic>
+             </div>
+         </div>
+    </div>
+</form>

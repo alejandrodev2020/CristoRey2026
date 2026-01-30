@@ -1,0 +1,65 @@
+<div class="p-4">
+        <div class="flex items-start justify-between">
+                <div class="w-full mt-4">
+                    <div class="text-2xl font-semibold tracking-tight leading-6">Visualizacion de Qr</div>
+                    <div class="font-medium tracking-tight text-secondary">Codigo Qr - Cobro</div>
+                </div>
+            <div  (click)="close()">
+                <mat-icon svgIcon="heroicons_outline:x"></mat-icon>
+            </div>
+        </div>
+        <div>
+
+           <!-- <qr-code-image [data]="QrBanking2"></qr-code-image> -->
+           <div style="display: flex;place-content: center;">
+
+               <img style="width: 200px;" src="{{QrBanking2}}" />
+            </div>
+           <div>
+               <p>Monto a pagar: <strong>Bs.- {{data.amountTotal}}</strong> </p>
+           </div>
+           <br>
+           <mat-divider></mat-divider>
+            <div *ngIf="validNumberPhone">
+                <div class="mt-2">
+                    <btn-generic 
+                        [color]="'green'"
+                        [label]="labelPhone"
+                        [icon]="'share'"
+                        [withFull]="true"
+                        (click)="sendCodeQrClient()">
+                    </btn-generic>
+                </div>
+                <div class="mt-2">
+                    <btn-generic 
+                        [color]="'orange'"
+                        [label]="'Otro número'"
+                        [icon]="'share'"
+                        (click)="SendMessageWhatsApp()">
+                    </btn-generic>
+                    <btn-generic 
+                        [color]="'black'"
+                        [label]="'Cerrar'"
+                        [icon]="'close'"
+                        (click)="close()">
+                     </btn-generic>
+                </div>
+            </div>
+            <div *ngIf="!validNumberPhone">
+                <div class="mt-2">
+                    <btn-generic 
+                        [color]="'green'"
+                        [label]="'Enviar - WhatsApp '"
+                        [icon]="'share'"
+                        (click)="SendMessageWhatsApp()">
+                    </btn-generic>
+                    <btn-generic 
+                        [color]="'black'"
+                        [label]="'Cerrar'"
+                        [icon]="'close'"
+                        (click)="close()">
+                     </btn-generic>
+                </div>
+            </div>
+        </div>
+</div>

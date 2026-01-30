@@ -1,0 +1,172 @@
+<div style="width: 100vw; overflow: hidden;">
+       <div style="height: 100vh; width: 100vw; background: #0f172a; display: flex; align-items: center;">
+            <div class="flex items-center justify-center " style="width: 100vw;">
+                <div class="text-center">
+                     <div class="flex items-center justify-center">
+
+                         <img style="width: 120px;" src="assets/images/logo/logo.svg" alt="Fuse logo">
+                     </div>
+                     <br>
+                    <P class="parpadea text" style="color: aliceblue;">Creando reporte</P>
+                </div>
+            </div>
+        </div>
+    <div #htmlData id="htmlData" style="width: 500px; padding: 15px; overflow: hidden;">
+        <div class="contenido-pdf" style="display: grid;">
+
+            <!------------------------------------------------------------------->
+            <mat-grid-list cols="10" rowHeight="30px" >
+                <mat-grid-tile [colspan]="2">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p><strong>N°:   </strong></p>
+                    </div>
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="8" rowHeight="30px" >
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p> {{ saleOrder?.order}} </p>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <!------------------------------------------------------------------->
+            <!------------------------------------------------------------------->
+            <mat-grid-list cols="10" rowHeight="30px">
+                <mat-grid-tile [colspan]="2">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p><strong>Cliente:   </strong></p>
+                    </div>
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="8">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p> {{ saleOrder?.client?.firstName}}  {{ saleOrder?.client?.lastName}} </p>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <!------------------------------------------------------------------->
+            <!------------------------------------------------------------------->
+            <mat-grid-list cols="10" rowHeight="30px">
+                <mat-grid-tile [colspan]="2">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p><strong>Fecha:   </strong></p>
+                    </div>
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="8">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p> {{ saleOrder?.saleDate |  dateFormatHours}} </p>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <!------------------------------------------------------------------->
+            <!------------------------------------------------------------------->
+            <mat-grid-list cols="10" rowHeight="30px">
+                <mat-grid-tile [colspan]="2">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p><strong>Vendedor:   </strong></p>
+                    </div>
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="8">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p> Carlos Eduardo Fernadez P. </p>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <!------------------------------------------------------------------->
+            <!------------------------------------------------------------------->
+            <mat-grid-list cols="10" rowHeight="30px">
+                <mat-grid-tile [colspan]="2">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p><strong>Almacen:   </strong></p>
+                    </div>
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="8">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p> {{ saleOrder?.warehouse?.name}} </p>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <!------------------------------------------------------------------->
+            <!------------------------------------------------------------------->
+            <mat-grid-list cols="10" rowHeight="30px">
+                <mat-grid-tile [colspan]="2">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p><strong>Tipo Venta:   </strong></p>
+                    </div>
+
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="8">
+                    <div class="flex items-start justify-start" style="width: 100%;">
+                        <p> {{ saleOrder?.saleType?.name}} </p>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <!------------------------------------------------------------------->
+            <br>
+            <!-- <mat-divider></mat-divider> -->
+            <br>
+            <table class="table" style="width: 335px;">
+                <thead >
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Producto</th>
+                    <th scope="col">Cant.</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Desc.</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody >
+                  <tr class="detail-item" *ngFor="let detail of saleOrder?.details; index as i">
+                    <th scope="row"> {{i+1}} </th>
+                    <td class="text-center">{{detail?.product?.name}}</td>
+                    <td class="text-center">{{detail?.amount}}</td>
+                    <td class="text-center">{{detail?.price}}</td>
+                    <td class="text-center">{{detail?.discucount}}</td>
+                    <td class="text-center">{{detail?.subTotal | number : '1.2-2' }}</td>
+                    <br>
+                    <br>
+                  </tr>
+                </tbody>
+              </table>
+              <br>
+              <br>
+              <!-- <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6">
+                <div class="sm:col-span-8 lg:col-span-8">
+                    <div class="flex flex-col flex-auto">
+                       <p><strong>Total:   </strong></p>
+                    </div>
+                </div>
+                <div class="sm:col-span-4 lg:col-span-4">
+                    <div class="flex flex-col flex-auto">
+                        <p style="text-align: end;"><strong>Bs. {{ saleOrder?.amountTotal | number : '1.2-2' }} </strong> </p>
+                     </div>
+                </div>
+            </div> -->
+            <br>
+            <br>
+            <br>
+            <br>
+            <!-- <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6">
+                <div class="sm:col-span-12 lg:col-span-12">
+                    <div class="flex flex-col flex-auto">
+                       <p><strong>Nota:</strong>
+                        La Presente nota de venta es efectuada por el sistema "ManagementStore" el uso indevido de la presente, sera penada deacuerdo a la ley.
+                    </p>
+                     <br>
+                    </div>
+                </div>
+            </div> -->
+            <!-- <qrcode
+            [elementType]="elementType"
+            [level]="level"
+            [qrdata]="qrdata"
+            [scale]="scale"
+            [width]="width"
+          ></qrcode> -->
+
+        </div>
+    </div>
+</div>

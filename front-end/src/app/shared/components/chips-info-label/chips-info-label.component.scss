@@ -1,0 +1,39 @@
+.card-main {
+    border: 3px solid #A2C747;
+    border-radius: 23px;
+    height: 35px;
+    width: fit-content;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 2px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.label-title{
+    color: #A2C747;
+    font-weight: 600;
+    padding-top: 2px;
+}
+
+.label-data{
+    color: #000;
+    font-weight: 500;
+}
+
+.card-faam-active{
+    border: 3px solid #b4beca;
+    background: #A2C747;
+    cursor: pointer;
+}
+
+.card-faam-active-label-title{
+    color: #fff;
+    margin: 0;
+    padding-top: 2px;
+}
+.card-faam-active-label-data{
+    color: #ffffff;
+}

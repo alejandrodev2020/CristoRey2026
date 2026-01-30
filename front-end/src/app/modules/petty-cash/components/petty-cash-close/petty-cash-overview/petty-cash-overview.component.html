@@ -1,0 +1,59 @@
+
+<div>
+
+    <!-- Main -->
+    <div class="inline-block p-4 sm:p-4 text-left print:p-0">
+
+        <!-- Invoice -->
+        <div class="p-3 rounded-2xl shadow bg-card print:w-auto print:p-0 print:rounded-none print:shadow-none print:bg-transparent">
+
+            <div class="flex items-start">
+                <div class="grid grid-rows-2 place-items-start gap-y-6">
+                    <div class="grid auto-cols-max grid-flow-col gap-x-8">
+                        <div class="place-self-center w-24">
+                            <img
+                                class="w-24"
+                                [src]=[logoClient]>
+                        </div>
+                        <div class="pl-10 border-l text-md">
+                            <div class="text-2xl font-medium">Cierre de Caja N° {{ currentPettyCash?.id}}</div>
+                            <div>Fecha Apertura: {{currentPettyCash?.pettyCashInit | dateFormatHours }}</div>
+                            <div>Fecha Cierre: {{ currentPettyCash?.pettyCashEnd | dateFormatHours}}</div>
+                            <div>Monto Dinero Inicio : {{ currentPettyCash?.amountInit | number : '1.2-2'}}</div>
+                            <div>Monto Dinero Cierre : {{ currentPettyCash?.amountEnd | number : '1.2-2'}}</div>
+                        </div>
+                    </div>
+                    <div class="grid auto-cols-max grid-flow-col gap-x-8">
+                        <div class="place-self-center w-24 text-center text-2xl text-secondary">
+                            Detalle 
+                        </div>
+                        <div class="pl-10 border-l text-md">
+                            <div class="font-medium">Vendedor: {{currentPettyCash?.userSeller?.firstName}} {{currentPettyCash?.userSeller?.lastName}}</div>
+                            <div class="font-medium">Administador: {{currentPettyCash?.userAdmin?.firstName}} {{currentPettyCash?.userAdmin?.lastName}}</div>
+                            <div class="font-medium">Almacen: {{ currentPettyCash?.warehouse?.name}}</div>
+                            <div>Monto entregado : Bs. {{currentPettyCash?.amountEnd | number : '1.2-2'}}</div>
+                            <div>Monto Sobrante : Bs. {{currentPettyCash?.amountSpareMoney | number : '1.2-2'}}</div>
+                            <div>Monto Faltante : Bs. {{currentPettyCash?.amountMissingMoney | number : '1.2-2'}}</div>
+                            <div>Monto Ventas al credito : Bs. {{currentPettyCash?.amountCreditCredit | number : '1.2-2'}}</div>
+                            <div>Monto Cobros Ventas Anteriores : Bs.  {{currentPettyCash?.amountCreditCredit | number : '1.2-2'}}</div>
+                            <div>Estado : {{currentPettyCash?.status?.name}}</div>
+                            <div>Nota : {{ currentPettyCash?.note }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1 ml-auto" style="direction: rtl">
+                    <div class="flex items-end text-2xl tracking-tight">
+                        <mat-icon (click)="close()" svgIcon="heroicons_outline:x"></mat-icon>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="mt-16">
+                <div class="font-medium">Gracias por efectuar el cierre de tu caja, cualquier dato a modificar por favor comunicarse con el administrador resposable.</div>
+            </div> -->
+
+        </div>
+
+    </div>
+
+</div>

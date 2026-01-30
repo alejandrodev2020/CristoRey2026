@@ -1,0 +1,59 @@
+.icon{
+    margin: 0px 10px;
+    color:#000;
+    font-weight: 900;
+}
+
+.contenido{
+    padding: 20px;
+    border-radius: 5px;
+    height: 100%;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+}
+
+.base-content{
+padding: 8px;
+width: 100%;
+}
+
+.btn-add{
+    background-color: #f39c12 !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+
+.image{
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+    height: 200px;
+    width: 200px;
+    border : 7px solid #BFC9CA;
+    border-radius: 5px;
+}
+
+.centre {
+    text-align: center
+  }
+
+
+  .card-not-configuration{
+    width: 100%;
+    height: 100%;
+    align-content: space-evenly;
+    border: 2px dashed gray;
+  }
+
+  .activo {
+    background: #b2babb  !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .inactivo {
+    background: #f3f#fff3f3 !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  .pointer{
+    cursor: pointer !important;
+  }

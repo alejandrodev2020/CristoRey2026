@@ -2,6 +2,18 @@
 # .NET / ASP.NET Core
 ############################
 
+
+
+
+
+# Node modules (frontend)
+node_modules/
+**/node_modules/
+front-end/.angular/
+front-end/.cache/
+
+
+
 # Build results
 **/bin/
 **/obj/

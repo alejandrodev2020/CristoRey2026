@@ -1,0 +1,59 @@
+<div class="card-info mb-2">
+    <div class="label-primary">
+         <p style="color: #fff;">{{label }}</p>
+         <p style="font-weight: bold; color:#fff" class="ml-1">{{ form.get('amountMain').value }}</p>
+         <p style="padding-left: 2px;" >Bs</p>
+    </div>
+</div>
+<div class="compoent-amount mb-2">
+    <div class="grid grid-cols-12">
+
+        <div class="col-span-12 " style="display: none;">
+            <input-invoice-decimal
+                [icon]="icon"
+                [label]="label"
+                [formControl]="control('amountMain')"
+                (keyup)="onKeyUp($event)" >
+            </input-invoice-decimal>
+        </div>
+    </div>
+    <div style="display:  flex;">
+          <div *ngIf="showCash" class="input-card">
+                <input-invoice-decimal
+                    [icon]="'money'"
+                    [label]="'Efectivo'"
+                    [image]="'assets/images/ui/cash.png'"
+                    [active]="isActive('amountCash')"
+                    [justifyContent]="'center'"
+                    [formControl]="control('amountCash')"
+                    (buttonClick)="selectOnlyPayment('amountCash')"
+                    (keyup)="onKeyUp($event)">
+                </input-invoice-decimal> 
+          </div>
+          <div *ngIf="showQr" class="input-card" style="padding-left: 5px;">
+                <input-invoice-decimal
+                    [icon]="'code'"
+                    [label]="'QR'"
+                    [image]="'assets/images/ui/qr.png'"
+                    [active]="isActive('amountQr')"
+                    [justifyContent]="'center'"
+                    [formControl]="control('amountQr')"
+                    (buttonClick)="selectOnlyPayment('amountQr')"
+                    (keyup)="onKeyUp($event)">
+                </input-invoice-decimal>
+          </div>
+          <div *ngIf="showCard" class="input-card" style="padding-left: 5px;">
+                <input-invoice-decimal
+                    [icon]="'credit_card'"
+                    [label]="'Tarjeta'"
+                    [image]="'https://cdn-icons-png.flaticon.com/512/5571/5571272.png'"
+                    [active]="isActive('amountCard')"
+                    [justifyContent]="'center'"
+                    [formControl]="control('amountCard')"
+                    (buttonClick)="selectOnlyPayment('amountCard')"
+                    (keyup)="onKeyUp($event)">
+                </input-invoice-decimal>
+          </div>
+
+    </div>
+</div>

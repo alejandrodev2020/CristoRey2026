@@ -1,0 +1,305 @@
+<div
+    class="preview-sale  p-0 rounded-2xl bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent">
+    <div class="flex items-start justify-between">
+        <div>
+            <div class="w-full ml-4 mt-4">
+                <div class="text-2xl font-semibold tracking-tight leading-6">Previsualizar Orden</div>
+                <div class="font-medium tracking-tight text-secondary">Preview de nota de venta</div>
+            </div>
+        </div>
+        <div class="p-4" (click)="close()">
+            <mat-icon svgIcon="heroicons_outline:x"></mat-icon>
+        </div>
+    </div>
+        <div class="p-3" style="width: 100%; height: auto;">
+            <div *ngIf="saleCredit" style="border-radius: 4px;"
+                class="py-0.4 px-1 pl-3  text-xs text-left font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                <p style="font-size: 16px;"><strong>Venta al credito</strong></p>
+            </div>
+        </div>
+    <form [formGroup]="form" ngNativeValidate autocomplete="off" #aForm2>
+    <div class="pl-4 pr-4">
+<!------------------------------------------------------------------------------------------------------>    
+            <div class="grid sm:grid-cols-4 w-full mb-2">
+                <div class="sm:col-span-4">
+                    <div class="grid grid-cols-9">
+                        <div class="col-span-9 xs:col-span-9 sm:col-span-9" style="display: flex;">
+                            <div class="flex flex-col flex-auto mr-1">
+                                <mat-form-field class="w-full">
+                                    <mat-label>Cliente:</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"
+                                        matPrefix></mat-icon>
+                                    <input type="text" class="w-full" placeholder="Nombre Cliente.." aria-label="Number"
+                                        matInput [formControl]="control('myControl')" [matAutocomplete]="auto" required>
+
+                                    <button (click)="cleanSearch()" mat-icon-button="" class="absolute right-0">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'"
+                                            matPrefix></mat-icon>
+                                    </button>
+                                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                        (optionSelected)="onSelectionChange($event)" required>
+                                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                            {{option.firstName}} {{option.lastName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div>
+                            <btn-add-custon
+                                [path]="'assets/icons/add-user.svg'"
+                                (buttonClick)="addClient()">
+                            </btn-add-custon>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="sm:col-span-4">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Tipo de Venta: </mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:library'" matPrefix></mat-icon>
+                        <mat-select [formControlName]="'saleTypeId'" (selectionChange)="selectSaleType()">
+                            <mat-option *ngFor="let type of listSaleType" [value]="type.id">
+                                {{type.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!------------------------------------------------------------------------------------------------------>
+            <mat-expansion-panel class="mat-elevation-z0 background-solid" style="padding: 0px !important;">
+                <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                    <mat-panel-title>¿Deseas dejar alguna nota?</mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="flex">
+                    <mat-form-field [ngClass]="'formFieldHelpers'" class="flex-auto">
+                        <mat-label>Nota:</mat-label>
+                        <textarea matInput [formControlName]="'note'" cdkTextareaAutosize
+                            [cdkAutosizeMinRows]="3"></textarea>
+                        <mat-icon class="icon-size-5" matSuffix
+                            [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                    </mat-form-field>
+                </div>
+            </mat-expansion-panel>
+            <!------------------------------------------------------------------------------------------------------>
+     
+        <br>
+        <mat-divider></mat-divider>
+    </div>
+
+    <div class="hidden-component" *ngFor="let item of orderNote.detailProduct">
+        <div class="m-3 p-3 item-product card">
+
+            <div class="grid grid-cols-12" style="background: white;">
+                <div class="col-span-1">
+                    <div class="flex flex-col flex-auto">
+                        <img style="width: 50px !important;" src="data:image/jpeg;base64, {{item?.product?.picture}}"
+                            alt="" srcset="">
+                    </div>
+                </div>
+                <div class="col-span-4">
+                    <div class="flex flex-col flex-auto">
+                        <p style="font-weight: 700; color:#5FB960;text-align: center">{{item?.product?.name | truncate:20}} </p>
+                        <div class="center" style="display: flex;">
+                            <button class="btn-quantity-tab center" (click)="updateAmount(item,'decrement')">
+                                <mat-icon style="color: white;" svgIcon="heroicons_outline:minus"></mat-icon>
+                            </button>
+                            <label style="margin:0px 10px;color:orange; font-size: 20px; font-weight: 500;">
+                                x{{item?.count | customNumber }}</label>
+                            <button class="btn-quantity-tab center" (click)="updateAmount(item,'increment')">
+                                <mat-icon style="color: white;" svgIcon="heroicons_outline:plus"></mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <div class="flex flex-col flex-auto">
+                        <p style="font-weight: 700; color:#000">P. U.</p>
+                        <p><strong>Bs. </strong> {{item?.price }}</p>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <div class="flex flex-col flex-auto">
+                        <p  class="text-center" style="font-weight: 700; color:#000">U. Med.</p>
+                        <p  class="text-center" >{{item?.unitMeasurementSelect?.unitMeasurement?.name }}</p>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <div class="flex flex-col flex-auto">
+                        <p class="text-center" style="font-weight: 700; color:#000">Sub T:</p>
+                        <p class="text-center" style="font-weight: 700; color:#ec9e29">{{ (item.price * item.count) | number : '1.0-2'}}</p>
+                    </div>
+                </div>
+                <div class="col-span-1">
+                    <div class="flex flex-col flex-auto">
+                        <mat-icon (click)="removeItem(item)" class="icon-size-7 text-red-600" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!----------------------------------------------------------------------------------------------------------------->
+    <div class="visibility-component mb-2">
+        <div *ngFor="let item of  orderNote.detailProduct" class="card-item-xs mb-2">
+            <div class="grid grid-cols-12">
+                <div class="col-span-3">
+                    <div class="flex flex-col flex-auto">
+                        <img style="width: 90px;" src="data:image/jpeg;base64, {{item?.product?.picture}}" alt="">
+                    </div>
+                </div>
+                <div class="col-span-8">
+                    <p class="text-center" style="font-weight: 700; font-size: 20px;">{{item?.product?.name}}</p>
+                    <div class="flex flex-col flex-auto">
+                        <div class="center" style="display: flex;">
+                            <button class="btn-quantity center" (click)="updateAmount(item,'decrement')">
+                                <mat-icon style="color: white;" svgIcon="heroicons_outline:minus"></mat-icon>
+                            </button>
+                            <label style="margin:0px 10px;color:orange; font-size: 35px; font-weight: 500;">
+                                {{item?.count | customNumber }}</label>
+                            <button class="btn-quantity center" (click)="updateAmount(item,'increment')">
+                                <mat-icon style="color: white;" svgIcon="heroicons_outline:plus"></mat-icon>
+                            </button>
+                        </div>
+                        <div class="center"><strong> {{item.unitMeasurementSelect.name }} </strong></div>
+                    </div>
+                </div>
+                <div class="col-span-1" style="display: flex; align-items: self-start; justify-self: right;">
+                    <div>
+                        <mat-icon (click)="removeItem(item)" class="icon-size-7 text-red-600" [svgIcon]="'heroicons_solid:trash'">
+                        </mat-icon>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-12 mt-2">
+                <div class="col-span-6">
+                    <div class="center flex flex-col flex-auto">
+                        <p>P/U Bs. {{item.price | number : '1.0-2'}}</p>
+                    </div>
+                </div>
+                <div class="col-span-6">
+                    <div class=" center flex flex-col flex-auto">
+                        <p>Sub Total : Bs. {{item.subTotal | number : '1.0-2'}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-4">
+        <mat-divider></mat-divider>
+        <div class="grid grid-cols-12 " style=" padding: 0px 15px;">
+            <div class="col-span-9 self-center size-lg font-bold tracking-tight">Total </div>
+            <div class="col-span-3 text-center size-lg font-medium"><strong>Bs </strong> {{orderNote.total | number : '1.0-2'}}</div>
+        </div>
+        <mat-divider></mat-divider>
+        <div  *ngIf="saleCredit"  class="grid grid-cols-12 " style=" padding: 0px 15px;color: #588750;">
+            <div class="col-span-9 self-center size-lg font-bold tracking-tight">Dinero entregado </div>
+            <div class="col-span-3 text-center size-lg font-medium"><strong>Bs </strong> {{amountPaymentDelivered | number : '1.0-2'}}</div>
+        </div>
+        <mat-divider></mat-divider>
+        <div  *ngIf="saleCredit"  class="grid grid-cols-12 " style=" padding: 0px 15px; color: #d1242b">
+            <div class="col-span-9 self-center size-lg font-bold tracking-tight">A cuenta </div>
+            <div class="col-span-3 text-center size-lg font-medium"><strong>Bs </strong> {{amountCredit | number : '1.0-2'}}</div>
+        </div>
+    </div>
+
+          <!----------------------------------------------------------------------------------------------------------------->
+    <div class="pl-4 pr-4">
+        <preview-amount-cash
+            *ngIf="!saleCredit"
+            [label]="'Total a pagar: '"
+            [formControl]="control('amountTotal')"
+            (formChanged)="handleFormChange($event)">
+        </preview-amount-cash>
+        <preview-amount-cash
+            *ngIf="saleCredit"
+            [label]="'Parte de pago: '"
+            [formControl]="control('paymentDelivered')"
+            (formChanged)="handleFormChange($event)">
+        </preview-amount-cash>
+        <div *ngIf="viewInpuntAmountRecived" class="mb-2 flex-col flex-auto">
+              <input-decimal
+                nameInput="amountRecived"
+                [formControl]="control('amountRecived')"
+                [label]="'dinero recibido'"
+                numberDecimal="3"
+                (keyup)="onAmountReceivedChanged($event)">
+              </input-decimal>
+        </div>
+        <div *ngIf="viewInpuntAmountRecived" class="card-info mb-2">
+            <div class="label-primary">
+                 <p>Cambio:</p>
+                 <p style="font-weight: bold;" class="ml-1">{{ change | number: '1.0-2' }}</p>
+                 <p style="padding-left: 2px;" >Bs</p>
+            </div>
+        </div>
+    </div>
+ 
+    <!----------------------------------------------------------------------------------------------------------------->
+    </form>
+<!-- -------------------------------------------------- -->
+<div class="grid grid-cols-12 ml-4 mr-4 mt-4">
+    <div class="col-span-4 pr-2">
+        <div class="flex flex-col flex-auto">
+            <btn-generic
+                class=""
+                [color]="'secondary'"
+                [label]="'Cancelar'"
+                [icon]="'close'"
+                [withFull]="true"
+                [disabled]="false"
+                [shadow]="true"
+                (buttonClick)="close()">
+            </btn-generic>
+         </div>  
+    </div>
+    <div class="col-span-8 pl-2">
+        <div class="flex flex-col flex-auto">
+            <btn-generic
+                *ngIf="!saleCredit"
+                class=""
+                [color]="'green'"
+                [label]="'Bs. ' + (orderNote.total | number : '1.0-2') + ' Pagar'"
+                [icon]="'attach_money'"
+                [withFull]="true"
+                [shadow]="true"
+                [disabled]="buttonDisabled || orderNote.total <= 0" 
+                (buttonClick)="saveShopping()">
+            </btn-generic>
+            <btn-generic
+                *ngIf="saleCredit"
+                class=""
+                [color]="'green'"
+                [label]="'Bs. ' + (amountPaymentDelivered | number : '1.0-2')   + ' Recibir'"
+                [icon]="'attach_money'"
+                [withFull]="true"
+                [disabled]="false"
+                (buttonClick)="saveShopping()">
+            </btn-generic>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="grid grid-cols-3 sm:grid-cols-12  pl-4 pr-4 mt-4 mb-5 w-full">
+        <div class="sm:col-span-4 lg:col-span-4">
+            <div class="flex flex-col flex-auto">
+              
+             </div>
+        </div>
+        <div class="sm:col-span-8 lg:col-span-8">
+            <div class="flex flex-col flex-auto">
+               
+            </div>
+        </div>
+    </div>
+</div>

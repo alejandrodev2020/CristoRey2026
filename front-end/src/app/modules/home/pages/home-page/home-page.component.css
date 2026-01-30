@@ -1,0 +1,25 @@
+.contenido{
+    width: 100%;
+    padding: 20px;
+    /* margin: 8px; */
+    border-radius: 5px;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+}
+
+.card-module{
+    border-radius: 6px;
+    color : #fff;
+    /* background-image: linear-gradient( 135deg, #92df5f 10%, #b8dbd7 100%); */
+    /* background: linear-gradient(45deg, #A2C747, #66B503);  */
+    background: #dddddd !important;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.welcome-text{
+    font-family: 'Dancing Script', cursive;
+    font-size: 70px;
+    /* font-family: 'Quicksand', sans-serif; */
+}

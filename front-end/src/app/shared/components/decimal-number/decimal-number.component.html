@@ -1,0 +1,21 @@
+<input
+  decimalNumberMask
+  [decimalControl]="control"
+  [numberInt]="numberInt"
+  [decimalNumber]="numberDecimal"
+  [isNegativeValue]="isNegativeValue"  
+  (keyup)="onKeyUpEvent($event)"
+  (blur)="onBlurEvent($event)"
+  class="form-control"
+  type="tel"
+  [formControl]="control"
+  [class.is-invalid]="
+    ngControl.invalid && (ngControl.dirty || ngControl.touched)
+  "
+  placeholder="{{ placeholderValue }}"
+/>
+<div
+  class="text-danger invalid-feedback text-left"
+  *ngIf="ngControl.invalid && (ngControl.dirty || ngControl.touched)"
+  [innerHTML]="showErrors()"
+></div>

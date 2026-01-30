@@ -1,0 +1,70 @@
+<div class="flex flex-col flex-auto min-w-10">
+    <div class="container">
+        <div class="background-div">
+
+            <div class="flex items-center justify-between dark:bg-gray-700">
+                <div></div>
+                <button class="closeA" (click)="backTo()" aria-label="Cerrar">
+                  <mat-icon aria-hidden="false" fontIcon="close"></mat-icon>
+                </button>
+            </div>
+            
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 50%;">
+                <div>
+                    <h1 class="title-banner pt-8 pr-6 pl-6" style="color: #3b791d;">¿Crees que el producto <strong
+                            style="color: #fff;"><br> "{{currentProduct?.name}}"</strong>, cuente con otras unidades de
+                        medida??</h1>
+                    <div class="center-div">
+                        <img class="image-banner" src="assets/images/ui/unit/unidad-1.svg" />
+                        <img class="image-banner" src="assets/images/ui/unit/unidad-2.svg" />
+                        <img class="image-banner" src="assets/images/ui/unit/unidad-3.svg" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="foreground-div">
+            <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+                <div class="grid grid-cols-12">
+                    <div class="col-span-5 p-1">
+                        <div class="flex flex-col flex-auto p-1">
+                            <div class="text-lg font-bold leading-none">{{currentProduct?.name | truncate:13}}</div>
+                            <div class="text-secondary">{{currentProduct?.description | truncate:12}}</div>
+                        </div>
+                    </div>
+                    <div class="col-span-7 p-1">
+                        <div class="flex flex-col flex-auto p-1">
+                            <span class="text-sm font-medium text-secondary">Gestion de unidades de medida</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="p-5">
+        <div class="grid grid-cols-12">
+            <div *ngFor="let unit of listUnitMeasurement.slice(0, 6)" class="col-span-4">
+                <div class="flex flex-col flex-auto">
+                    <card-info-label [title]="'Medida :'" [label]="unit?.name" [active]="unit?.check"></card-info-label>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="grid grid-cols-12">
+            <div class="col-span-3">
+                <div class="flex flex-col flex-auto p-1">
+                    <btn-generic [color]="'secondary'" [label]="'cerrar'" [withFull]="true" [icon]="'close'"
+                        (click)="backTo()">
+                    </btn-generic>
+                </div>
+            </div>
+            <div class="col-span-9">
+                <div class="flex flex-col flex-auto p-1">
+                    <btn-generic [color]="'green'" [label]="'Gestionar Medidas'" [withFull]="true" [icon]="'archive'"
+                        (click)="gestionaryEquivalences()">
+                    </btn-generic>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

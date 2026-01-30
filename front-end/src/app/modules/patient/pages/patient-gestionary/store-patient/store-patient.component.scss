@@ -1,0 +1,28 @@
+.icon{
+    margin: 0px 10px;
+    color:#000;
+    font-weight: 900;
+}
+
+.contenido{
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    border-radius: 5px;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+}
+.father{
+    padding: 8px;
+    width: 100%;
+    height: 100%;
+}
+
+.image{
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+    height: 200px;
+    width: 200px;
+    border : 7px solid #BFC9CA;
+    border-radius: 5px;
+}

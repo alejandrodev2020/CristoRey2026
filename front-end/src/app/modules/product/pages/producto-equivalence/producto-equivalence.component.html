@@ -1,0 +1,120 @@
+<div class="base-content">
+    <div class="contenido">
+        <!-------------------------------------------->
+                <div class="">
+                    <div class="w-full">
+                        <div *ngIf="isCreate" class="text-2xl font-semibold tracking-tight leading-6">Registro de Producto</div>
+                        <div *ngIf="!isCreate" class="text-2xl font-semibold tracking-tight leading-6">Gestion de equivalencias</div>
+                        <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para equivalencias</div>
+                    </div>
+                    <br>
+                    <mat-divider class="mb-4"></mat-divider>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+                        <div class="sm:col-span-6 md:col-span-4 lg:col-span-3">
+                            <div class="flex flex-col flex-auto">
+                                <img *ngIf="currentProduct?.picture !=null" [src]="currentProduct?.picture" />
+                                <img *ngIf="currentProduct?.picture ==null" [src]="imageSource" />
+                                 <div>
+                                    <label  class="text-lg font-bold">{{currentProduct?.name}}</label>
+                                    <br>
+                                    <label  class="text-md font-semibold">{{currentProduct?.description}}</label>
+                                    <br>
+                                    <label  class="text-md font-semibold">Categoria : {{currentProduct?.category?.name}}</label>
+                                    <br>
+                                    <label  class="text-md font-semibold">Unidad de Medida : {{currentProduct?.unitMeasurement?.name}}</label>
+                                    <br>
+                                    <label  class="text-md font-semibold">Codigo: {{currentProduct?.code}}</label>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="sm:col-span-6 md:col-span-8 lg:col-span-9">
+                            <div class="flex flex-col flex-auto">
+                                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0">
+
+
+                                    <div  (click)="createNewUnit()" class=" btn-add pointer flex flex-col flex-auto pt-4 pr-6 pl-6 pb-4 bg-card  rounded-2xl overflow-hidden">
+                                            <div class="text-center">
+                                                <label  class="text-center text-lg font-bold" style="color: #ffffff">Agregar</label>
+                                            </div>
+                                        <mat-divider class="mb-2 mt-2"></mat-divider>
+                                        <div  class="card-not-configuration" style="border: 2px dashed  #fff !important">
+                                            <div class="text-sm text-center font-semibold" style="color: #ffffff">+</div>
+                                        </div>
+                                        <mat-divider class="mb-2 mt-4"></mat-divider>
+                                        <div class="text-sm text-center font-semibold" style="color: #ffffff">Agregar Nuevo</div>
+
+                                    </div>
+
+                                    <div  *ngFor="let item of listUnitMeasurementActive"
+                                          class="pointer flex flex-col flex-auto pt-4 pr-6 pl-6 pb-4 bg-card shadow rounded-2xl overflow-hidden"
+                                          [ngClass]="{'activo': item.exist == true , 'inactivo': item.exist == false }"
+                                          >
+                                          <div class="flex items-center justify-between  dark:bg-gray-700">
+                                            <div>
+                                                <label *ngIf="item.exist" class="text-lg font-bold" style="color:#ffffff !important">{{item.name}}</label>
+                                                <label  *ngIf="!item.exist" class="text-lg font-bold" style="color:#e06651 !important">{{item.name}}</label>
+                                            </div>
+                                            <div>
+                                                <!-- <div (click)="getionaryStatusItem(item)"  *ngIf="item?.isActive && item?.exist"  style="padding: 5px 0px;"
+                                                        class="pointer py-0.4 h-6 w-full px-1 rounded-full text-sm text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                                     Habilitado
+                                                 </div>
+                                                 <div (click)="getionaryStatusItem(item)" *ngIf="!item?.isActive && item?.exist"  style="padding: 5px 0px;"
+                                                    class="pointer py-0.4 h-6 w-full px-1 rounded-full text-sm text-center font-semibold text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-500">
+                                                    Inhabilitado
+                                                </div> -->
+                                            </div>
+                                         </div>
+
+                                         <mat-divider class="mb-2 mt-2"></mat-divider>
+                                         <div  style="display: flex; height: 45px;" >
+                                            <div (click)="gestionaryItem(item)" *ngIf="item?.exist" style="width: 100%;">
+                                                <label class="text-xs font-semibold">Compra:</label>
+                                                <div *ngIf="item?.suggestedPricePurchase"   style="padding: 5px 0px;" class="py-0.4 h-6 w-full px-1 rounded-full text-sm text-center font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                                                   Bs.  {{item?.suggestedPricePurchase}}
+                                                </div>
+                                            </div>
+                                            <div (click)="gestionaryItem(item)" *ngIf="item?.exist" style="width: 100%;">
+                                                <label class="text-xs font-semibold">Venta:</label>
+                                                <div *ngIf="item?.suggestedPriceSale" style="padding: 5px 0px;"  class="py-0.4 h-6 w-full px-1 rounded-full text-sm text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                                   Bs. {{item?.suggestedPriceSale}}
+                                                </div>
+                                            </div>
+                                            <div (click)="gestionaryItem(item)" *ngIf="!item?.exist" class="card-not-configuration">
+                                                <div class="text-sm text-center font-semibold text-gray-800">Por Configurar</div>
+                                            </div>
+                                          </div>
+                                          <mat-divider class="mb-2 mt-4"></mat-divider>
+                                          <!-- <div (click)="gestionaryItem(item)" class="text-sm text-center font-semibold text-green-800" *ngIf="item?.exist">En Uso</div> -->
+                                          <div (click)="gestionaryItem(item)" class="text-sm text-center font-semibold text-orange-800" *ngIf="!item?.exist">Fuera de uso</div>
+                                         
+                                         
+                                          <div class="flex flex-col md:flex-row items-center justify-between dark:bg-gray-700 ">
+                                            <div>
+                                                <div (click)="getionaryStatusItem(item)"  *ngIf="item?.isActive && item?.exist"  style="padding: 5px 0px;"
+                                                        class="pointer py-0.4 h-6 w-full px-1 rounded-full text-sm text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                                     Habilitado
+                                                 </div>
+                                                 <div (click)="getionaryStatusItem(item)" *ngIf="!item?.isActive && item?.exist"  style="padding: 5px 0px;"
+                                                    class="pointer py-0.4 h-6 w-full px-1 rounded-full text-sm text-center font-semibold text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-500">
+                                                    Inhabilitadox
+                                                </div>
+                                            </div>
+                                            <div  class="flex flex-col md:flex-row items-center mt-4 md:mt-0">
+                                                <mat-icon *ngIf="item?.isActive && item?.favoriteUnitMeasurement"(click)="selectFavorite(item)" style="color: #cb4335;margin-right: 5px;">favorite</mat-icon>
+                                            	<mat-icon *ngIf="item?.exist && item?.unitMeasurementPrint" (click)="selectPrint(item)"  style="color: #cb4335">print</mat-icon>
+                                            </div>
+                                            <div *ngIf="item?.exist" class="flex flex-col md:flex-row items-center mt-4 md:mt-0">
+                                                <mat-icon *ngIf="item?.isActive && !item?.favoriteUnitMeasurement"(click)="selectFavorite(item)"  style="color: rgb(0, 0, 0);margin-right: 5px" >favorite_outline</mat-icon>
+                                                <mat-icon *ngIf="item?.exist && !item?.unitMeasurementPrint"  (click)="selectPrint(item)">assignment</mat-icon>
+                                            </div>
+                                          </div> 
+                                    </div>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        <!-------------------------------------------->
+    </div>
+</div>

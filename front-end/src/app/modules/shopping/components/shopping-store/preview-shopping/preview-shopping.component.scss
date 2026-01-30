@@ -1,0 +1,39 @@
+.fw-700{
+    color:#000;
+    font-weight: 900;
+    font-size: 1.4em !important;
+}
+
+.add-client{
+    background: #A2C747 ;
+    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    color: white;
+    margin-top: 3px;
+}
+
+
+.icon-btn{
+    height: 21px;
+    width: 21px;
+}
+
+.container-botton{
+    height: 100%;   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-product{
+    // background: red;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}

@@ -1,0 +1,111 @@
+<div
+  class="preview-sale p-0 rounded-2xl bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent">
+
+  <!-- Header: título + X -->
+  <div class="flex items-start justify-between">
+    <div>
+      <div class="w-full ml-4 mt-4">
+        <div class="text-2xl font-semibold tracking-tight leading-6">
+          Previsualizar información
+        </div>
+        <div class="font-medium tracking-tight text-secondary">
+          Revisa los datos antes de confirmar
+        </div>
+      </div>
+    </div>
+    <div class="p-4 cursor-pointer" (click)="close()">
+      <mat-icon svgIcon="heroicons_outline:x"></mat-icon>
+    </div>
+  </div>
+
+
+
+  <!-- Formulario -->
+  <form [formGroup]="form" ngNativeValidate autocomplete="off" #aForm2>
+
+    <!-- Contenido principal -->
+    <div class="px-4 pb-4 space-y-4">
+
+      <!-- Texto descriptivo -->
+      <!-- <p class="text-sm text-secondary">
+        A continuación se muestra toda la información relacionada con el registro seleccionado.
+        Si todo es correcto, presiona <strong>Aceptar</strong>. Si no corresponde, puedes <strong>Rechazar</strong>.
+      </p> -->
+
+      <!-- Vista completa del objeto recibido -->
+    <div class="px-4 pb-4 space-y-3">
+
+    <h3 class="text-base font-semibold mb-2">Información de la cita</h3>
+
+    <!-- Paciente -->
+    <div class="text-sm">
+        <strong>Paciente:</strong>
+        {{ patient?.firstName }} {{ patient?.lastName }}
+    </div>
+
+    <!-- Doctor -->
+    <div class="text-sm">
+        <strong>Doctor:</strong>
+        {{ doctor?.firstName }} {{ doctor?.lastName }}
+    </div>
+
+    <!-- Fecha -->
+    <div class="text-sm">
+        <strong>Fecha:</strong>
+        {{ appointment?.dateQuery | date:'dd/MM/yyyy' }}
+    </div>
+
+    <!-- Hora -->
+    <div class="text-sm">
+        <strong>Hora:</strong>
+        {{ appointment?.dateQuery | date:'HH:mm' }}
+    </div>
+
+    <!-- Motivo -->
+    <div class="text-sm">
+        <strong>Motivo:</strong>
+        <span *ngIf="appointment?.motive && appointment?.motive.trim() !== ''">
+            {{ appointment?.motive }}
+        </span>
+        <span *ngIf="!appointment?.motive || appointment?.motive.trim() === ''" class="text-gray-500">
+            Sin motivo registrado
+        </span>
+    </div>
+
+    <!-- Observaciones -->
+    <div class="text-sm">
+        <strong>Observaciones:</strong>
+        <span *ngIf="appointment?.observations">
+            {{ appointment?.observations }}
+        </span>
+        <span *ngIf="!appointment?.observations" class="text-gray-500">
+            Sin observaciones
+        </span>
+    </div>
+
+    <!-- Estado -->
+    <div class="text-sm">
+        <strong>Estado:</strong>
+        <span *ngIf="appointment?.statusId === 0">Pendiente</span>
+        <span *ngIf="appointment?.statusId === 1">Confirmada</span>
+        <span *ngIf="appointment?.statusId === 2">Atendida</span>
+        <span *ngIf="appointment?.statusId === 3">Cancelada</span>
+    </div>
+
+    </div>
+
+    </div>
+
+    <!-- Footer: botones de acción -->
+    <div class="px-4 pb-4 flex justify-end gap-3">
+      <button mat-stroked-button color="warn" type="button" (click)="onReject()">
+        Rechazar
+      </button>
+
+      <button mat-flat-button color="primary" type="button" (click)="onAccept()">
+        Aceptar
+      </button>
+    </div>
+
+  </form>
+</div>

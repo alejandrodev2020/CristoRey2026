@@ -1,0 +1,17 @@
+<div class="contenido">
+  <!-------------------------------------------->
+  <div class="calendar-nav">
+    <button class="nav-btn" (click)="previousWeek()">⟨</button>
+
+    <div class="current-date">
+      {{ viewDate | date:'EEEE d MMMM yyyy' }}
+    </div>
+
+    <button class="nav-btn" (click)="nextWeek()">⟩</button>
+  </div>
+  
+  <mwl-calendar-week-view [viewDate]="viewDate" [events]="events" [hourSegments]="2" [dayStartHour]="6"
+    [dayEndHour]="20" [hourSegmentHeight]="30" (eventClicked)="onEventClicked($event.event)">
+  </mwl-calendar-week-view>
+  <!-------------------------------------------->
+</div>

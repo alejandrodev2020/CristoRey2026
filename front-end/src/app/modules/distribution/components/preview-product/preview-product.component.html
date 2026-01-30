@@ -1,0 +1,150 @@
+<div class="p-6">
+    <div class="flex items-center justify-between dark:bg-gray-700">
+        <div>
+            Agregar productox
+        </div>
+        <div (click)="close()">
+            <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="content">
+        <div class="flex items-center justify-between dark:bg-gray-700">
+            <div>
+                <div>
+                    <label style="font-size: 17px !important;" class="text-lg">{{ product?.name | truncate:35 }}</label>
+                    <div style="font-size: 12px;" class="text-secondary">{{ product?.description | truncate:35 }}</div>
+                </div>
+            </div>
+            <div>
+                <btn-actions
+                        *ngIf="viewPricePurcharse"
+                        [color]="'secondary'"
+                        [label]="purcharsePriceCalculate | number:'1.0-2'"
+                        [icon]="'visibility_off'"
+                        [withFull]="true"
+                        [disabled]="false"
+                        (buttonClick)="hiddenPricePurcharse()">
+                </btn-actions>
+                <btn-actions
+                        *ngIf="!viewPricePurcharse"
+                        [color]="'secondary'"
+                        [label]="'***'"
+                        [icon]="'visibility'"
+                        [withFull]="true"
+                        [disabled]="false"
+                        (buttonClick)="showPricePurcharse()">
+                </btn-actions>
+            </div>
+        </div>
+        <div class="flex items-center justify-center">
+            <img style="width: 18em; max-width: 200px;" src="data:image/png;base64,{{ product.product.picture }}">
+        </div>
+        <div>
+            <p>Tu venta es por:</p>
+            <div style="display: ruby;">
+                <chips-info-label *ngFor="let unit of listUnitMeasurement" [title]="unit?.unitMeasurement?.name"
+                    [label]="'Etiqueta de Ejemplo'" (click)="addQuantity(unit)"
+                    [active]="unit?.check">
+                </chips-info-label>
+                <div class="available mt-1 w-full px-3 py-1 font-bold">
+                    Disp: {{ amountAvailable }} {{ labelUnitMeasurement}}
+                </div>
+                <div class="btn-sub-total mt-2 mb-2">
+                    <strong style="color: #fff">Sub Total: Bs.<strong style="color:#fff">{{(form.get('subTotal').value || 0 | number:'1.0-2')}}</strong> </strong>
+                </div>
+            </div>
+        </div>
+        <form [formGroup]="form" ngNativeValidate autocomplete="off" #aForm2>
+            <!-- Hidden Component -->
+            <div class="hidden-component">
+                <div class="grid sm:grid-cols-6">
+                    <div class="sm:col-span-2">
+                        <input-decimal
+                            [formControl]="control('amount')"
+                            (enterPressed)="addInput('suggestedPrice')"
+                            (keyup)="calculateSubTotal()"
+                            label="Cantidad:"
+                            icon="heroicons_outline:plus"
+                            nameInput="amount"
+                            numberDecimal="2">
+                        </input-decimal>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <input-decimal
+                            [formControl]="control('suggestedPrice')"
+                            (enterPressed)="addInput('discount')"
+                            (keyup)="calculateSubTotal()"
+                            label="Precio Venta:"
+                            icon="heroicons_outline:currency-dollar"
+                            nameInput="suggestedPrice"
+                            numberDecimal="2">
+                        </input-decimal>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <input-decimal
+                            [formControl]="control('discount')"
+                            (enterPressed)="addInput('save')"
+                            (keyup)="calculateSubTotal()"
+                            label="Descuento:"
+                            icon="heroicons_outline:minus"
+                            nameInput="discount"
+                            numberDecimal="2">
+                        </input-decimal>
+                    </div>
+                </div>
+                <!-- <div class="btn-sub-total mt-2">
+                    <strong style="color: #fff">Sub Total: Bs.<strong style="color:#fff">{{(form.get('subTotal').value || 0 | number:'1.0-2')}}</strong> </strong>
+                </div> -->
+            </div>
+            <!-- Visibility Component -->
+            <div class="visibility-component">
+                <div class="flex flex-col flex-auto">
+                    <label class="text-center">Cantidad</label>
+                    <div class="center" style="display: flex;">
+                        <button (click)="decrementItemDecimal()" class="btn-decimal-quantity center">
+                            <mat-icon svgIcon="heroicons_outline:minus"></mat-icon>
+                        </button>
+                        <button (click)="decrementItemNumber()" class="btn-quantity center">
+                            <mat-icon style="color: white;" svgIcon="heroicons_outline:minus"></mat-icon>
+                        </button>
+                        <label style="margin: 0px 10px; color: orange; font-size: 35px; font-weight: 500;">{{ form.get('amount').value | customNumber }}</label>
+                        <button (click)="incrementItemNumber()" class="btn-quantity center">
+                            <mat-icon style="color: white;" svgIcon="heroicons_outline:plus"></mat-icon>
+                        </button>
+                        <button (click)="incrementItemDecimal()" class="btn-decimal-quantity center">
+                            <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-auto">
+                    <label class="text-center">precio</label>
+                    <div class="center" style="display: flex;">
+                        <button (click)="decrementPriceDecimal()" class="btn-decimal-quantity center">
+                            <mat-icon svgIcon="heroicons_outline:minus"></mat-icon>
+                        </button>
+                        <button (click)="decrementPriceNumber()" class="btn-quantity center">
+                            <mat-icon style="color: white;" svgIcon="heroicons_outline:minus"></mat-icon>
+                        </button>
+                        <label style="margin: 0px 10px; color: orange; font-size: 35px; font-weight: 500;">{{ form.get('suggestedPrice').value | customNumber }}</label>
+                        <button (click)="incrementPriceNumber()" class="btn-quantity center">
+                            <mat-icon style="color: white;" svgIcon="heroicons_outline:plus"></mat-icon>
+                        </button>
+                        <button (click)="incrementPriceDecimal()" class="btn-decimal-quantity center">
+                            <mat-icon svgIcon="heroicons_outline:plus"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div style="cursor: pointer;">
+                <div class="box">
+                    <p [class.parpadea]="activeAlert" class="alert">{{ message }}</p>
+                </div>
+                <btn-generic [color]="'green'" [label]="(isNew)?'Agregar':'Actualizar'" [icon]="'add_shopping_cart'" [withFull]="true"
+                    [disabled]="false" (buttonClick)="save()">
+                </btn-generic>
+
+            </div>
+        </form>
+    </div>
+</div>

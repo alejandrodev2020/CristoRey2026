@@ -1,0 +1,148 @@
+<div
+    class="preview-sale  p-0 rounded-2xl bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent">
+    <div class="flex items-start justify-between">
+        <div  class="p-4">Previsualisación de la compra</div>
+        <div class="p-4" (click)="close()">
+            <mat-icon svgIcon="heroicons_outline:x"></mat-icon>
+        </div>
+    </div>
+    <mat-divider class="mb-2"></mat-divider>
+    <form [formGroup]="form">
+        <div class="pl-4 pr-4">
+            <div class="grid sm:grid-cols-4 w-full mb-2">
+                <div class="sm:col-span-4">
+                    <div class="grid grid-cols-9">
+                        <div class="col-span-9 xs:col-span-9 sm:col-span-9" style="display: flex;">
+                            <div class="flex flex-col flex-auto mr-1">
+                                <mat-form-field class="w-full">
+                                    <mat-label>Proveedor:</mat-label>
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'"
+                                        matPrefix></mat-icon>
+                                    <input type="text" class="w-full" placeholder="Nombre Proveedor.."
+                                        aria-label="Number" matInput (click)="setListProvider()"
+                                        [formControl]="control('myControl')" [matAutocomplete]="auto" required>
+
+                                    <button (click)="cleanSearch()" mat-icon-button="" class="absolute right-0">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'"
+                                            matPrefix></mat-icon>
+                                    </button>
+                                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                                        (optionSelected)="onSelectionChange($event)" required>
+                                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                            {{option.firstName}} {{option.lastName}}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                    <mat-error *ngIf="form.get('myControl').hasError('required') && form.get('myControl').touched">
+                                        Este campo es obligatorio.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="">
+                                <div class="container-botton">
+                                    <button class="add-client center" (click)="addClient()">
+                                        <img class="icon-btn" src="assets/icons/add-user.svg" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sm:col-span-4">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Compras para la sucurzal: </mat-label>
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:library'" matPrefix></mat-icon>
+                        <mat-select [formControlName]="'WarehouseId'">
+                            <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
+                                {{warehouse.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="form.get('WarehouseId').hasError('required') && form.get('WarehouseId').touched">
+                            Este campo es obligatorio.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!------------------------------------------------------------------------------------------------------>
+            <mat-expansion-panel class="mt-4">
+                <mat-expansion-panel-header [collapsedHeight]="'56px'">
+                    <mat-panel-title>¿Deseas dejar alguna nota?</mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="flex">
+                    <mat-form-field [ngClass]="'formFieldHelpers'" class="flex-auto">
+                        <mat-label>Nota:</mat-label>
+                        <textarea matInput [formControlName]="'note'" cdkTextareaAutosize
+                            [cdkAutosizeMinRows]="3"></textarea>
+                        <mat-icon class="icon-size-5" matSuffix
+                            [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                    </mat-form-field>
+                </div>
+            </mat-expansion-panel>
+            <!------------------------------------------------------------------------------------------------------>
+
+            <br>
+            <mat-divider></mat-divider>
+        </div>
+
+
+        <div *ngFor="let item of orderNote.detailProduct">
+            <div class="m-3 p-3 item-product card">
+
+                <div class="grid grid-cols-12" style="background: white;">
+                    <div class="col-span-2">
+                        <div class="flex flex-col flex-auto">
+                            <img style="width: 50px !important;" [src]="'data:image/png;base64,' + item.picture" alt=""
+                                srcset="">
+                        </div>
+                    </div>
+                    <div class="col-span-4">
+                        <div class="flex flex-col flex-auto">
+                            <p style="font-weight: 700; color:#5FB960">{{item.name | truncate:35 }} </p>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="flex flex-col flex-auto">
+                            <p style="text-align: center; font-weight: 700; color:#000">Cant.</p>
+                            <p style="text-align: center;">{{item.count }}</p>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="flex flex-col flex-auto">
+                            <p style="font-weight: 700; text-align: center;color:#000">U. Med.</p>
+                            <p style="text-align: center">{{item.unitMeasurementSelect.name }}</p>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="flex flex-col flex-auto">
+                            <p style="font-weight: 700; color:#000;text-align: center">Sub T.</p>
+                            <p style="font-weight: 700; color:#ec9e29; text-align: center">{{ (item.price * item.count) | number : '1.0-2'}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pl-4 pr-4">
+            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                <mat-label>Descuento:</mat-label>
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:briefcase'" matPrefix></mat-icon>
+                <input [formControlName]="'discount'" (keyup)="calculateSubTotal()" matInput>
+            </mat-form-field>
+        </div>
+        <br>
+        <div class="flex items-center justify-between">
+            <btn-generic class="ml-3" [color]="'secondary'" [label]="' Cancelar'" [icon]="'close'"
+                [withFull]="false" [disabled]="false" (buttonClick)="close()">
+            </btn-generic>
+
+            <div class="flex items-center">
+                <btn-generic class="mr-3" [color]="'green'"
+                    [label]="'Bs. ' + (form.get('amountTotal')?.value || 0 | number : '1.0-2') + ' Pagar'"
+                    [icon]="'cash'" [withFull]="false" [disabled]="buttondisabled" (buttonClick)="saveShopping()">
+                </btn-generic>
+            </div>
+        </div>
+        <br>
+        <br>
+    </form>
+</div>

@@ -1,0 +1,97 @@
+<div>
+    <mat-divider></mat-divider>
+    <br>
+    <form  
+    [formGroup]="form"
+    ngNativeValidate
+    autocomplete="off"
+        >
+    <mat-form-field class="example-full-width w-100 mr-3" appearance="fill">
+      <mat-label>Cliente:</mat-label>
+      <mat-icon
+          class="icon-size-5"
+          [svgIcon]="'heroicons_solid:user-circle'"
+          matPrefix></mat-icon>
+      <input type="text"
+             class="w-full"
+             placeholder="Nombre Cliente.."
+             aria-label="Number"
+             matInput
+             [formControl]="control('myControl')"
+             [matAutocomplete]="auto"
+             >
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)" required>
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+          {{option.firstName}}  {{ option?.lastName || '' }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field class="w-50 mr-3">
+        <mat-label>Almacen</mat-label>
+        <mat-select [formControl]="control('warehouseId')" (selectionChange)="selectionWarehouse($event)">
+          <mat-option *ngFor="let item of listWarehouse" [value]="item.id">
+              {{item.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+    <mat-form-field class="w-50 mr-3">    
+        <mat-label>Tipo Venta</mat-label>
+        <mat-select [formControl]="control('typeId')"> 
+          <mat-option *ngFor="let option of optionsSaleType" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+    </mat-form-field> 
+
+    <mat-form-field class="w-50 mr-3">
+      <mat-label>Fechas</mat-label>
+      <mat-select [formControl]="form.get('dateType')" (selectionChange)="selectionData($event)">
+        <mat-option *ngFor="let option of optionsDate" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  <mat-form-field class="mr-3" color="accent" *ngIf="inputsDateVisible">
+      <mat-label>Inicio</mat-label>
+      <input  [formControl]="control('dateInit')" matInput [matDatepicker]="picker1">
+      <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    
+    <mat-form-field class="mr-3" color="accent" *ngIf="inputsDateVisible">
+      <mat-label>Fin</mat-label>
+      <input  [formControl]="control('dateEnd')" matInput [matDatepicker]="picker2">
+      <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker #picker2 color="primary"></mat-datepicker>
+    </mat-form-field>
+
+      <btn-generic 
+        [color]="'green'"
+        class="px-6 ml-3"
+        [label]="'filtrar'"
+        [icon]="'filter_list'"
+        [withFull]="false"
+        [disabled]="false"
+        (buttonClick)="save()">
+      </btn-generic>
+      <btn-generic 
+        [color]="'secondary'"
+        class="px-6 ml-3"
+        [label]="'Limpiar'"
+        [icon]="'clear_all'"
+        [withFull]="false"
+        [disabled]="false"
+        (buttonClick)="clean()">
+      </btn-generic>
+
+
+
+
+
+      <mat-divider class="mt-2"></mat-divider>
+    </form>
+</div>

@@ -1,0 +1,19 @@
+.bg-new{
+    position: relative;
+    /* background: rgba(0, 0, 0, 0.9); */
+    /* background: url('../../../../../assets/images/ui/fondo2.png') no-repeat center center; */
+    /* background: url('assets/images/backgrounds/portraint-autopernos.jpg') no-repeat center center; */
+    background: url('assets/images/backgrounds/doctor.png') no-repeat center center;
+    background-size: cover; /* Hace que la imagen cubra todo el contenedor */
+}
+
+.bg-new::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Capa de color negro con 50% de opacidad */
+    z-index: 10; /* Asegura que la capa esté detrás del contenido */
+}

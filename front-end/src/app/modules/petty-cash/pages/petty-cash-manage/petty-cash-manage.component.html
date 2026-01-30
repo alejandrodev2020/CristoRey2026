@@ -1,0 +1,262 @@
+<div class="contenido">
+    <!-- -------------------------------------tabla------------------------------------------------- -->
+    <div class="preview-sale  p-0 rounded-2xl bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent">
+        <div class="flex items-start justify-between mb-2">
+            <div>
+                <div class="w-full mt-4 ml-6">
+                    <div class="text-2xl font-semibold tracking-tight leading-6">Detalle de caja</div>
+                     <div class="font-medium tracking-tight text-secondary">Visualización de informacíon de caja</div>
+                </div>
+            </div>
+            <div  class="p-4" >
+                <div class="flex">
+                    <btn-export-pdf (click)="exportPdf()"></btn-export-pdf>
+                    <btn-export-excel (click)="downloadPDFTermic()"></btn-export-excel>
+                </div>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+    
+        <mat-tab-group class="mt-4" (selectedTabChange)="selectTab($event)">
+            <mat-tab label="Datos">
+
+                    <section class="ml-6 mr-6">
+                            <mat-divider></mat-divider>
+                            <div class="mt-2">
+                            <div style="border-radius: 6px;" class="mb-2 py-0.4 px-1 pt-3 pb-3  pl-2  text-sm text-start font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                <div class="text-3x2 font-extrabold tracking-tight leading-none">Dinero Total:</div>
+                                <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ pettyCashObj?.cashAmountMain | number : '1.2-2'}}</div>
+    
+                            </div>
+                            <mat-divider></mat-divider>
+                            <div class="mt-2 mb-2 grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+                                <div class="sm:col-span-4 lg:col-span-4">
+                                    <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pb-3 pl-2  text-sm text-start font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                        <div class="text-3x2 font-extrabold tracking-tight leading-none">Efectivo Total:</div>
+                                        <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ pettyCashObj?.cashAmountCash | number : '1.2-2'}}</div>
+    
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-4 lg:col-span-4">
+                                    <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pb-3 pl-2  text-sm text-start font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                                        <div class="text-3x2 font-extrabold tracking-tight leading-none">Qr Total:</div>
+                                        <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ pettyCashObj?.cashAmountQr | number : '1.2-2'}}</div>
+    
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-4 lg:col-span-4">
+                                    <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pb-3 pl-2  text-sm text-start font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                                        <div class="text-3x2 font-extrabold tracking-tight leading-none">Tarjeta Total:</div>
+                                        <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ pettyCashObj?.cashAmountCard | number : '1.2-2'}}</div>
+    
+                                    </div>
+                                </div>
+                            </div>
+                            <mat-divider></mat-divider>
+                        </div>
+    
+                        <br>
+    
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="mb-1 text-3x2 font-extrabold tracking-tight leading-none">Datos Principales</div>
+                            </div>
+                            <div class="flex items-center"> </div>
+                        </div>
+                        <div style="box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);" class="card-details mt-2 mb-2 py-4 px-5 rounded-lg ng-star-inserted">
+                             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-4" >
+                                    <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Fecha Apertura:</div>
+                                    <p>{{pettyCashObj?.pettyCashInit | dateFormatHours}} </p>
+                                    </div>
+                                    <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Fecha Cierre</div>
+                                    <p>{{pettyCashObj?.pettyCashEnd | dateFormatHours}}</p>
+                                    </div>
+                                    <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Ventas Total</div>
+                                    <p>Bs.- {{pettyCashObj?.amountSale | number : '1.2-2'}}</p>
+                                    </div>
+                                    <div style="border-radius: 6px;">
+                                        <div class="text-3x2 font-semibold tracking-tight leading-none">Monto Caja:</div>
+                                        <p>Bs.- {{pettyCashObj?.cashAmountMain | number : '1.2-2'}}</p>
+                                    </div>
+                                    <div style="border-radius: 6px;">
+                                        <div class="text-3x2 font-semibold tracking-tight leading-none">Vendedor Resp.:</div>
+                                        <p>{{pettyCashObj?.userSeller?.firstName}} {{ pettyCashObj?.userSeller?.lastName}} </p>
+                                    </div>
+                                    <div style="border-radius: 6px;">
+                                        <div class="text-3x2 font-semibold tracking-tight leading-none">Administrador Resp.:</div>
+                                        <p>{{pettyCashObj?.userAdmin?.firstName}} {{pettyCashObj?.userAdmin?.lastName}}</p>
+                                    </div>
+                                </div>
+                                <mat-divider></mat-divider>
+                            </div>
+    
+                    </section>
+                    <mat-divider class="mt-5 ml-6 mr-6"></mat-divider>
+                        <div class="mt-2 ml-6 mr-6 mb-1 text-3x2 font-extrabold tracking-tight leading-none">Datos Secundarios</div>
+                    <section class="ml-6 mr-6">
+                        <div style="box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);" class="card-details mt-2 py-4 px-5 rounded-lg ng-star-inserted">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-4" >
+                                <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Dinero Inicio:</div>
+                                    <p>{{pettyCashObj?.amountInit | number : '1.2-2'}} </p>
+                                </div>
+                                <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Dinero Sobrante:</div>
+                                    <p>{{pettyCashObj?.amountSpareMoney | number : '1.2-2'}}</p>
+                                </div>
+                                <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Dinero Faltante:</div>
+                                    <p>Bs.- {{pettyCashObj?.amountMissingMoney | number : '1.2-2'}}</p>
+                                </div>
+                                <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Monto Ventas - Credito:</div>
+                                <p>Bs.- {{pettyCashObj?.amountCreditCredit | number : '1.2-2'}}</p>
+                                </div>
+                                <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Sucursal:</div>
+                                <p>{{pettyCashObj?.warehouse.name}} </p>
+                                </div>
+                                <div style="border-radius: 6px;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-none">Nota Vendedor:</div>
+                                    <p>{{pettyCashObj?.note}}</p>
+                                </div>
+                            </div>
+                            </div>
+    
+    
+                            <div class="mt-3" *ngIf="viewGraphics" style="background: #f2f2f2;    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3); padding: 10px; border-radius: 7px;">
+                                <div style="text-align:center">
+                                    <apx-chart
+                                      [series]="chartOptions.series"
+                                      [chart]="chartOptions.chart"
+                                      [xaxis]="chartOptions.xaxis"
+                                      [colors]="chartOptions.colors"
+                                      [title]="chartOptions.title"
+                                    ></apx-chart>
+                                  </div>
+                            </div>
+    
+                    </section>
+    
+                    <br>
+                    <mat-divider></mat-divider>
+                    <br>
+    
+                    <div class="flex items-center justify-between">
+                        <div></div>
+                        <div class="flex items-center">
+                            <btn-generic
+                                class="px-6 ml-3"
+                                [color]="'black'"
+                                [label]="' Imprimir'"
+                                [icon]="'list'"
+                                [withFull]="false"
+                                [disabled]="true"
+                                (buttonClick)="closePettyCash()">
+                            </btn-generic>
+                            <btn-generic
+                                class="px-6 ml-3"
+                                [color]="'green'"
+                                [label]="' Cerrar Caja'"
+                                [icon]="'close'"
+                                [withFull]="false"
+                                [disabled]="pettyCashObj?.status?.id === 2"
+                                (buttonClick)="closePettyCash()"
+                                >
+                            </btn-generic>
+                        </div>
+                    </div>
+
+             </mat-tab>
+             <mat-tab label="Movimientos">
+                <petty-cash-movement *ngIf="viewMovements" [data]="id"></petty-cash-movement>
+    
+            </mat-tab>
+            <mat-tab label="Colaboradores">
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+                    <div class="sm:col-span-12 md:col-span-12 lg:col-span-12 ">
+                        <div class="flex flex-col">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                  <div class="text-3x2 font-extrabold tracking-tight leading-none">Detalles de los colaboradores</div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <btn-actions 
+                                        [color]="'green'" 
+                                        [label]="' Agregar Colaborador'" 
+                                        [icon]="'add'"
+                                        [withFull]="false"
+                                        [disabled]="false" 
+                                        (buttonClick)="addCollaborators()">
+                                    </btn-actions>
+                                </div>                   
+                            </div>
+                        </div>
+                        <!---->
+                        <table mat-table [dataSource]="dataSource" >
+
+                            <ng-container matColumnDef="id">
+                              <th mat-header-cell *matHeaderCellDef> No. </th>
+                              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                            </ng-container>
+            
+                            <ng-container matColumnDef="pettyCashId">
+                              <th mat-header-cell *matHeaderCellDef> Caja </th>
+                              <td mat-cell *matCellDef="let element"> {{element?.pettyCashId}}</td>
+                            </ng-container>
+            
+                            <ng-container matColumnDef="firstName">
+                              <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                              <td mat-cell *matCellDef="let element">
+                                   {{element?.operator?.firstName}}
+                              </td>
+                            </ng-container>
+                            
+                            <ng-container matColumnDef="lastName">
+                                <th mat-header-cell *matHeaderCellDef> Apellido </th>
+                                <td mat-cell *matCellDef="let element">
+                                     {{element?.operator?.lastName}}
+                                </td>
+                              </ng-container>
+                                          
+                              <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <chips-faam  [color]="'green'" [label]="'Activo'"></chips-faam>
+                                </td>
+                              </ng-container>
+                                                  
+
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <btn-actions 
+                                        [color]="'secondary'" 
+                                        [label]="' Inhabilitar'" 
+                                        [icon]="'close'"
+                                        [withFull]="false"
+                                        [disabled]="false" 
+                                        >
+                                     </btn-actions>
+                                </td>
+                              </ng-container>
+            
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+                        <!---->
+                    </div>
+                  </div>
+            </mat-tab>
+        </mat-tab-group>
+    
+    </div>
+    
+    <!-- -------------------------------------tabla------------------------------------------------- -->
+</div>
+
+    

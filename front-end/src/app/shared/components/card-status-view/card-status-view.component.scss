@@ -1,0 +1,24 @@
+.active-card{
+    background:#5FB960 !important;
+    width: 100% !important;
+    color:#fff !important;
+}
+
+.card-payment-type{
+    display: flex;
+    background: #c0c0c0;
+    color: #75716f;
+    width: 100% !important;
+    padding: 10px;
+    border-radius: 10px;
+    height: 60px;
+}
+
+.contenedor-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 1em;
+    font-weight: 600;
+  }

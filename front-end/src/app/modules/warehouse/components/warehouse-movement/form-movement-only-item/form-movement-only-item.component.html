@@ -1,0 +1,85 @@
+<div class="m-4 w-80">
+    <div class="flex items-center justify-between  dark:bg-gray-700">
+        <div></div>
+        <div>
+            <mat-icon (click)="close()" svgIcon="heroicons_outline:x"></mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <form [formGroup]="form" ngNativeValidate autocomplete="off">
+        <!-------------------------------------------------------------------------------------------------------------------------------->
+        <div class="w-full mt-1">
+            <div class="text-2xl text-center font-semibold tracking-tight leading-6">¿Seguro que quieres traspasar el
+                articulo {{product?.product?.name}}?</div>
+        </div>
+        <div class="flex items-center justify-center ">
+            <img style="width: 170px;" src="{{image}}">
+        </div>
+        <div style="display: ruby;">
+            <chips-info-label *ngFor="let unit of listUnitMeasurement"
+                [title]="unit?.unitMeasurementMotive?.name" (click)="addQuantity(unit)"
+                [active]="unit?.check"></chips-info-label>
+        </div>
+        <div class="w-full mt-1">
+               <div  class="available w-full px-3 py-1 font-bold">
+                    Disponible: {{ amountAvailable }} {{ checkUnitMeasurement?.name}}
+                </div>
+        </div>
+        <mat-divider class="mt-2 mb-2"></mat-divider>
+        <div class="w-full box">
+            <p [class.parpadea]="activeAlert" class="alert">{{message}}</p>
+       </div>
+        <div class="grid sm:grid-cols-12 gap-6 w-full mt-1">
+
+            <div class="sm:col-span-12">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>Cantidad a traspasar:</mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:currency-dollar'" matPrefix></mat-icon>
+                    <input 
+                    [formControlName]="'amount'" 
+                    (keyup)="validateStockAvailable()"
+                    matInput name="suggestedPrice">
+                </mat-form-field>
+            </div>
+            <div class="sm:col-span-12">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>Almacen Destino: </mat-label>
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:library'" matPrefix></mat-icon>
+                    <mat-select [formControlName]="'warehouseDestinationId'">
+                        <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
+                            {{warehouse.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="sm:col-span-12">
+                <mat-form-field [ngClass]="'formFieldHelpers'" class="w-full flex-auto">
+                    <mat-label>Nota:</mat-label>
+                    <textarea matInput [formControlName]="'noteRequest'" cdkTextareaAutosize
+                        [cdkAutosizeMinRows]="3"></textarea>
+                    <mat-icon class="icon-size-5" matSuffix [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+        <!-------------------------------------------------------------------------------------------------------------------------------->
+        <div class="flex items-center justify-between  dark:bg-gray-700">
+            <btn-generic 
+                    [color]="'secondary'"
+                    [label]="'Cancelar'"
+                    [icon]="'close'" 
+                    [withFull]="false"
+                    [disabled]="false"
+                    (buttonClick)="close()">
+                </btn-generic>  
+                <btn-generic 
+                    [color]="'green'"
+                    [label]="'Solicitar'"
+                    [icon]="'check'" 
+                    [withFull]="false"
+                    [disabled]="false"
+                    (buttonClick)="sendRequeset()">
+                </btn-generic>
+        </div>
+    </form>
+</div>

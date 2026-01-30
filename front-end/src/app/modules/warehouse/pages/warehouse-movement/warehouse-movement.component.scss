@@ -1,0 +1,42 @@
+.contenido{
+    width: 100%;
+    padding: 20px;
+    margin: 8px;
+    border-radius: 5px;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+}
+
+.center-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+
+
+.small-button {
+  padding: 2px 4px;  /* Ajusta el padding según sea necesario */
+  font-size: 12px;  /* Ajusta el tamaño de la fuente según sea necesario */
+  min-width: 36px;  /* Ajusta el ancho mínimo si es necesario */
+}
+
+.small-button mat-icon {
+  font-size: 16px; /* Ajusta el tamaño del icono según sea necesario */
+}
+
+.table-responsive {
+    overflow-x: auto;
+  }
+  @media only screen and (max-width: 599px) {
+    .hide-on-small-screen {
+      display: none; /* Ocultar elementos en pantallas pequeñas */
+    }
+  }
+
+  @media only screen and (min-width: 600px) {
+    .show-on-small-screen {
+      display: none; /* Ocultar elementos en pantallas grandes */
+    }
+  }

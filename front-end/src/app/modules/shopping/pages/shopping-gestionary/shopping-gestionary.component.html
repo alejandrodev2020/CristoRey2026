@@ -1,0 +1,87 @@
+<div class="contenido">
+  <!------------------------------------------------------->
+
+  <div class="flex flex-col md:flex-row items-center justify-between dark:bg-gray-700 p-4">
+    <div class="w-full mt-4 ml-[-5px]"> <!-- Añadir ml-[-3px] para mover el texto 3px a la izquierda -->
+      <div class="text-2xl font-semibold tracking-tight leading-6">Listado de compras</div>
+      <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para compra</div>
+    </div>
+    <div class="flex flex-col md:flex-row items-center mt-4 md:mt-0">
+      <btn-generic class="px-6 ml-3" [color]="'green'" [label]="'Crear Nuevo'" [icon]="'add'" [withFull]="false"
+        (click)="createNew()">
+      </btn-generic>
+    </div>
+  </div>
+  
+  <!------------------------------------------------------->
+
+  <div class="flex items-center justify-between mt-2" style="color:#a2c747 !important">
+    <button (click)="toggleFilter()" class="flex items-center" style="margin-left: 8px;">
+      <mat-icon style="color:#a2c747 !important">{{ isFilterVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+      <span style="color:#a2c747 !important" class="ml-2 font-bold text-black">{{ isFilterVisible ? 'Ocultar filtros' : 'Mostrar filtros' }}</span>
+    </button>
+  </div>
+  
+  <div *ngIf="isFilterVisible">
+    <filter-shopping-gestionary (emitQuery)="senfilter($event)"></filter-shopping-gestionary>
+  </div>
+  
+
+  <div class="mat-elevation-z0 table-responsive mt-8">
+    <div class="overflow-x-auto">
+      <table mat-table [dataSource]="dataSource" class="table min-w-full">
+        <!-- Position Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> No.</th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="warehouse">
+          <th mat-header-cell *matHeaderCellDef> Sucursal </th>
+          <td mat-cell *matCellDef="let element"> {{element.warehouse.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="provider">
+          <th mat-header-cell *matHeaderCellDef> Proveedor </th>
+          <td mat-cell *matCellDef="let element"> {{element.provider.businessName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="shoppingDate">
+          <th mat-header-cell *matHeaderCellDef> Fecha Compra</th>
+          <td mat-cell *matCellDef="let element"> {{element.shoppingDate | dateFormatHours}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amountTotal">
+          <th mat-header-cell *matHeaderCellDef> Monto</th>
+          <td mat-cell *matCellDef="let element"> {{element.amountTotal | number : '1.2-2'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef> Estado </th>
+          <td mat-cell *matCellDef="let element">
+            <chips-faam *ngIf="element.shoppingStatusId === 1" [color]="'green'" [label]="'Comprado'">
+            </chips-faam>
+            <chips-faam *ngIf="element.shoppingStatusId === 2" [color]="'red'" [label]="'Cancelado'">
+            </chips-faam>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon class="mr-2" (click)="overView(element)">visibility</mat-icon>
+            <!-- <mat-icon class="mr-2" (click)="update(element)">create</mat-icon> -->
+            <mat-icon class="mr-2" (click)="lowWarehouse(element)">delete_forever</mat-icon>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <mat-paginator [pageSizeOptions]="[10, 20,50,100,1000,10000]" showFirstLastButtons aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+  <!-------------------------------------------->
+</div>

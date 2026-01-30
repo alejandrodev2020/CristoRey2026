@@ -1,0 +1,140 @@
+<!-- <div #content id="content">
+    <div class="contenido-pdf" style="display: grid;">
+
+        <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-4 lg:col-span-4">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>N°:   </strong></p>
+                </div>
+            </div>
+            <div class="sm:col-span-8 lg:col-span-8">
+                <div class="flex flex-col flex-auto">
+                    <p> {{ saleOrder?.order}} </p>
+                 </div>  
+            </div>
+        </div>
+        <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-4 lg:col-span-4">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>Cliente:   </strong></p>
+                </div>
+            </div>
+            <div class="sm:col-span-8 lg:col-span-8">
+                <div class="flex flex-col flex-auto">
+                    <p> {{ saleOrder?.client?.firstName}}  {{ saleOrder?.client?.lastName}} </p>
+                 </div>  
+            </div>
+        </div>
+        <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-4 lg:col-span-4">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>Fecha:   </strong></p>
+                </div>
+            </div>
+            <div class="sm:col-span-8 lg:col-span-8">
+                <div class="flex flex-col flex-auto">
+                    <p> {{ saleOrder?.saleDate |  dateFormatHours}} </p>
+                 </div>  
+            </div>
+        </div>
+        <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-4 lg:col-span-4">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>Vendedor:   </strong></p>
+                </div>
+            </div>
+            <div class="sm:col-span-8 lg:col-span-8">
+                <div class="flex flex-col flex-auto">
+                    <p> Carlos Eduardo Fernadez P. </p>
+                 </div>  
+            </div>
+        </div>
+
+        <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-4 lg:col-span-4">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>Almacen:   </strong></p>
+                </div>
+            </div>
+            <div class="sm:col-span-8 lg:col-span-8">
+                <div class="flex flex-col flex-auto">
+                    <p> {{ saleOrder?.warehouse?.name}} </p>
+                 </div>  
+            </div>
+        </div>
+        <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-4 lg:col-span-4">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>Tipo Venta:   </strong></p>
+                </div>
+            </div>
+            <div class="sm:col-span-8 lg:col-span-8">
+                <div class="flex flex-col flex-auto">
+                    <p> {{ saleOrder?.saleType?.name}} </p>
+                 </div>  
+            </div>
+        </div>
+        <br>
+        <br>
+        <mat-divider></mat-divider>
+        <br>
+        <br>
+        <table class="table">
+            <thead style="font-size: 27px;">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Cant.</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Desc.</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody style="font-size: 27px;">
+              <tr class="detail-item" *ngFor="let detail of saleOrder?.details; index as i">
+                <th scope="row"> {{i+1}} </th>
+                <td class="text-center">{{detail?.product?.name}}</td>
+                <td class="text-center">{{detail?.amount}}</td>
+                <td class="text-center">{{detail?.price}}</td>
+                <td class="text-center">{{detail?.discucount}}</td>
+                <td class="text-center">{{detail?.subTotal}}</td>
+                <br>
+                <br>
+              </tr>
+            </tbody>
+          </table>
+          <br>
+          <br>        
+          <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-8 lg:col-span-8">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>Total:   </strong></p>
+                </div>
+            </div>
+            <div class="sm:col-span-4 lg:col-span-4">
+                <div class="flex flex-col flex-auto">
+                    <p style="text-align: end;"><strong>Bs. {{ saleOrder?.amountTotal}} </strong> </p>
+                 </div>  
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="grid header-pdf grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-12 lg:col-span-12">
+                <div class="flex flex-col flex-auto">
+                   <p><strong>Nota:   </strong>La Presente nota de venta es efectuada por el sistema "ManagementStore"
+                 el uso indevido de la presente, sera penada deacuerdo a la ley.</p>
+                 <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+  <button mat-raised-button (click)="generarPDF()" id="donwloadpdf">
+  DESCARGAR CARTA DE CONFORMIDAD
+</button> -->

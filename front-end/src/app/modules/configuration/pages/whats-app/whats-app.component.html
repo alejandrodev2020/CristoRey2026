@@ -1,0 +1,48 @@
+<div class="base-content">
+    <div class="contenido">
+        <!---------------------------------------------------------------------------------------------------------------------------->
+
+        <!------------------------------------------------------------------------------------------------------------------------------------>
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+            <div
+                class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-6 sm:py-12 md:px-8 border-b bg-card dark:bg-transparent"
+                style="flex-shrink: 0; overflow-x: auto; width: 100%;">
+                <div>
+                    <div class="text-4xl font-extrabold tracking-tight leading-none">Whats App</div>
+                    <div class="flex items-center mt-0.5 font-medium text-secondary"></div>
+                </div>
+                <div class="mt-0 sm:mt-0"></div>
+            </div>
+
+            <div style="flex-grow: 1; display: flex; justify-content: center; align-items: center; overflow-y: auto;">
+                <div>
+                    <p style="text-align:  center;">{{labelText}}</p>
+                    <img *ngIf="!sessionActive" style="width: 400px;" src="assets/images/ui/generate-qr.png" />
+                    <img *ngIf="sessionActive" style="width: 400px; height: 400px;" [src]=[imageqr]>
+                    <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+                        <btn-generic
+                           *ngIf="!sessionActive"
+                            [color]="'green'"
+                            [label]="'Generar Codigo Qr'"
+                            [icon]="'share'"
+                            [withFull]="true"
+                            (click)="generateQr()">
+                        </btn-generic>
+                        <btn-generic
+                            *ngIf="sessionActive"
+                            [color]="'secondary'"
+                            [label]="'Cerrar Session'"
+                            [icon]="'exit_to_app'"
+                            [withFull]="true"
+                            (click)="closeSession()">
+                        </btn-generic>
+                    </div>
+                     <div>
+                        <!-- Aqui se vera el estado -->
+                     </div>
+                </div>
+            </div>
+        </div>
+        <!---------------------------------------------------------------------------------------------------------------------------->
+    </div>
+</div>

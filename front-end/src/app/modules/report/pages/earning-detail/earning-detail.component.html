@@ -1,0 +1,151 @@
+<div class="base-content">
+    <div class="contenido">
+      <div class="p-3">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-12 md:col-span-12 lg:col-span-12 ">
+                <div class="flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <div></div>
+                        <div>
+                            <!-- <btn-export-pdf
+                              [label]="'Imprimir'">
+                            </btn-export-pdf> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        <br>
+        <div>
+            <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+             <div class="grid grid-cols-12">
+                <div class="col-span-12 mt-2">
+                    <div class="flex flex-col flex-auto">
+                        <div class="grid grid-cols-1  sm:grid-cols-1 md:grid-cols-2 gap-6 w-full min-w-0">
+                            <div class="flex flex-col flex-auto p-4 bg-card shadow rounded-2xl overflow-hidden">
+                                <div class="mt-2 text-3x2 font-extrabold tracking-tight leading-none">Detalles de la Venta</div>
+                                <div class="m-4 grid grid-cols-12">
+                                    <div class="col-span-6">
+                                        <div class="flex flex-col flex-auto">
+                                            <p><strong>Cod Venta:</strong> SALE - {{currentSale?.id}}</p>
+                                            <p><strong>Cliente:</strong> {{currentSale?.client?.firstName}} {{currentSale?.client?.lastName}}</p>
+                                            <p><strong>Vendedor:</strong>{{currentSale?.user?.firstName}} {{currentSale?.user?.lastName}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-6">
+                                        <div class="flex flex-col flex-auto">
+                                            <p><strong>Fecha Venta:</strong> {{currentSale?.saleDate | dateFormatHours}}</p>
+                                            <p><strong>Tipo Pago:</strong> {{currentSale?.saleType.name}} </p>
+                                            <p><strong>Monto Total:</strong> {{currentSale?.amountTotal  | number : '1.2-2'}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+                                  
+                                    <div class="mt-2 mb-2" *ngFor="let item of currentSale?.details">
+                                        <div class="item-preview mb-2 grid grid-cols-1 sm:grid-cols-12 gap-4 w-full h-full min-w-0">
+                                            <div class="sm:col-span-3 lg:col-span-3">
+                                                <div class="background-white center-items flex flex-col flex-auto text-center">
+                                                    <mat-icon svgIcon="heroicons_outline:shopping-bag"></mat-icon>
+                                                </div>
+                                            </div>
+                                            <div class="sm:col-span-5 lg:col-span-5">
+                                                <div class="flex flex-col flex-auto">
+                                                    <div >
+                                                        <div class="text-3x2 font-semibold tracking-tight leading-6">{{item.product?.name}}</div>
+                                                        <div class="font-medium tracking-tight text-secondary">{{item?.unitMeasurenment?.name }} x{{item.amountOrigin}}    ------    Precio:{{item.price}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="sm:col-span-1 lg:col-span-1 pr-3" style=" width: 100% !important; text-align: end;">
+                                                <div style="font-weight: 600; padding-right: 10px;">
+                                                    cod:{{item.product?.id}}
+                                                 </div>
+                                            </div>
+                                            <div class="sm:col-span-3 lg:col-span-3 pr-3" style=" width: 100% !important; text-align: end;">
+                                                <div class="text-3x2 font-semibold tracking-tight leading-6" style="color: #C0D222;">Bs {{item.subTotal  | number:'1.0-2'}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+                                    <div class="m-4 grid grid-cols-12">
+                                        <div class="col-span-8">
+                                            <div class="flex flex-col flex-auto">
+                                                <p><strong>Nota:</strong>Escanea este codigo qr, para poder ver mas detalle de la venta realizada</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-span-4">
+                                            <div class="flex flex-col flex-auto">
+                                                <p><strong>Total :  {{currentSale?.amountTotal  | number : '1.2-2'}}</strong></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="items-center" style="width: 100%;">
+                                        <img style="width: 125px; height: 125px;" [src]="'data:image/png;base64,' + currentSale?.codeQrLink" alt="">
+                
+                                    </div>
+                            </div>
+                       
+                            <div class="flex flex-col flex-auto p-4 bg-card shadow rounded-2xl overflow-hidden">
+                                <div class="text-3x2 font-extrabold tracking-tight leading-none">Detalles de Ganancias</div>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+                                <br>
+
+                       
+                                <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+                                <div class="mt-2 mb-2" *ngFor="let item of earningDetail">
+                                    <div class="item-preview mb-2 grid grid-cols-1 sm:grid-cols-12 gap-4 w-full h-full min-w-0">
+                                        <div class="sm:col-span-3 lg:col-span-3">
+                                            <div class="background-white center-items flex flex-col flex-auto text-center">
+                                                <mat-icon svgIcon="heroicons_outline:shopping-bag"></mat-icon>
+                                            </div>
+                                        </div>
+                                        <div class="sm:col-span-5 lg:col-span-5">
+                                            <div class="flex flex-col flex-auto">
+                                                <div >
+                                                    <div class="text-3x2 font-semibold tracking-tight leading-6">{{item.product?.name}}</div>
+                                                    <div class="font-medium tracking-tight text-secondary">{{item?.unitMeasurenment?.name }} x{{item.amountOrigin}}    ------    Precio:{{item.price}}</div>            
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="sm:col-span-4 lg:col-span-4 pr-3" style=" width: 100% !important; text-align: end;">
+                                            <div *ngIf="item.amountEarning > 0" class="text-3x2 font-semibold tracking-tight leading-6" style="color: #C0D222;">Ganancia : Bs {{item.amountEarning  | number:'1.0-2'}}</div>
+                                            <div *ngIf="item.amountEarning ==  0" class="text-3x2 font-semibold tracking-tight leading-6" style="color: #67619c;">Sin Ganancia : Bs {{item.amountEarning  | number:'1.0-2'}}</div>
+                                            <div *ngIf="item.amountEarning < 0" class="text-3x2 font-semibold tracking-tight leading-6" style="color: #f77206;">Perdida : Bs {{item.amountEarning  | number:'1.0-2'}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+                        
+                                <div style="border-radius: 6px;" class="mt-2 mb-2 py-0.4 px-1 pt-3 pb-3  pl-2  text-sm text-end font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                    <div class="text-3x2 font-extrabold tracking-tight leading-none">Ganancia Total:</div>
+                                    <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.  {{amountTotalEarning  | number:'1.0-2'}}</div>
+            
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+   
+            </div>
+
+
+
+
+
+
+
+
+        </div>
+        <div class="mt-5" style="background: #1e293b; width: 100%; height: 1px;"></div>
+
+     </div>
+
+    </div>
+  </div>
+

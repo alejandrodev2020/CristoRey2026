@@ -1,0 +1,119 @@
+<div class="p-6">
+    <div class="flex items-center justify-between dark:bg-gray-700">
+        <div>
+            Agregar producto
+        </div>
+        <div (click)="close()">
+            <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="content">
+        <div class="flex items-center justify-between dark:bg-gray-700">
+            <div>
+                <div>
+                    <label class="text-product-name text-lg">{{product?.name   | truncate:20 }}</label>
+                    <div style="font-size: 12px;" class="text-secondary">{{product?.description  | truncate:25 }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-between mt-2">
+            <div style="font-weight: 800; padding-right: 10px;">
+                cod:{{product?.id}}
+            </div>
+            <div></div>
+        </div>
+        <div class="flex items-center justify-center">
+            <img style="width: 200px;" src="data:image/png;base64,{{product.picture}}">
+        </div>
+        <div *ngIf="listUnitMeasurement?.length > 0">
+            <div class="mb-2">
+                <p style="margin: 0;">tu compra es por:</p>
+                <div style="display: ruby;">
+                    <chips-info-label *ngFor="let unit of listUnitMeasurement" [title]="unit?.unitMeasurementMotive?.name"
+                        [label]="'Etiqueta de Ejemplo'" (click)="addQuantity(unit)"
+                        [active]="unit?.checkDefault"></chips-info-label>
+                </div>
+            </div>
+        </div>
+
+        <form [formGroup]="form" ngNativeValidate autocomplete="off" #aForm2>
+            <!-------------------------------------------------------------------------------------------------------------------------------->
+            <div class="grid grid-cols-6">
+                <div class="col-span-2 m-1">
+                        <input-decimal
+                        [formControl]="form.get('count')"  
+                        [label]="'Cantidad: '"  
+                        nameInput="count"                  
+                        numberDecimal="2"                  
+                        (keydown.enter)="handleKeyDown($event, 'suggestedPrice')"  
+                        (keydown.escape)="handleKeyDown($event, 'close')"          
+                        (keyup)="calculateSubTotal()">    
+                       </input-decimal>
+                </div>
+                <div class="col-span-2 m-1">
+                    <input-decimal
+                    [formControl]="form.get('suggestedPrice')"  
+                    [label]="'Precio sugerido: '" 
+                    nameInput="suggestedPrice"                  
+                    numberDecimal="2"                  
+                    (keydown.enter)="handleKeyDown($event, 'discount')"
+                    (keydown.escape)="handleKeyDown($event, 'countInput')" (keyup)="calculateSubTotal()"
+                    name="suggestedPrice">
+                   </input-decimal>
+                </div>
+                <div class="col-span-2 m-1">
+                    <input-decimal
+                    [formControl]="form.get('discount')"  
+                    [label]="'Descuento: '" 
+                    nameInput="discount"                  
+                    numberDecimal="2"                  
+                    (keydown.enter)="handleKeyDown($event, 'expired')"
+                    (keydown.escape)="handleKeyDown($event, 'suggestedPrice')" (keyup)="calculateSubTotal()"
+                    name="discount">
+                   </input-decimal>
+                </div>
+                <div class="sm:col-span-6" *ngIf="this.product.requiredExpired">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-label>Fecha Vencimiento:</mat-label>
+                        <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                            [svgIcon]="'heroicons_solid:cube-transparent'"></mat-icon>
+                        <input #expired matInput [matDatepicker]="birthdayDatepicker"
+                            [formControlName]="'expirationDate'" (keydown.enter)="handleKeyDown($event, 'save')"
+                            (keydown.space)="openDatepicker()" (keydown.escape)="handleKeyDown($event, 'discount')"
+                            (keyup)="calculateSubTotal()" [placeholder]="'Fecha vencimiento'">
+                        <mat-datepicker-toggle matSuffix [for]="birthdayDatepicker"></mat-datepicker-toggle>
+                        <mat-datepicker #birthdayDatepicker></mat-datepicker>
+                        <mat-error *ngIf="form.get('expirationDate').hasError('required') && form.get('expirationDate').touched">
+                            <span class="text-red-500">Fecha Vencimiento requerido</span>
+                          </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="btn-sub-total mt-2">
+                <strong style="color: #fff">Sub Total: Bs.<strong style="color:#fff">{{(form.get('subTotal').value || 0 | number:'1.0-2')}}</strong> </strong>
+            </div>
+            <div>
+                <div class="box">
+                    <p [class.parpadea]="activeAlert" class=" alert">{{message}}</p>
+                </div>
+                <div class="grid grid-cols-12">
+                    <div class="col-span-4">
+                        <div class="flex flex-col flex-auto ml-1 mr-1">
+                            <btn-generic [color]="'secondary'" [label]="'Cerrar'" [icon]="'close'" [withFull]="true"
+                                [disabled]="false" (buttonClick)="close()">
+                            </btn-generic>
+                        </div>
+                    </div>
+                    <div class="col-span-8">
+                        <div class="flex flex-col flex-auto  ml-1 mr-1">
+                            <btn-generic [color]="'green'" [label]="isNew ? 'Agregar' : 'Actualizar'"
+                                [icon]="'shopping_basket'" [withFull]="true" [disabled]="false" (buttonClick)="save()">
+                            </btn-generic>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

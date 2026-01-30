@@ -1,0 +1,78 @@
+<div class="base-content">
+    <div class="contenido">
+        <!---------------------------------------------------------------------------------------------------------------------------->
+
+        <!------------------------------------------------------------------------------------------------------------------------------------>
+        <div style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-6 sm:py-12 md:px-8 border-b bg-card dark:bg-transparent"
+                style="flex-shrink: 0; overflow-x: auto; width: 100%;">
+                <div>
+                    <div class="text-4xl font-extrabold tracking-tight leading-none">Metodos de Pago</div>
+                    <div class="flex items-center mt-0.5 font-medium text-secondary"></div>
+                </div>
+                <div class="mt-0 sm:mt-0"></div>
+            </div>
+            <form [formGroup]="form">
+                <div class="w-full text-xl mt-2">Metodos</div>
+                <div class="grid grid-cols-1 gap-6 w-full mt-8">
+                    <div class="border-t"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex-auto cursor-pointer" (click)="communication.toggle()">
+                            <img  style="width: 50px;" src="assets/images/ui/cash.png" />
+                            <div class="leading-6 font-medium">Efectivo</div>
+                            <div class="text-md text-secondary">Transferencia de dinero físico (billetes y monedas) por bienes o servicios.</div>
+                        </div>
+                        <mat-slide-toggle class="ml-2" [color]="'primary'" [formControlName]="'paymentCash'"
+                            #communication>
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="border-t"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex-auto cursor-pointer" (click)="securityToggle.toggle()">
+                            <img  style="width: 35px; height: 35px;" src="assets/images/ui/qr.png" />
+                            <div class="leading-6 font-medium">Codigo QR</div>
+                            <div class="text-md text-secondary">Pago mediante código QR escaneado con un dispositivo móvil.</div>
+                        </div>
+                        <mat-slide-toggle class="ml-2" [color]="'primary'" [formControlName]="'paymentQr'"
+                            #securityToggle>
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="border-t"></div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex-auto cursor-pointer" (click)="meetupsToggle.toggle()">
+                            <img  style="width: 45px; height: 30px;" src="assets/images/ui/card.png" />
+                            <div class="leading-6 font-medium">Tarjeta</div>
+                            <div class="text-md text-secondary">Pago mediante tarjeta de crédito o débito, procesado electrónicamente.</div>
+                        </div>
+                        <mat-slide-toggle class="ml-2" [color]="'primary'" [formControlName]="'paymentCard'" #meetupsToggle>
+                        </mat-slide-toggle>
+                    </div>
+                </div>
+                <div class="my-10 border-t"></div>
+                <div class="flex items-center justify-end">
+                    <btn-generic 
+                        class="px-6 ml-3"
+                        [color]="'secondary'" 
+                        [label]="' Cancelar'" 
+                        [icon]="'close'" 
+                        [withFull]="false"
+                        [disabled]="false"
+                        (buttonClick)="cancel()">
+                     </btn-generic>
+
+                     <btn-generic 
+                        class="px-6 ml-3"
+                        [color]="'green'" 
+                        [label]="'Actualizar'" 
+                        [icon]="'add'" 
+                        [withFull]="false"
+                        [disabled]="false"
+                        (buttonClick)="save()">
+                    </btn-generic>
+                </div>
+            </form>
+
+        </div>
+        <!---------------------------------------------------------------------------------------------------------------------------->
+    </div>
+</div>

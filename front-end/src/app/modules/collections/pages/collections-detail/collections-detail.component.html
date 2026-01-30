@@ -1,0 +1,187 @@
+<div class="base-content">
+    <div class="contenido">
+      <div class="p-3">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+            <div class="sm:col-span-12 md:col-span-12 lg:col-span-12 ">
+                <div class="flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <div></div>
+                        <div>
+                            <btn-export-pdf
+                              [label]="'Imprimir'">
+                            </btn-export-pdf>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        <br>
+        <div>
+            <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+
+            <div class="grid grid-cols-1  sm:grid-cols-1 md:grid-cols-2 gap-6 w-full min-w-0">
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="mt-2 text-3x2 font-extrabold tracking-tight leading-none">Detalles de la Venta</div>
+                    <div class="m-4 grid grid-cols-12">
+                        <div class="col-span-6">
+                            <div class="flex flex-col flex-auto">
+                                <p><strong>Cod Venta:</strong> SALE - {{currentSale?.id}}</p>
+                                <p><strong>Cliente:</strong> {{currentSale?.client?.firstName}} {{currentSale?.client?.lastName}}</p>
+                                <p><strong>Vendedor:</strong>{{currentSale?.user?.firstName}} {{currentSale?.user?.lastName}}</p>
+                            </div>
+                        </div>
+                        <div class="col-span-6">
+                            <div class="flex flex-col flex-auto">
+                                <p><strong>Fecha Venta:</strong> {{currentSale?.saleDate | dateFormatHours}}</p>
+                                <p><strong>Tipo Pago:</strong> {{currentSale?.saleType.name}} </p>
+                                <p><strong>Monto Total:</strong> {{currentSale?.amountTotal  | number : '1.2-2'}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+                        <div class="mt-2 mb-2" *ngFor="let item of currentSale?.details">
+                            <div class="item-preview mb-2 grid grid-cols-1 sm:grid-cols-12 gap-4 w-full h-full min-w-0">
+                                <div class="sm:col-span-3 lg:col-span-3" style="">
+                                    <div class="background-white center-items flex flex-col flex-auto text-center">
+                                        <mat-icon svgIcon="heroicons_outline:shopping-bag"></mat-icon>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-6 lg:col-span-6" style="">
+                                    <div class="flex flex-col flex-auto">
+                                        <div >
+                                            <div class="text-3x2 font-semibold tracking-tight leading-6">{{item.product?.name}}</div>
+                                            <div class="font-medium tracking-tight text-secondary">{{item?.unitMeasurenment?.name }} x{{item.amountOrigin}}    ------    Precio:{{item.price}}</div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sm:col-span-3 lg:col-span-3 pr-3" style=" width: 100% !important; text-align: end;">
+                                    <div class="text-3x2 font-semibold tracking-tight leading-6" style="color: #C0D222;">Bs {{item.subTotal}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+                    <mat-divider></mat-divider>
+                    <div style="text-align: end;">
+                       <div class="text-amount" style="color: #000;">Total :{{currentSale?.amountTotal}}  Bs</div>
+                       <div *ngIf="currentSale?.saleTypeId === 2" class="text-amount" style="color: #34bcbd;">Dinero Recivido:  {{currentSale?.paymentDelivered}} Bs </div>
+                       <div *ngIf="currentSale?.saleTypeId === 2" class="text-amount" style="color: #ff6000;">Saldo Pendiente:  {{currentSale?.amountOfDebt}} Bs</div>
+                        
+                    </div>
+                 <mat-divider></mat-divider>  
+                    <div class="m-4 grid grid-cols-12">
+                        <div class="col-span-3">
+                            <div class="flex flex-col flex-auto">
+                                <img style="width: 125px; height: 125px;" [src]="'data:image/png;base64,' + currentSale?.codeQrLink" alt="">
+                            </div>
+                        </div>
+                        <div class="col-span-9">
+                            <div class="flex flex-col flex-auto">
+                                <p><strong>Nota:</strong>Escanea este codigo qr, para poder ver mas detalle de la venta realizada</p>
+                            </div>
+                        </div>
+                     
+                    </div>
+                </div>
+                <!-- Overdue -->
+                <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                    <div class="text-3x2 font-extrabold tracking-tight leading-none">Detalles de credito</div>
+                    <div class="m-4 grid grid-cols-12">
+                        <div class="col-span-6">
+                            <div class="flex flex-col flex-auto">
+                                <p><strong>Estado del Credito:</strong>{{collectionsCurrent?.status?.name}}</p>
+                            </div>
+                        </div>
+                        <div class="col-span-6">
+
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full mt-2 md:mt-6" >
+
+
+                      <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                         <div class="text-3x2 font-extrabold tracking-tight leading-none">A Dejado Inicio:</div>
+                         <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ currentSale?.paymentDelivered | number : '1.2-2'}}</div>
+
+                     </div>
+                      <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-500">
+                          <div class="text-3x2 font-extrabold tracking-tight leading-none">Deuda Pendiente:</div>
+                          <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ collectionsCurrent?.amountCredit | number : '1.2-2'}}</div>
+
+                      </div>
+                    </div>
+                    <!---->
+                    <div>
+                        <br>
+                        <div class="flex items-center justify-between">
+                          <div>
+                              <div class="text-3x2 font-extrabold tracking-tight leading-none">Pagos</div>
+                          </div>
+                          <div>
+                              <btn-actions
+                                 [color]="'green'"
+                                 [label]="'Agregar'"
+                                 [icon]="'add'"
+                                 [withFull]="true"
+                                 [disabled]="collectionsCurrent?.status?.id === 2"
+                                 (buttonClick)="addPayment()"
+                               >
+                              </btn-actions>
+                          </div>
+                         </div>
+
+                            <br>
+                            <div class="details">
+                              <table mat-table [dataSource]="dataSource" >
+
+                                <ng-container matColumnDef="id">
+                                  <th mat-header-cell *matHeaderCellDef> No. </th>
+                                  <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="paymentDate">
+                                  <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                                  <td mat-cell *matCellDef="let element"> {{element.paymentDate | dateFormatHours }} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="amount">
+                                  <th mat-header-cell *matHeaderCellDef> Monto </th>
+                                  <td mat-cell *matCellDef="let element">Bs. {{element.amount | number : '1.2-2'}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                  <th mat-header-cell *matHeaderCellDef> Saldo </th>
+                                  <td mat-cell *matCellDef="let element">Bs. {{element.balance| number : '1.2-2'}}
+                                    <!-- <chips-faam *ngIf="element.movementTypeId == 1" [color]="'green'" [label]="'Ingreso'"></chips-faam>
+                                    <chips-faam *ngIf="element.movementTypeId == 2" [color]="'red'" [label]="'Egreso'"></chips-faam> -->
+                                  </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="actions">
+                                  <th mat-header-cell *matHeaderCellDef> Acción </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <mat-icon class="mr-2" (click)="overView(element)">visibility</mat-icon>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                              </table>
+
+                            </div>
+
+                     </div>
+                    <!---->
+                </div>
+             </div>
+
+
+        </div>
+
+
+     </div>
+
+    </div>
+  </div>
+

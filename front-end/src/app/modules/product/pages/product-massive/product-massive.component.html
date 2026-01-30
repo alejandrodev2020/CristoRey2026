@@ -1,0 +1,103 @@
+<div class="base-content">
+    <div class="contenido">
+<!---------------------------------------------------------------------------------------------------------------------------->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between sm:py-6  border-b bg-card dark:bg-transparent">
+                <div>
+                    <div class="text-4xl font-extrabold tracking-tight leading-none">Subida Masiva</div>
+                    <div class="flex items-center mt-0.5 font-medium text-secondary">
+                    </div>
+                </div>
+                <div class="mt-4 sm:mt-0"></div>
+            </div>
+        <!---------------------------------------------------------------------------------------------------------------------------->
+        <ng-container>
+            <div class="mb-3">
+                <div class="font-medium">Gestión</div>
+                <p>En esta sección, puedes cargar productos de manera masiva. Descarga una plantilla de Excel como ejemplo, edítala con la información de tus productos y luego súbela para agregar o actualizar múltiples productos de forma rápida y eficiente.</p>
+                <div
+                    class="flex flex-wrap -m-2 mt-2">
+                    <div>
+                        <form
+                        [formGroup]="form"
+                        ngNativeValidate
+                        autocomplete="off">
+                        <div class="flex items-center justify-between  dark:bg-gray-700">
+                            <!-- <div (click)="uploadFile.click()">
+                                <btn-generic
+                                   mat-raised-button
+                                   class="px-6 ml-3"
+                                   [color]="'green'"
+                                   [label]="' Subir Excel'"
+                                   [icon]="'cloud_upload'"
+                                   [withFull]="false"
+                                   [disabled]="false">
+                                </btn-generic>
+                               <input #uploadFile (change)="upload($event)" type='file' style="display:none"/>
+                           </div> -->
+                           <btn-generic
+                               class="ml-2"
+                               [color]="'secondary'"
+                               [label]="'Descargar Plantilla'"
+                               [icon]="'cloud_download'"
+                               [withFull]="false"
+                               [disabled]="false"
+                               (buttonClick)="dowloadTemplate()">
+                           </btn-generic>
+                        </div>
+
+                    </form>
+
+                    </div>
+                    <div class="mb-3 border-b"></div>
+                    <br>
+                </div>
+            </div>
+
+        <div class="center" style="height: 73%;" >
+            <div style="text-align: center;">
+                <div class="center">
+                    <img *ngIf="!existFile" style="width: 350px;"  src="assets/images/ui/empty.png"/>
+                    <img *ngIf="existFile" style="width: 125px;"  src="assets/images/ui/excel_image.png"/>
+                </div>
+                <h4>{{fileName}}</h4>
+                <div *ngIf="!existFile" (click)="uploadFile.click()">
+                        <btn-generic
+                        mat-raised-button
+                        class="px-6 ml-3"
+                        [color]="'green'"
+                        [label]="' Subir Excel'"
+                        [icon]="'cloud_upload'"
+                        [withFull]="false"
+                        [disabled]="false">
+                        </btn-generic>
+                       <input #uploadFile (change)="upload($event)" type='file' style="display:none"/>
+                 </div>
+                 <btn-generic
+                    *ngIf="existFile"
+                    mat-raised-button
+                    class="px-6 ml-3"
+                    [color]="'green'"
+                    [label]="' Subir Datos'"
+                    [icon]="'cloud_upload'"
+                    [withFull]="false"
+                    [disabled]="false"
+                    (buttonClick)="sendMassiveData()">
+                  </btn-generic>
+                  <btn-generic
+                    *ngIf="existFile"
+                    mat-raised-button
+                    class="px-6 ml-3"
+                    [color]="'secondary'"
+                    [label]="' Borrar archivo'"
+                    [icon]="'clear'"
+                    [withFull]="false"
+                    [disabled]="false"
+                    (buttonClick)="removeFile()">
+                    </btn-generic>
+            </div>
+        </div>
+        <div class="mb-3 border-b"></div>
+        </ng-container>
+<!----------------------------------------------------------------------------------------------------------------------------------->
+    </div>
+</div>

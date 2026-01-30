@@ -1,0 +1,112 @@
+<div class="p-6">
+ <div class="flex items-center justify-between dark:bg-gray-700">
+    <div>
+       Agregar producto
+    </div>
+    <div (click)="close()">
+         <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+     </div>
+ </div>
+ <hr>
+ <div class="content">
+    <div class="flex items-center justify-between dark:bg-gray-700">
+        <div>
+            <div >
+                <label style="font-size:27px !important;" class="text-lg">{{product?.name | truncate:15 }}</label>
+                <div style="font-size: 12px;" class="text-secondary">{{product?.description  | truncate:15}}</div>
+            </div>
+        </div>
+        <div>
+            <span  style="background: #5FB960; color:#fff" class="inline-flex rounded px-3 py-1 font-bold">
+                <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="cash"></mat-icon>
+                Sub Total:  Bs. {{ form.get('subTotal').value }}</span>
+                <div class="text-center py-0.5 px-3 rounded-full text-sm font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                    disponible : 23
+                 </div>
+         </div>
+     </div>
+    <div class="flex items-center justify-center ">
+        <img style="width: 250px;" src="data:image/png;base64,{{product.picture}}">
+    </div>
+    <form
+    [formGroup]="form"
+    ngNativeValidate
+    autocomplete="off"
+    #aForm
+>
+
+<!-------------------------------------------------------------------------------------------------------------------------------->
+    <div class="grid sm:grid-cols-6">
+         <div class="sm:col-span-2">
+            <mat-form-field
+                style="    padding: 2px;"
+                class="w-full"
+                [subscriptSizing]="'dynamic'">
+                <mat-label>Cantidad:</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_outline:plus'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'count'"
+                    matInput
+                    (keyup.enter)="addInput('price')"
+                    (keyup)="calculateSubTotal()">
+                </mat-form-field>
+            </div>
+        <div class="sm:col-span-2">
+            <mat-form-field
+            style="    padding: 2px;"
+                class="w-full"
+                [subscriptSizing]="'dynamic'">
+                <mat-label>Precio sugerido:</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_outline:currency-dollar'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'price'"
+                    matInput
+                    (keyup.enter)="addInput('discount')"
+                    (keyup)="calculateSubTotal()"
+                    name="price">
+            </mat-form-field>
+        </div>
+            <div class="sm:col-span-2">
+                <mat-form-field
+                style="    padding: 2px;"
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Descuento:</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_outline:minus'"
+                        matPrefix></mat-icon>
+                    <input
+                        [formControlName]="'discount'"
+                        (keyup.enter)="addInput('save')"
+                        (keyup)="calculateSubTotal()"
+                        matInput
+                        name="discount">
+                </mat-form-field>
+            </div>
+    </div>
+
+   <br>
+   <div>
+        <btn-generic
+            class="px-6 ml-3"
+            [color]="'green'"
+            [label]="' Guardar'"
+            [icon]="'shopping-cart'"
+            [withFull]="true"
+            [disabled]="false"
+            (buttonClick)="save()">
+        </btn-generic>
+       <span *ngIf="isNew" (click)="save()"  class="btn-add inline-flex rounded px-3 py-1 font-bold"><mat-icon svgIcon="heroicons_outline:shopping-cart"></mat-icon>Agregar </span>
+       <span *ngIf="!isNew" (click)="save()"  class="btn-add inline-flex rounded px-3 py-1 font-bold"><mat-icon svgIcon="heroicons_outline:shopping-cart"></mat-icon>Actualizar </span>
+    </div>
+
+</form>
+</div>
+</div>

@@ -1,0 +1,220 @@
+<div class="base-content">
+    <div class="contenido">
+        <!-------------------------------------------->
+        <div class="pd-20 card-box mb-30">
+            <div class="">
+                <div class="">
+                    <div class="w-full mt-4">
+                        <div *ngIf="isCreate" class="text-2xl font-semibold tracking-tight leading-6">Registro de Usuario</div>
+                        <div *ngIf="!isCreate" class="text-2xl font-semibold tracking-tight leading-6">Actualización de Usuario</div>
+                         <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para Usuarios</div></div>
+                    <br>
+                    <mat-divider></mat-divider>
+                    <br>
+                    <form
+                        [formGroup]="form"
+                        ngNativeValidate
+                        autocomplete="off"
+                        (ngSubmit)="save()"
+                    >
+<!-------------------------------------------------------------------------------------------------------------------------------->
+                    <div>
+                        <div  class="flex items-center justify-center">
+                        <img class="image" [src]="imageSource" alt="Image Source">
+                        </div>
+                        <div class="flex items-center justify-center mt-1">
+                            <div style="width: 200px;" class="flex items-center justify-center">
+                            <div class="flex items-center justify-center bg-primary-500 p-1" style="border-radius: 5px; width: 100%;" >
+                                    <input
+                                        id="avatar-file-input"
+                                        class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                        type="file"
+                                        [multiple]="false"
+                                        [accept]="'image/jpeg, image/png'"
+                                        (change)="uploadAvatar(avatarFileInput.files)"
+                                        #avatarFileInput>
+                                    <label
+                                        class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                                        for="avatar-file-input"
+                                        matRipple>
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="'heroicons_outline:camera'"></mat-icon>
+                                    </label>
+                                </div>
+                                <div (click)="removeAvatar()" class=" flex items-center justify-center bg-warn-500 p-1"
+                                     style="border-radius: 5px;width: 100%; height: 48px;">
+                                    <mat-icon
+                                    class="text-white"
+                                    [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<!------------------------------------------------------------------------------------------------------------------------------------------------------------>
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <div class="sm:col-span-2">
+                            <input-text
+                            [formControl]="control('firstName')"
+                            [label]="'Nombre:'"
+                            [maxLength]="50"
+                            [minLength]="3"
+                            [icon]="'heroicons_outline:user-circle'"
+                            [disabled]="false"
+                            [placeholder]="'nombre..'"
+                            >
+                            </input-text>
+                        </div>
+                        <div class="sm:col-span-2">
+                                <input-text
+                                [formControl]="control('lastName')"
+                                [label]="'Apellido:'"
+                                [maxLength]="50"
+                                [minLength]="3"
+                                [icon]="'heroicons_outline:user-circle'"
+                                [disabled]="false"
+                                [placeholder]="'apellido..'"
+                                >
+                                </input-text>
+                            </div>
+                        </div>
+
+<!------------------------------------------------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------------------------------------------------>
+                        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                            <div class="sm:col-span-2">               
+                                <input-text
+                                [formControl]="control('phone')"
+                                [label]="'Celular:'"
+                                [maxLength]="50"
+                                [minLength]="3"
+                                [icon]="'heroicons_outline:phone'"
+                                [disabled]="false"
+                                [placeholder]="'celular..'"
+                                >
+                                </input-text>
+                            </div>
+
+                            <div class="sm:col-span-2">                                 
+                                    <input-text
+                                    [formControl]="control('ci')"
+                                    [label]="'N° Carnet:'"
+                                    [maxLength]="50"
+                                    [minLength]="3"
+                                    [icon]="'heroicons_outline:identification'"
+                                    [disabled]="false"
+                                    [placeholder]="'carnet..'"
+                                    >
+                                    </input-text>
+                                </div>
+                            </div>
+
+<!------------------------------------------------------------------------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------------------------------------------------------------------------>
+                            <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                                <div class="sm:col-span-2">
+                                    <input-text
+                                    [formControl]="control('userName')"
+                                    [label]="'Usuario:'"
+                                    [maxLength]="50"
+                                    [minLength]="3"
+                                    [icon]="'heroicons_solid:briefcase'"
+                                    [disabled]="false"
+                                    [placeholder]="'carnet..'"
+                                    >
+                                    </input-text>
+                                </div>
+
+                                <div class="sm:col-span-2">
+                                        <mat-form-field
+                                            class="w-full"
+                                            [subscriptSizing]="'dynamic'">
+                                            <mat-label>Contraseña</mat-label>
+                                            <mat-icon
+                                                class="icon-size-5"
+                                                [svgIcon]="'heroicons_outline:lock-closed'"
+                                                matPrefix></mat-icon>
+                                            <input
+                                                id="password"
+                                                matInput
+                                                type="password"
+                                                [formControlName]="'userKey'"
+                                                #passwordField
+                                                maxlength="30">
+                                            <button
+                                                mat-icon-button
+                                                type="button"
+                                                (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                                                matSuffix>
+                                                <mat-icon
+                                                    class="icon-size-5"
+                                                    *ngIf="passwordField.type === 'password'"
+                                                    [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                                                <mat-icon
+                                                    class="icon-size-5"
+                                                    *ngIf="passwordField.type === 'text'"
+                                                    [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                                            </button>
+                                            <mat-error>
+                                                Password requerido
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+<!------------------------------------------------------------------------------------------------------------------------------------------------------------>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+                                <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                                    <div class="sm:col-span-2">
+                                        <mat-form-field
+                                            class="w-full"
+                                            [subscriptSizing]="'dynamic'">
+                                                <mat-label>Rol:</mat-label>
+                                                <mat-icon
+                                                class="icon-size-5"
+                                                [svgIcon]="'heroicons_solid:briefcase'"
+                                                matPrefix></mat-icon>
+                                                <mat-select [formControlName]="'authRoleId'">
+                                                <mat-option [value]="1">Administrador</mat-option>
+                                                <mat-option [value]="2">Colaborador</mat-option>
+                                                </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+                        <br>
+                        <br>
+                        <div class="flex items-center justify-between dark:bg-gray-700">
+                            <div></div>
+                            <div>
+                               <btn-generic
+                                   class="px-6 ml-3"
+                                   [color]="'secondary'"
+                                   [label]="' Cancelar'"
+                                   [icon]="'close'"
+                                   [withFull]="false"
+                                   [disabled]="false"
+                                   (buttonClick)="cancelStore()">
+                                </btn-generic>
+                                <btn-generic
+                                    class="px-6 ml-3"
+                                    [color]="'green'"
+                                    [label]="' Guardar'"
+                                    [icon]="'save'"
+                                    [withFull]="false"
+                                    [disabled]="dissableBotton"
+                                    (buttonClick)="save()">
+                                </btn-generic>
+                             </div>
+                         </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-------------------------------------------->
+
+    </div>
+</div>

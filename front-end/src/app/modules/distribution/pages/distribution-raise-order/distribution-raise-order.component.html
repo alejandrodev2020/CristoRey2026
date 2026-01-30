@@ -1,0 +1,257 @@
+<div class="base-content">
+    <div class="contenido" style="overflow: hidden;">
+        <div class="visibility-component">
+            <div class="fab-container">
+                <div class="number-items">
+                    {{productListSelect?.length}}
+                </div>
+                <button mat-fab style="background: #A2C747 !important;" aria-label="Add" (click)="onFabClick()">
+                    <mat-icon  color="white" svgIcon="heroicons_outline:shopping-cart"></mat-icon>
+                </button>
+
+            </div>
+        </div>
+        <div  class="grid grid-cols-12 w-full h-full min-w-0" *ngIf="warehouseSelectStatus">
+            <div class="col-span-12 sm:col-span-12 md:col-span-7 lg:col-span-7 xl:col-span-9" style="height: 90vh;">
+                <div *ngIf="warehouseSelectStatus" class="card-product w-full pl-2 pr-2"
+                    style="height: 90px; background: #e2e8f0;">
+                    <br>
+                    <form [formGroup]="form" class="w-full" >
+                        <div style="display: flex;">                        
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                     <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:search'" matPrefix></mat-icon>
+                                <!-- <input 
+                                    [formControlName]="'search'"
+                                    placeholder="Buscar por nombre.."
+                                    (keyup)="searchCriteria()" 
+                                    (ngModelChange)="onSearchChange($event)"
+                                    matInput> -->
+
+
+                                    <input 
+                                        [formControlName]="'search'"
+                                        placeholder="Buscar por nombre.."
+                                        (ngModelChange)="onSearchChange($event)" 
+                                        matInput>
+                                        
+                                        
+                                        
+                                    <!-- <input 
+                                    [formControlName]="'search'"
+                                    placeholder="Buscar por nombre.."
+                                    matInput> -->
+
+
+
+                                <button (click)="cleanSearch()" type="button" mat-icon-button="" class="absolute right-0">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:x'"
+                                        matPrefix></mat-icon>
+                                </button>
+                            </mat-form-field>
+                            <button (click)="searchProduct()" class="btn-action">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+                <cdk-virtual-scroll-viewport class="example-viewport  h-full" itemSize="100" itemSize="50" 
+                (scrolledIndexChange)="onScroll($event)">
+                    <div *ngIf="warehouseSelectStatus"
+                        class="grid grid-cols-2 sm:grid-cols-12 xs:grid-cols-12 w-full min-w-0">
+                        <div *ngFor="let product of productList | filter:myCriteria" 
+                        class="custom-shadow xs:col-span-6 sm:col-span-4  md:col-span-4 lg:col-span-3 xl:col-span-3  flex flex-col flex-auto p-0 bg-card shadow rounded overflow-hidden p-1 m-1 mt-2"
+                       style="background: #fff !important;"
+                       (click)="selectProduct(product)">
+                            <div class="p-2">
+                                <div class="flex items-center justify-between">
+                                    <div
+                                        class="py-0.5 px-3 rounded-full text-sm font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                        Disp : {{product?.amount | number : '1.0-2'}}
+                                    </div>
+                                    <div class="flex items-center">
+                                        <mat-icon *ngIf="!product?.check" class="icon-size-5 text-danger-600"
+                                            [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
+                                        <mat-icon *ngIf="product?.check" class="icon-size-5 text-green-600"
+                                            [svgIcon]="'heroicons_solid:badge-check'"></mat-icon>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <div
+                                        class="py-0.5 px-3 rounded-full text-sm font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                                        {{product?.unitMeasurement?.name}}
+                                    </div>
+                                    <div style="font-weight: 800; padding-right: 10px;">
+                                       cod:{{product?.id}}
+                                    </div>
+                                </div>
+                            </div>
+                            <img style="max-width: 230px; max-height: 230px; align-self:center; "
+                                src="data:image/png;base64,{{product.product.picture}}">
+                                
+                            <div class="text-center mt-1 mb-1">
+                                <div class="text-lg font-bold leading-none">{{product?.product?.name| truncate:20}}
+                                </div>
+                                <div class="text-secondary">{{product?.product?.description | truncate:25}}</div>
+                            </div>
+                            <div class="price-product">
+                                <div class="price-product-label text-center" style="background: #A2C747;">
+                                    <label for="" style="color: #fff; font-weight: 700;">Bs {{ product?.suggestedPrice |
+                                        number : '1.0-2'}}</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </cdk-virtual-scroll-viewport>
+            </div>
+
+        
+             <div class="md:col-span-5 lg:col-span-5  xl:col-span-3 custom-shadow">
+                <div  class="show-on-small-screen p-2" style="background: #1e293b;">
+                    <div class="text-center">
+                        <div style="color: #fff;" class="text-lg font-bold leading-none">Detalle de Lenantamiento</div>
+                        <div style="color: #fff;" class="text-secondary">Carrito</div>
+                    </div>
+                    <div class="flex items-center justify-between" style="transform: translateX(-41px);">
+                        <btn-generic class="px-6 ml-3" [color]="'secondary'" [label]="'Cancelar'" [icon]="'close'"
+                            [withFull]="false" [disabled]="false" (buttonClick)="cancelStore()">
+                        </btn-generic>
+                        <div class="flex items-center">
+                            <btn-generic class="px-6 ml-3" [color]="'green'"
+                                [label]="'Bs. ' + (totalDinner | number : '1.0-2') + ' Pagar'"
+                                [icon]="'monetization_on'" [withFull]="false" [disabled]="false"
+                                (buttonClick)="previewStore()">
+                            </btn-generic>
+                        </div>
+                    </div>
+
+                </div>
+                <cdk-virtual-scroll-viewport  class="custom-shadow example-viewport h-full " itemSize="100">
+                    <mat-divider></mat-divider>
+                    <div *ngIf="productListSelect.length === 0" class="h-full center">
+                        <img style="width: 250px !important;" src="assets/images/ui/empty_cart_icon.svg" />
+                    </div>
+                    <div class="listProduct">
+                        <div *ngFor="let item of productListSelect" class="custom-shadow" style="background: #fff;">
+                            <div class="itemSelect">
+                                <div class="flex items-center justify-between">
+                                    <div (click)="updateSelect(item)">
+                                        <label style="font-weight: 700;
+                                    font-size: 20px;">{{item?.product?.name | truncate:20}}</label>
+                                        <p>{{item?.product?.description | truncate:20 }}</p>
+                                    </div>
+
+                                    <div class="flex items-center" (click)="removeItem(item)">
+                                        <mat-icon class="icon-size-7 text-red-600" [svgIcon]="'heroicons_solid:trash'">
+                                        </mat-icon>
+                                    </div>
+                                </div>
+                                <div class="" (click)="updateSelect(item)">
+
+                                    <div class="flex items-center justify-between">
+                                        <p>Precio: Bs.{{item?.price | number : '1.0-2'}}</p>
+                                        <p>Descuento : {{item?.discount | number : '1.0-2'}}</p>
+                                    </div>
+
+
+
+
+                                    <div class="flex items-center justify-between">
+                                        <p>Cantidad : {{item?.count | number : '1.0-2'}}</p>
+                                        <div
+                                            class="py-1.5 px-3 rounded-full text-sm font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                                            {{item?.unitMeasurementSelect?.unitMeasurement?.name}}
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center justify-between mt-2">
+                                        <div
+                                            class="py-1.5 px-3 rounded-full text-sm font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                                            <p>Descuento : {{item?.discount | number : '1.0-2'}}</p>
+                                        </div>
+                                        <div
+                                            class="py-1.5 px-3 rounded-full text-sm font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                                            Sub Total : Bs. {{item?.subTotal | number : '1.0-2'}}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </cdk-virtual-scroll-viewport>
+            </div>
+        </div>
+
+        <div *ngIf="!warehouseSelectStatus" class="w-full max-w-screen-xl mx-auto" style="overflow: hidden;">
+            <div *ngIf="viewMessage" class="">
+                <div class="hijo">
+                    <!--============================================================-->
+                    <div class="w-full mt-1">
+                        <div class="mb-4 text-2xl text-center font-semibold tracking-tight leading-6">¡Selecciona una
+                            sucurzal!</div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+                        <div *ngFor="let item of listWarehouse" class="sm:col-span-6 md:col-span- lg:col-span-3"
+                            (click)="setWarehouse(item)">
+                            <div class="card-warehouse">
+                                <div class="container">
+                                    <div class="background-div">
+
+                                        <div
+                                            style="display: flex; align-items: center; justify-content: center; width: 100%; height: 70%;">
+                                            <div>
+                                                <h1 class="mt-5 title-banner">Vista previa de Almacen</h1>
+                                                <div class="center-div">
+                                                    <img class="mt-2 image-banner"
+                                                        src="assets/images/ui/icon-warehouse.png" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <h4 class="text-center bold-text">{{ item.pettyCash?.status?.name }}</h4> -->
+                                    </div>
+                                    <div class="foreground-div">
+                                        <div
+                                            style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+                                            <div class="flex" style="width: 100%;">
+                                                <div class="flex flex-col items-center lg:items-start  lg:mt-0 ml-8">
+                                                    <div class="text-lg font-bold leading-none">{{item.name}}</div>
+                                                    <div class="text-secondary">{{item.description | truncate:10 }}
+                                                    </div>
+                                                </div>
+
+                                                <div class=" lg:flex h-8 mx-8 border-l-2"></div>
+
+                                                <div class="flex items-center lg:mt-0 space-x-6">
+                                                    <div class="flex flex-col items-center">
+                                                        <span class="font-bold">Codigo:</span>
+                                                        <span
+                                                            class="text-sm font-medium text-secondary">{{item?.code}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--============================================================-->
+                </div>
+            </div>
+        </div>
+        <!---------------------------------------------------------------------------------------------------------------------------->
+    </div>
+</div>

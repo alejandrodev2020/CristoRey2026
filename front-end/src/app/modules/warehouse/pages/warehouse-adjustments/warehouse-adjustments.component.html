@@ -1,0 +1,125 @@
+<div class="base-content">
+    <div class="contenido">
+     <div class="grid grid-cols-1 sm:grid-cols-12 w-full h-full min-w-0">
+        <div class="sm:col-span-12 lg:col-span-12" style="overflow: hidden;">
+            <div class="w-full pl-2 pr-2">   
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+                <div class="sm:col-span-4 lg:col-span-3">
+                    <div class="flex flex-col flex-auto">
+                     
+                        <div class="w-full">
+                            <div class="text-2xl font-semibold tracking-tight leading-6">Listado de productos</div>
+                            <div class="font-medium tracking-tight text-secondary">Gestion de productos del almacen {{warehouseId}}</div>
+                          </div>
+                    </div>
+                </div>
+                <div class="sm:col-span-8 lg:col-span-9">
+                    <div class="" style="display: flex; justify-content: right; justify-content: right;align-items: flex-end;">
+                       
+                        <div class="flex pb-2" style="overflow-y: hidden;">
+                            <btn-actions
+                              class="w-full sm:w-auto mr-2"
+                              [color]="'orange'"
+                              [label]="'Agregar Todos'"
+                              [icon]="'check'"
+                              [withFull]="true"
+                              [disabled]="false"
+                              (buttonClick)="addProductForWareouse()">
+                            </btn-actions>
+                            <btn-actions
+                              class="w-full sm:w-auto mr-2"
+                              [color]="'green'"
+                              [label]="'Agregar Seleccionados'"
+                              [icon]="'check'"
+                              [withFull]="true"
+                              [disabled]="false"
+                              (buttonClick)="gestionaryTransfer()">
+                            </btn-actions>
+                          </div>
+                    </div>  
+                </div>
+            </div>          
+            </div>
+
+            <div class="flex items-center justify-between mt-2" style="color:#a2c747 !important">
+                <button (click)="toggleFilter()" class="flex items-center">
+                  <mat-icon style="color:#a2c747 !important">{{ isFilterVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  <span style="color:#a2c747 !important" class="ml-2 font-bold text-black">{{ isFilterVisible ? 'Ocultar filtros' :
+                    'Mostrar filtros' }}</span>
+                </button>
+              </div>            
+            <div *ngIf="isFilterVisible">
+                <filter-item  class="mb-1 mt-1" (emitQuery)="senfilter($event)"></filter-item>
+            </div>
+            <mat-divider class="mt-2"></mat-divider>
+            <div class="flex items-center justify-center">
+                <mat-paginator
+                   [pageSizeOptions]="listOptionsPage"
+                   [length]="totalLength"
+                   [pageIndex]="page"
+                   [pageSize]="limit"
+                   showFirstLastButtons
+                   (page)="pageEvent($event)"
+                   aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+           
+            <mat-divider></mat-divider>
+            <!-- <div *ngIf="productList.length == 0" style="height: 50% !important; width: 100% !important; ">
+                 <div style="display: flex; justify-content: center; align-items: center; height: 100%;"> 
+                    <img style="width: 260px;" src="assets/images/ui/empty_cart_icon.svg" alt="Empty cart icon" />
+                </div>
+            </div> -->
+            <cdk-virtual-scroll-viewport class="example-viewport  h-full" itemSize="10" (scrolledIndexChange)="onScroll($event)">
+                <div class="grid grid-cols-1 sm:grid-cols-12 w-full h-full">
+                        <div  *cdkVirtualFor="let product of productList" class="sm:col-span-6 xs:col-span-12  md:col-span-3   lg:col-span-2
+                                     flex flex-col flex-auto p-0 bg-card shadow rounded overflow-hidden p-1 m-1"  style="background: #fff !important;">
+                            <div class="p-2">
+                                <div class="flex justify-between">
+                                    <div> 
+                                        <div class="ml-2" style="font-weight: 600; padding-right: 10px;">
+                                            cod:{{product?.id}}
+                                         </div>
+                                       
+                                    </div>
+                                    <div>
+                                        <mat-checkbox
+                                        class="-ml-2"
+                                        [color]="'primary'"
+                                       
+                                        >
+                                        Selecciónar
+                                    </mat-checkbox>
+                                    </div>
+                                </div>
+                              
+                            </div>
+                            <div class="flex items-center justify-center">
+                                <img style="max-width: 170px; max-height: 170px;"  [src]="product?.picture ? 'data:image/png;base64,' + product?.picture : imageSource" >
+                            </div>
+                            <div class="text-center mt-1 mb-1 h-full">
+                                <div class="product-name">{{product?.name | truncate : 40}}</div>
+                                <div class="product-description">{{product?.description | truncate : 40}}</div>       
+                            </div>
+                            <div class="text-center" style="background: #D5D8DC;">
+                            </div>
+                        </div>
+                        <div *ngIf="loading" class="loading-spinner">Cargando...</div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+              </cdk-virtual-scroll-viewport>
+        </div>
+       </div>
+<!---------------------------------------------------------------------------------------------------------------------------->
+    </div>
+</div>

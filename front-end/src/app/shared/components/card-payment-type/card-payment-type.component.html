@@ -1,0 +1,21 @@
+<div *ngIf="type==='Efectivo'" class="card-payment-type" [class.active-card] = "active">
+    <img  style="width: 50px;" src="assets/images/ui/cash.png" />
+    <div class="contenedor-center">  Efectivo</div>
+</div>
+
+
+<div *ngIf="type==='Qr'" class="card-payment-type" [class.active-card] = "active">
+    <img  style="width: 35px; height: 35px;" src="assets/images/ui/qr.png" />
+    <div class="contenedor-center"> Cod. Qr</div>
+</div>
+
+
+<div *ngIf="type==='Tarjeta'" class="card-payment-type" [class.active-card] = "active">
+    <img  style="width: 70px; height: 30px;" src="assets/images/ui/card.png" />
+    <div class="contenedor-center">  Tarjeta</div>
+</div>
+
+<div *ngIf="type==='mix'" class="card-payment-type" [class.active-card] = "active">
+    <img  style="width: 70px; height: 40px;" src="assets/images/ui/mix.svg" />
+    <div class="contenedor-center">  Mixto</div>
+</div>

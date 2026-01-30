@@ -1,0 +1,52 @@
+<form class="flex flex-col mt-4 px-8 pt-1  rounded overflow-hidden">
+
+    <div class="flex items-center justify-between -mx-8  px-8 py-5  dark:bg-gray-700">
+       <div>Filtros:</div>
+       <div>
+           <button mat-button>
+               Limpiar
+            </button>
+            <button
+            class="px-6 ml-3"
+            mat-flat-button
+            [color]="'primary'">
+            Filtrar
+            </button>
+        </div>
+    </div>
+    
+    <div class="flex items-center justify-end -mx-8  px-8 py-5  dark:bg-gray-700">
+
+
+            <div class="grid sm:grid-cols-4 gap-6 w-full">
+                <div class="sm:col-span-1 hide-xs">p</div>
+                <div class="sm:col-span-1 hide-xs">2</div>
+          
+                <div class="sm:col-span-1">
+                    <mat-form-field
+                        class="w-full"
+                        [subscriptSizing]="'dynamic'">
+                        <input
+                            placeholder="Nombre.."
+                            matInput>
+                    </mat-form-field>
+                </div>
+                
+                <div class="sm:col-span-1">
+                    <mat-form-field class="w-full">
+                        <mat-select [placeholder]="'Estado..'">
+                            <mat-option value="country-1">Activo</mat-option>
+                            <mat-option value="country-2">Inactivo</mat-option>
+                            <mat-option value="country-3">Deprecado</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+
+     </div>
+
+
+</form>
+<br>
+<mat-divider></mat-divider>
+<br>

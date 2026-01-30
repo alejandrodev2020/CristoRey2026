@@ -1,0 +1,72 @@
+.my-alert {
+    position: relative;
+    width: 100%;
+
+}
+
+.modal-actions {
+    position: absolute;
+    bottom: 50px; 
+    /* left: 50%; */
+    /* transform: translateX(-60%);  */
+    /* transform: translateY(50%);  */
+    
+    display: flex;
+    justify-content: space-around;
+    width: 20%; 
+    transition: transform 0.3s ease-in-out; /* Animación suave al mover los botones */
+}
+
+button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-download {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-hide {
+    background-color: #f44336;
+    color: white;
+}
+
+
+
+.btn-warning-faam{
+    background: #F39C12;
+    color: #fff;
+    border-radius: 18px !important;
+}
+.btn-success-faam{
+    background: #A2C747 !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+}
+
+.btn-bad-faam{
+    background: #1e293b !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+}
+.btn-secondary-faam{
+    background: #b4beca !important;
+    color: #fff !important;
+    border-radius: 18px !important;
+}
+
+
+
+
+.btn-disabled-faam {
+    background: #D3D3D3 !important; /* Color de fondo para deshabilitado */
+    color: #1e293b !important; /* Color de texto para deshabilitado */
+    border-radius: 18px !important; /* Mantén el mismo border-radius */
+    cursor: not-allowed; /* Cambia el cursor */
+}
+.btn-shadow-faam {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);  /* Puedes modificar esta sombra a tu gusto */
+}

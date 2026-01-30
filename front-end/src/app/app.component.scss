@@ -1,0 +1,32 @@
+:host {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+}
+
+.contenido{
+    width: 100%;
+    padding: 20px;
+    margin: 8px;
+    border-radius: 5px;
+    background: #fff;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 25px rgb(0 0 0 / 10%);
+}
+
+::ng-deep .btn-warning-faam{
+    background: orange;
+    color: #fff;
+}
+
+::ng-deep.mat-mdc-dialog-surface {
+            padding: 0px !important;  
+}
+
+::ng-deep .overview-sale  {
+    
+    border-radius: 1px !important;
+ }
+
+ 

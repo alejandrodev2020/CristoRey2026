@@ -1,0 +1,267 @@
+<div class="preview-sale  p-0 rounded-2xl bg-card print:w-auto print:rounded-none print:shadow-none print:bg-transparent">
+    <div class="flex items-start justify-between mb-2">
+        <div>
+            <div class="w-full mt-4 ml-6">
+                <div class="text-2xl font-semibold tracking-tight leading-6">Plan Basico</div>
+                 <div class="font-medium tracking-tight text-secondary">Actual Plan adquirido</div>
+            </div>
+        </div>
+        <div  class="p-4" (click)="close()">
+            <mat-icon svgIcon="heroicons_outline:x"></mat-icon>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero dolorum voluptates quaerat, amet expedita doloribus quibusdam, sit ipsum nihil eveniet dolore optio quae culpa quidem, esse tenetur provident beatae repellat.</p> -->
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full min-w-0 p-2">
+        <!-- Summary -->
+        <div class="flex flex-col flex-auto  bg-card shadow rounded-2xl overflow-hidden">
+           
+            <fuse-card class="flex-col max-w-sm md:max-w-none p-1">
+                <div class="text-2xl font-bold tracking-tight leading-tight">Basico</div>
+                <div class="mt-2 text-lg font-medium tracking-tight text-secondary">Plan Gratuito para todo tipo de negocio</div>
+                <div class="w-8 h-1 my-2 rounded bg-accent"></div>
+                <!-- Price -->
+                <div class="flex items-baseline whitespace-nowrap">
+                    <div class="mr-2 text-2xl">BS.</div>
+                    <div class="text-3xl font-semibold leading-tight tracking-tight">
+                        <ng-container >0.00</ng-container>
+
+                    </div>
+                </div>
+                <!-- Price details -->
+                <!-- <div class="flex flex-col mt-2 text-secondary">
+                    <ng-container >
+                        <div>billed yearly</div>
+                        <div><b>$9.00</b> billed monthly</div>
+                    </ng-container>
+          
+                </div> -->
+                <!-- CTA -->
+                <button
+                    class="fuse-mat-button-large mt-2"
+                    mat-stroked-button
+                    [color]="'primary'">
+                   Plan Actual
+                </button>
+                <!-- Features -->
+                <div class="flex flex-col mt-1">
+                    <div class="font-semibold">Detalles del plan, basico:</div>
+                    <div class="mt-4 space-y-2">
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1"><b>1</b> Caja</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1"><b>1</b> Sucursal</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Reportes</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Inventario</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Clientes</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Compras</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Ventas</div>
+                        </div>
+                    </div>
+                </div>
+            </fuse-card>
+
+        </div>
+        <!-- Overdue -->
+        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+           
+                
+            <fuse-card class="flex-col max-w-sm md:max-w-none p-1">
+                <div class="text-2xl font-bold tracking-tight leading-tight">Basico</div>
+                <div class="mt-2 text-lg font-medium tracking-tight text-secondary">Plan Gratuito para todo tipo de negocio</div>
+                <div class="w-8 h-1 my-2 rounded bg-accent"></div>
+                <!-- Price -->
+                <div class="flex items-baseline whitespace-nowrap">
+                    <div class="mr-2 text-2xl">BS.</div>
+                    <div class="text-3xl font-semibold leading-tight tracking-tight">
+                        <ng-container >0.00</ng-container>
+
+                    </div>
+                </div>
+                <!-- Price details -->
+                <!-- <div class="flex flex-col mt-2 text-secondary">
+                    <ng-container >
+                        <div>billed yearly</div>
+                        <div><b>$9.00</b> billed monthly</div>
+                    </ng-container>
+          
+                </div> -->
+                <!-- CTA -->
+                <button
+                    class="fuse-mat-button-large mt-2"
+                    mat-stroked-button
+                    [color]="'primary'">
+                   Plan Actual
+                </button>
+                <!-- Features -->
+                <div class="flex flex-col mt-1">
+                    <div class="font-semibold">Detalles del plan, basico:</div>
+                    <div class="mt-4 space-y-2">
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1"><b>1</b> Caja</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1"><b>1</b> Sucursal</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Reportes</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Inventario</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Clientes</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Compras</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Ventas</div>
+                        </div>
+                    </div>
+                </div>
+            </fuse-card>
+        </div>
+        <!-- Issues -->
+        <div class="flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                
+            <fuse-card class="flex-col max-w-sm md:max-w-none p-1">
+                <div class="text-2xl font-bold tracking-tight leading-tight">Basico</div>
+                <div class="mt-2 text-lg font-medium tracking-tight text-secondary">Plan Gratuito para todo tipo de negocio</div>
+                <div class="w-8 h-1 my-2 rounded bg-accent"></div>
+                <!-- Price -->
+                <div class="flex items-baseline whitespace-nowrap">
+                    <div class="mr-2 text-2xl">BS.</div>
+                    <div class="text-3xl font-semibold leading-tight tracking-tight">
+                        <ng-container >0.00</ng-container>
+
+                    </div>
+                </div>
+                <!-- Price details -->
+                <!-- <div class="flex flex-col mt-2 text-secondary">
+                    <ng-container >
+                        <div>billed yearly</div>
+                        <div><b>$9.00</b> billed monthly</div>
+                    </ng-container>
+          
+                </div> -->
+                <!-- CTA -->
+                <button
+                    class="fuse-mat-button-large mt-2"
+                    mat-stroked-button
+                    [color]="'primary'">
+                   Plan Actual
+                </button>
+                <!-- Features -->
+                <div class="flex flex-col mt-1">
+                    <div class="font-semibold">Detalles del plan, basico:</div>
+                    <div class="mt-4 space-y-2">
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1"><b>1</b> Caja</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1"><b>1</b> Sucursal</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Reportes</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Inventario</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Clientes</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Compras</div>
+                        </div>
+                        <div class="flex">
+                            <mat-icon
+                                class="icon-size-1 text-green-600"
+                                [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                            <div class="ml-2 leading-1">Ventas</div>
+                        </div>
+                    </div>
+                </div>
+            </fuse-card>
+        </div>  
+     </div>
+    <br>
+    <br>
+    <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. At, vitae natus nam iure sit reiciendis molestiae aliquam! Saepe, placeat illo vero, cumque ut debitis temporibus quibusdam ex rerum consequatur veritatis.
+    </p>
+    
+    
+</div>

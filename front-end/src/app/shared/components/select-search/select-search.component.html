@@ -1,0 +1,62 @@
+<div [class.materialize]="materialize">
+    <ng-container *ngIf="!isFocusActive">
+        <ng-select
+            [placeholder]="placeholder"
+            [disabled]="disabled"
+            [items]="list"
+            [bindValue]="keyField"
+            [bindLabel]="valueField"
+            [multiple]="isMultiSelect"
+            [closeOnSelect]="!isMultiSelect"
+            [(ngModel)]="model"
+            (ngModelChange)="onChangeModel()"
+            (onSelect)="onItemSelect($event)"
+            (search)="onSearch($event)"
+        >
+            <ng-template ng-option-tmp let-item="item">
+                <span class="ng-value-label">
+                    <i *ngIf="item.icon" class="{{ item.icon }}" style="color: #8A98AC;"></i>
+                    {{ item.name || item.description || item.showName || item.subject }}
+                </span>
+            </ng-template>
+
+            <ng-template *ngIf="groupBy" ng-optgroup-tmp let-item="item">
+                {{ getTextGroup(item) }}
+            </ng-template>
+
+            <ng-template ng-tag-tmp let-search="searchTerm" *ngIf="isAddTag">
+                <b>Agregar</b>: {{ search }}
+            </ng-template>
+        </ng-select>
+    </ng-container>
+
+    <ng-container *ngIf="isFocusActive">
+        <ng-select
+            autofocus
+            [placeholder]="placeholder"
+            [disabled]="disabled"
+            [items]="list"
+            [bindValue]="keyField"
+            [bindLabel]="valueField"
+            [multiple]="isMultiSelect"
+            [closeOnSelect]="!isMultiSelect"
+            [(ngModel)]="model"
+            (ngModelChange)="onChangeModel()"
+            (onSelect)="onItemSelect($event)"
+            (search)="onSearch($event)"
+        >
+            <ng-template *ngIf="groupBy" ng-optgroup-tmp let-item="item">
+                {{ getTextGroup(item) }}
+            </ng-template>
+
+            <ng-template ng-tag-tmp let-search="searchTerm" *ngIf="isAddTag">
+                <b>Agregar</b>: {{ search }}
+            </ng-template>
+        </ng-select>
+    </ng-container>
+
+    <div *ngIf="materialize" class="form-control focus-border"></div>
+    <div class="text-danger invalid-feedback text-left" *ngIf="ngControl.invalid && (ngControl.dirty || ngControl.touched)">
+        {{ showErrors() }}
+    </div>
+</div>

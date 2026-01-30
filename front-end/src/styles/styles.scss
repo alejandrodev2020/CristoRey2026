@@ -1,0 +1,11 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  @ Import/write your custom styles here.
+/*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/* ----------------------------------------------------------------------------------------------------- */
+.theme-brand .light .mat-mdc-snack-bar-container, .theme-brand.light .mat-mdc-snack-bar-container {
+  --mat-mdc-snack-bar-button-color: transparent; /* Oculta el botón */
+  --mdc-snackbar-container-color: #a2c747;
+  --mdc-snackbar-supporting-text-color: rgba(255, 255, 255, 0.87);
+  border-radius: 18px; /* Cambia el valor según lo que necesites */
+  overflow: hidden; /* Asegúrate de que el border-radius funcione correctamente */
+} 

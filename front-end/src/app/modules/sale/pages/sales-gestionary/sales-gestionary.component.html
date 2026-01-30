@@ -1,0 +1,295 @@
+<div class="contenido">
+  <!-------------------------------------------->
+  <div class="flex items-center justify-between  dark:bg-gray-700">
+    <div class="w-full mt-4">
+      <div class="text-2xl font-semibold tracking-tight leading-6">Listado de ventas</div>
+      <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para ventas</div>
+    </div>
+    <div>
+      <btn-generic [color]="'green'" class="px-6 ml-3" [label]="'Nueva Venta'" [icon]="'add'" [withFull]="false"
+        [disabled]="false" (buttonClick)="createNew()">
+      </btn-generic>
+    </div>
+  </div>
+
+
+  <div class="flex items-center justify-between mt-2" style="color:#a2c747 !important">
+    <button (click)="toggleFilter()" class="flex items-center">
+      <mat-icon style="color:#a2c747 !important">{{ isFilterVisible ? 'visibility_off' : 'visibility' }}</mat-icon>
+      <span style="color:#a2c747 !important" class="ml-2 font-bold text-black">{{ isFilterVisible ? 'Ocultar filtros' :
+        'Mostrar filtros' }}</span>
+    </button>
+  </div>
+  <!-------------------------------------------->
+  <!-- <div class="flex items-center justify-between  dark:bg-gray-700"> -->
+  <div *ngIf="isFilterVisible">
+    <sale-filter (emitQuery)="senfilter($event)"></sale-filter>
+  </div>
+  <!-- </div> -->
+  <br>
+  <!-------------------------------------------->
+  <!-- <table-faam  [actions]=[actions2] [columns]=[columns2] [dataList]=[MyData]></table-faam> -->
+
+  <!-------------------------------------------->
+  <br>
+  <div class="div">
+
+    <!-- <list-generic
+      [columns]="displayedColumns"
+      [listOptionsPage]="listOptionsPage"
+      [totalLength]="totalLength"
+      [pageIndex]="page"
+      [pageSize]="limit"
+      [dataSource]="dataSource"
+      [data]="data"
+      (pageChange)="pageEvent($event)" >
+    </list-generic> -->
+
+    <div class="mat-elevation-z0 table-responsive hide-on-small-screen">
+      <table mat-table [dataSource]="dataSource" class="table">
+
+        <ng-container matColumnDef="order">
+          <th mat-header-cell *matHeaderCellDef> Orden </th>
+          <td mat-cell *matCellDef="let element"> {{element?.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="warehouse">
+          <th mat-header-cell *matHeaderCellDef> Sucursal </th>
+          <td mat-cell *matCellDef="let element"> {{element?.warehouse?.name}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="client">
+          <th mat-header-cell *matHeaderCellDef> Cliente </th>
+          <td mat-cell *matCellDef="let element"> {{element?.client?.firstName}} {{element?.client?.lastName}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="saleDate">
+          <th mat-header-cell *matHeaderCellDef> Fecha </th>
+          <td mat-cell *matCellDef="let element"> {{element?.saleDate | dateFormatHours }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amountTotal">
+          <th mat-header-cell *matHeaderCellDef> Monto Total </th>
+          <td mat-cell *matCellDef="let element"> Bs. {{element?.amountTotal | number : '1.2-2'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="saleType">
+          <th mat-header-cell *matHeaderCellDef> Tipo de Venta </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element.saleType.id === 1"
+              class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+              {{element?.saleType?.name}}
+            </div>
+            <div *ngIf="element.saleType.id === 2"
+              class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+              {{element?.saleType?.name}}
+            </div>
+            <div *ngIf="element.saleType.id === 3"
+                class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                {{element?.saleType?.name}}
+            </div>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="paymentType">
+          <th mat-header-cell *matHeaderCellDef> Pago </th>
+          <td mat-cell *matCellDef="let element">
+            <img *ngIf="element?.paymentType?.id === 1" style="width: 30px;" src="assets/images/ui/cash.png" />
+            <img *ngIf="element?.paymentType?.id === 2" style="width: 30px;" src="assets/images/ui/qr.png" />
+            <img *ngIf="element?.paymentType?.id === 3" style="width: 30px;" src="assets/images/ui/card.png" />
+            <img *ngIf="element?.paymentType?.id === 4" style="width: 30px;" src="assets/images/ui/payment-mix.png" />
+          </td>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef> Estado </th>
+          <td mat-cell *matCellDef="let element">
+            <div *ngIf="element?.saleStatus?.id === 2"
+              class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+              {{element?.saleStatus?.name}}
+            </div>
+            <div *ngIf="element?.saleStatus?.id === 5"
+              class="py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-500">
+              {{element?.saleStatus?.name}}
+            </div>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon class="mr-2" (click)="overView(element)">visibility</mat-icon>
+            <mat-icon class="mr-2" (click)="lowWarehouse(element)">delete_forever</mat-icon>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="listOptionsPage" [length]="totalLength" [pageIndex]="page" [pageSize]="limit"
+        showFirstLastButtons (page)="pageEvent($event)" aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+  <div class="show-on-small-screen">
+    <div *ngFor="let item of dataSource?.data">
+      <div style=" height: 16em; background: #fff; border-radius: 14px; overflow: hidden; box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.3);" class="mb-2 p-4">
+
+        <!------------------------------------------ROW 0------------------------------------------------>
+        <div class="grid grid-cols-12">
+          <div class="col-span-2">
+            <div class="flex flex-col flex-auto">
+              <p><strong> N° {{item?.id}} </strong></p>
+            </div>
+          </div>
+          <div class="col-span-2">
+
+          </div>
+
+          <div class="col-span-8" style="text-align: end;">
+            <div class="flex flex-col flex-auto">
+              <p><strong>Fecha: </strong> {{item?.saleDate | dateFormatHours }} </p>
+            </div>
+          </div>
+        </div>
+        <!------------------------------------------ROW 0------------------------------------------------>
+        <!------------------------------------------ROW 1------------------------------------------------>
+        <div class="grid grid-cols-12  mt-2">
+          <div class="col-span-4">
+            <div class="flex flex-col flex-auto">
+              <!-- <p><strong>Cliente:</strong> </p> -->
+              <div *ngIf="item.saleStatus.id === 1"
+                class="pt-1 py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                {{item?.saleStatus?.name}}
+              </div>
+              <div *ngIf="item.saleStatus.id === 2"
+                class="pt-1 py-0.4 h-6 w-22 px-1 rounded-full text-xs text-center font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                {{item?.saleStatus?.name}}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-2">
+
+          </div>
+          <div class="col-span-3">
+            <div style="display: flex;    justify-content: end; padding-right: 4px;">
+              <div *ngIf="item?.saleType.id === 1"
+                class="center-item py-0.4  h-6 w-16 px-1 rounded-full text-xs text-center font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                {{item?.saleType.name}}
+              </div>
+              <div *ngIf="item?.saleType.id === 2"
+                class="center-item py-0.4 h-6 w-16 px-1 rounded-full text-xs text-center font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                {{item?.saleType.name}}
+              </div>
+            </div>
+          </div>
+          <div class="col-span-3">
+            <div class="flex flex-col flex-end" style="justify-self: self-end;">
+              <div *ngIf="!item.isActive" class="fuse-vertical-navigation-item-badge ng-star-inserted">
+                <div
+                  class="w-16 h-6 fuse-vertical-navigation-item-badge-content text-center bg-red-500 text-white rounded">
+                  Cancelado
+                </div>
+              </div>
+              <div *ngIf="item.isActive" class="fuse-vertical-navigation-item-badge ng-star-inserted">
+                <div
+                  class=" w-16 h-6 fuse-vertical-navigation-item-badge-content text-center bg-green-500 text-white rounded">
+                  Vendido
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!------------------------------------------ROW 1------------------------------------------------>
+        <!------------------------------------------ROW 2------------------------------------------------>
+        <div class="grid grid-cols-12">
+          <div class="col-span-9">
+            <div class="flex flex-col flex-auto">
+              <p>{{item?.client.firstName}} {{item?.client.lastName}} </p>
+            </div>
+          </div>
+          <div class="col-span-3">
+            <div class="flex flex-col flex-auto">
+
+            </div>
+          </div>
+        </div>
+        <!------------------------------------------ROW 2------------------------------------------------>
+        <!------------------------------------------ROW 3------------------------------------------------>
+        <div class="grid grid-cols-11 mt-2 " style="background-color: white; height: 65px; border-radius:  5px;">
+          <div class="col-span-5 mt-2">
+            <div class="flex flex-col flex-auto">
+              <p class=" text-center  text-green-800  dark:text-green-50 dark:bg-green-500"
+                style="font-size: 17px; font-weight: 800;"> Bs. {{item.amountTotal | number : '1.0-2'}} </p>
+              <p class=" text-center"><strong> Monto Total</strong> </p>
+            </div>
+          </div>
+          <div class="center-item col-span-1 mt-2 mb-2 ">
+            <div class="" style="width: 3px; height: 50px; background: #f1f1f1;">
+
+            </div>
+          </div>
+          <div class="col-span-5 mt-2">
+            <div class="flex flex-col flex-auto">
+              <div class="center-item">
+                <img *ngIf="item?.paymentType.id === 1" style="width: 30px;" src="assets/images/ui/cash.png" />
+                <img *ngIf="item?.paymentType.id === 2" style="width: 30px;" src="assets/images/ui/qr.png" />
+                <img *ngIf="item?.paymentType.id === 3" style="width: 30px;" src="assets/images/ui/card.png" />
+              </div>
+              <p class=" text-center"><strong> Tipo Pago</strong> </p>
+            </div>
+          </div>
+        </div>
+        <!------------------------------------------ROW 3------------------------------------------------>
+        <!------------------------------------------ROW 2------------------------------------------------>
+        <div class="grid grid-cols-12 mt-3">
+       
+          <div class="col-span-12 center-item">
+            <div class="" style="display: flex;">
+              <btn-actions
+                 class="mr-2"
+                 [color]="'green'"
+                 [label]="'Ver'"
+                 [icon]="'visibility'"
+                 [withFull]="true"
+                 [disabled]="false"
+                 (buttonClick)="overView(item)">
+              </btn-actions>
+              <btn-actions-pdf
+                 class="mr-2"
+                 [color]="'green'"
+                 [label]="'imprimir'"
+                 [icon]="'print'"
+                 [withFull]="true"
+                 [disabled]="false"
+                 (buttonClick)="dowloadTermic(item)">
+              </btn-actions-pdf>
+              <btn-actions-whatsapp
+                 class="mr-2"
+                 [color]="'green'"
+                 [label]="'Enviar'"
+                 [withFull]="true"
+                 [disabled]="false"
+                 (buttonClick)="SendMessageWhatsApp(item)">
+              </btn-actions-whatsapp>
+            </div>
+          </div>
+          <div class="col-span-2">
+            <div class="flex flex-col flex-auto">
+
+            </div>
+          </div>
+        </div>
+        <!------------------------------------------ROW 2------------------------------------------------>
+      </div>
+    </div>
+  </div>
+  <!-------------------------------------------->
+</div>

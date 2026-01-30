@@ -1,0 +1,138 @@
+<div class="base-content">
+    <div class="contenido">
+        <!-------------------------------------------->
+                <div class="">
+                    <div class="w-full">
+                        <div *ngIf="isCreate" class="text-2xl font-semibold tracking-tight leading-6">Registro de Opción</div>
+                        <div *ngIf="!isCreate" class="text-2xl font-semibold tracking-tight leading-6">Actualización de Opción</div>
+                        <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para almacenes</div>
+                    </div>
+                    <br>
+                    <mat-divider class="mb-4"></mat-divider>
+                    <form
+                    [formGroup]="form"
+                    ngNativeValidate
+                    autocomplete="off">
+<!-------------------------------------------------------------------------------------------------------------------------------->
+                    <div>
+                        <div  class="flex items-center justify-center">
+                        <img class="image" [src]="imageSource" alt="Image Source">
+                        </div>
+                        <div class="flex items-center justify-center mt-1">
+                            <div style="width: 200px;" class="flex items-center justify-center">
+                            <div class="flex items-center justify-center bg-primary-500 p-1" style="border-radius: 5px; width: 100%;" >
+                                    <input
+                                        id="avatar-file-input"
+                                        class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                        type="file"
+                                        [multiple]="false"
+                                        [accept]="'image/jpeg, image/png'"
+                                        (change)="uploadAvatar(avatarFileInput.files)"
+                                        #avatarFileInput>
+                                    <label
+                                        class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover"
+                                        for="avatar-file-input"
+                                        matRipple>
+                                        <mat-icon
+                                            class="text-white"
+                                            [svgIcon]="'heroicons_outline:camera'"></mat-icon>
+                                    </label>
+                                </div>
+                                <div (click)="removeAvatar()" class=" flex items-center justify-center bg-gray-300 p-1"
+                                        style="border-radius: 5px;width: 100%; height: 48px;">
+                                    <mat-icon
+                                    class="text-white"
+                                    [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                        <div  class="flex items-center justify-center mt-1">
+                            <btn-actions *ngIf="!isCreate"
+                            class="mt-2 mr-2"
+                            [color]="'orange'"
+                            [label]="'Diasnosticos & Tratamientos'"
+                            [icon]="'tune'"
+                            [withFull]="false"
+                            [disabled]="false"
+                            (buttonClick)="gestionaryEquivalences()">
+                          </btn-actions>
+                        </div>
+                    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------------------------------------------------------->
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-3">
+                        <div class="sm:col-span-2">
+                            <input-text
+                                [formControl]="control('title')"
+                                [label]="'Tutulo:'"
+                                [maxLength]="50"
+                                [minLength]="3"
+                                [icon]="'heroicons_solid:briefcase'"
+                                [disabled]="false"
+                                [placeholder]="'Titulo de Opción..'"
+                                (focus)="onFocusNameInput()">
+                            </input-text>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <input-text
+                                [formControl]="control('description')"
+                                [label]="'Descripción:'"
+                                [maxLength]="100"
+                                [minLength]="3"
+                                [icon]="'heroicons_solid:office-building'"
+                                [disabled]="false"
+                                [placeholder]="'Nombre producto..'">
+                            </input-text>
+                        </div>
+                    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-3">
+
+                        <div class="sm:col-span-2">
+                            <input-text
+                                [formControl]="control('code')"
+                                [label]="'Código:'"
+                                [maxLength]="50"
+                                [minLength]="3"
+                                [icon]="'heroicons_solid:briefcase'"
+                                [disabled]="false"
+                                [placeholder]="'Codigo producto..'">
+                            </input-text>
+                        </div>
+                    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+                    <br>
+                    <br>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+
+                            <div class="flex items-center justify-between mt-3 mb-2 dark:bg-gray-700">
+                            <div></div>
+                            <div>
+                                <btn-generic
+                                    class="px-6 ml-3"
+                                    [color]="'secondary'"
+                                    [label]="' Cancelar'"
+                                    [icon]="'close'"
+                                    [withFull]="false"
+                                    [disabled]="false"
+                                    (buttonClick)="cancelStore()">
+                                </btn-generic>
+                                <btn-generic
+                                    class="px-6 ml-3"
+                                    [color]="'green'"
+                                    [label]="' Guardar'"
+                                    [icon]="'save'"
+                                    [withFull]="false"
+                                    [disabled]="false"
+                                    [disabled]="isSaving"
+                                    (buttonClick)="save()">
+                                </btn-generic>
+                             </div>
+                         </div>
+                    </form>
+                </div>
+        <!-------------------------------------------->
+
+    </div>
+</div>

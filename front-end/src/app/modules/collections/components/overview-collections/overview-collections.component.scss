@@ -1,0 +1,38 @@
+.overview-sale{
+    background:  red;
+    // width: 450px;
+    max-width: 700px;
+}
+
+.box-1{
+    background-color: white;
+    border-width: 20px;
+    border: solid 1px #1e293b;
+    border-radius: 5px;
+    padding: 10px 1px;
+    margin: 5px 17px;
+  }
+
+.btn-export{
+    border-radius: 4px;
+    background: #d4d4d4;
+    width: fit-content;
+    cursor: pointer;
+    color: aliceblue;
+}
+
+.btn-whatsapp{
+    background: #d4d4d4;
+}
+
+.btn-pdf{
+    background: #F15642;
+}
+
+.btn-excel{
+    background: #84BD5A;
+}
+
+.fw-700{
+    font-weight: 700 !important;
+}

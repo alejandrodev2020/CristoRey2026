@@ -1,0 +1,62 @@
+<div id="contenido2" class="backgoud-page">
+    <br>
+    <br>
+    <div class="center-items mb-6 ml-6 mr-6 text-center">
+        <div >
+            <div style=" display: flex;
+            justify-content: center;
+            align-items: center;">
+                <img style="width: 100px; display: flex;
+                justify-content: center;
+                align-items: center;" src="assets/images/flags/check.png" alt="">
+            </div>
+            <h2 class="title">Compra Exitosa</h2>
+        </div>
+    </div>
+    <div class="m-6">
+        <p> <strong> Cod. Venta  :</strong> SALE-{{order.id}} </p>
+        <p> <strong> Cliente :</strong> {{order.client.firstName}} {{order.client.lastName}}</p>
+        <p> <strong> Fecha :</strong> {{order.saleDate | dateFormatHours}} </p>
+    </div>
+    <mat-divider></mat-divider>
+    <br>
+    <div class="pl-2 pr-2">
+        <div *ngFor="let item of order.details" class="card-item">
+            <div class="grid grid-cols-12 sm:grid-cols-12 gap-4 w-full h-full min-w-0">
+                <div class="col-span-3 sm:col-span-3 lg:col-span-3">
+                    <div class="background-white center-items flex flex-col flex-auto text-center">
+                        <mat-icon svgIcon="heroicons_outline:shopping-bag"></mat-icon>
+                     </div>  
+                </div>
+                <div class="col-span-6 sm:col-span-6 lg:col-span-6">
+                    <div class="flex flex-col flex-auto">
+                         <div >
+                            <div class="text-3x2 font-semibold tracking-tight leading-6">{{item.product?.name}}</div>
+                             <div class="font-medium tracking-tight text-secondary">{{item?.unitMeasurenment?.name }} x{{item.amountOrigin}}    ------    Precio:{{item.price}}</div>
+
+                        </div>
+                    </div>
+                </div>  
+                <div class="col-span-3 sm:col-span-3 lg:col-span-3 pr-3" style=" width: 100% !important; text-align: end;">
+                    <div class="text-3x2 font-semibold tracking-tight leading-6" style="color: #C0D222;">Bs {{item.subTotal}}</div>
+                </div>  
+            </div> 
+        </div>
+        <br>
+    </div>
+    <mat-divider></mat-divider>
+        <div class="label-total m-3">
+            <div class="text-3x2 font-semibold tracking-tight leading-6">Total :  {{order.amountTotal | number : '1.2-2'}} Bs.</div>
+        </div>
+
+    <div class="footet-text">
+        <div class="mt-6 ml-6 mr-6">
+            <p>{{nameStore}} agradece su compra, Muchas gracias por su preferencia </p>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <!-- <img src="assets/images/flags/footer-sale-note.png" alt=""> -->
+    </div>
+</div>

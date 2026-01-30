@@ -1,0 +1,68 @@
+<div class="mat-elevation-z0 table-responsive hide-on-small-screen">
+
+    <div style="overflow-x: scroll;">
+        <div style="display: flex; justify-content: space-between; ">
+            <div *ngFor="let column of displayedColumns"  [style.min-width]="column.maxWidth" style="text-align: center; width: 100%; ">
+                   <strong style="text-align: center; width: 100%;" class="mr-2">{{ column.key }}</strong>
+               </div>
+           </div>
+
+
+          <div *ngFor="let item of myData">
+              <div style="display: flex; justify-content: space-between; ">
+                     <div  *ngFor="let column of displayedColumns" [style.min-width]="column.maxWidth" style="text-align: center; width: 100%; ">
+                               <p style="padding: 5px;">
+                                   <span *ngIf="column.pipe">
+                                     <span *ngIf="column.pipe === 'dateFormatHours'">
+                                       {{ getValueByPath(item, column.value) | dateFormatHours }}
+                                     </span>
+                                     <span *ngIf="column.pipe === 'number'">
+                                       {{ getValueByPath(item, column.value) | number:'1.2-2' }}
+                                     </span>
+                                     <span *ngIf="column.pipe === 'truncate'">
+                                       {{ getValueByPath(item, column.value) | truncate:25 }}
+                                     </span>
+                                   </span>
+                                   <span *ngIf="!column.pipe">
+                                     {{ getValueByPath(item, column.value) }}
+                                   </span>
+                                 </p>
+                      </div>
+              </div>
+          </div>
+    </div>
+
+
+    <mat-paginator
+        [pageSizeOptions]="listOptionsPage"
+        [length]="totalLength"
+        [pageIndex]="page"
+        [pageSize]="limit"
+        showFirstLastButtons
+         (page)="pageEvent($event)"
+         aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <p>list-generic works!</p>
+
+
+<mat-paginator [pageSizeOptions]="listOptionsPage" [length]="totalLength" [pageIndex]="page" [pageSize]="limit"
+showFirstLastButtons (page)="pageEvent($event)" aria-label="Select page of periodic elements">
+</mat-paginator> -->

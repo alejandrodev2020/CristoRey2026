@@ -1,0 +1,106 @@
+ <div class="base-content">
+  <div class="contenido">
+    <div class="p-3">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+          <div class="sm:col-span-12 md:col-span-12 lg:col-span-12 ">
+              <div class="flex flex-col">
+                  <div class="flex items-center justify-between">
+                      <div>
+                        <div class="text-3x2 font-extrabold tracking-tight leading-none">Detalles de Caja</div>
+                      </div>
+                      <div style="display: flex; align-items: center; gap: 10px;">
+                      </div>                   
+                  </div>
+              </div>
+          </div>
+        </div>
+      <div>
+         <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 w-full mt-4 md:mt-6" >
+           <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+             <div class="text-3x2 font-extrabold tracking-tight leading-none">Ventas:</div>
+              <p>Cantidad : {{pettyCash?.amountSales}}</p>
+              <p>Efectivo : Bs. {{pettyCash?.amountSale | number : '1.2-2'}}</p>
+           </div>
+           <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-purple-800 bg-purple-100 dark:text-purple-50 dark:bg-purple-500">
+             <div class="text-3x2 font-extrabold tracking-tight leading-none">Cobros</div>
+             <p>Cantidad de cobros : {{pettyCash?.amountCharges}}</p>
+             <p>Efectivo por cobros: Bs. {{pettyCash?.amountCreditPaid | number : '1.2-2'}}</p>
+           </div>
+           <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+             <div class="text-3x2 font-extrabold tracking-tight leading-none">Ventas al Credito</div>
+             <p>Cantidad creditos: {{pettyCash?.amountCreditSales}} </p>
+             <p>Deuda : Bs.{{pettyCash?.amountCreditCredit| number : '1.2-2'}}</p>
+           </div>
+           <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+               <div class="text-3x2 font-extrabold tracking-tight leading-none">Efectivo Total:</div>
+               <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ pettyCash?.cashAmount | number : '1.2-2'}}</div>
+
+           </div>
+         </div>
+
+      </div>
+      <br>
+      <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+      <div>
+        <div class="mt-1 mb-1 text-3x2 font-extrabold tracking-tight leading-none">Movimientos</div>
+            <div class="details">
+              <table mat-table [dataSource]="dataSource" >
+
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> No. </th>
+                  <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="movementDate">
+                  <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                  <td mat-cell *matCellDef="let element"> {{element.movementDate | dateFormatHours }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="amount">
+                  <th mat-header-cell *matHeaderCellDef> Monto </th>
+                  <td mat-cell *matCellDef="let element">
+                     {{ (element.movementTypeId == 2)? - element.amount  : element.amount | number : '1.2-2' }} Bs
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="type">
+                  <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                  <td mat-cell *matCellDef="let element">
+                    <chips-faam *ngIf="element.movementTypeId == 1" [color]="'green'" [label]="'Ingreso'"></chips-faam>
+                    <chips-faam *ngIf="element.movementTypeId == 2" [color]="'red'" [label]="'Egreso'"></chips-faam>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef> Origen </th>
+                    <td mat-cell *matCellDef="let element">
+                        <chips-faam *ngIf="element.movementOriginId == 1" [color]="'green'" [label]="'Venta Contado'"></chips-faam>
+                        <chips-faam *ngIf="element.movementOriginId == 2" [color]="'orange'" [label]="'Venta Credito'"></chips-faam>
+                        <chips-faam *ngIf="element.movementOriginId == 3" [color]="'blue'" [label]="'Cobro'"></chips-faam>
+                        <chips-faam *ngIf="element.movementOriginId == 4" [color]="'red'" [label]="'Gastos'"></chips-faam>
+                        <chips-faam *ngIf="element.movementOriginId == 5" [color]="'red'" [label]="'Compra'"></chips-faam>
+                        <chips-faam *ngIf="element.movementOriginId == 6" [color]="'green'" [label]="'Apertura'"></chips-faam>
+                        <chips-faam *ngIf="element.movementOriginId == 7" [color]="'red'" [label]="'Venta Cancelada'"></chips-faam>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef> Acción </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon class="mr-2" (click)="overView(element)">visibility</mat-icon>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+
+            </div>
+
+     </div>
+   </div>
+
+  </div>
+</div>
+

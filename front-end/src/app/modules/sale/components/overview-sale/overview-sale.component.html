@@ -1,0 +1,136 @@
+<div
+  id="contenido"
+  class="overview-sale p-0 rounded-2xl bg-card
+         print:w-auto print:rounded-none print:shadow-none print:bg-transparent">
+
+  <!-- HEADER -->
+  <div class="grid grid-cols-12 border-b">
+    <div class="col-span-3">
+      <div class="p-4 flex flex-col flex-auto">
+        <img class="max-w-20" [src]="logoClient">
+      </div>
+    </div>
+
+    <div class="col-span-6">
+      <div class="center-item">
+        <div>
+          <div class="text-2xl font-semibold tracking-tight leading-6">
+            Gestión de Cita N° {{ cita?.id }}
+          </div>
+
+          <!-- ESTADO -->
+            <div class="mt-2 flex items-center gap-2">
+                <span class="text-sm font-semibold">Estado:</span>
+
+                <span
+                    class="px-3 py-1 rounded-full text-xs font-semibold"
+                    [ngClass]="{
+                    'bg-yellow-100 text-yellow-800': cita?.statusId === 1,
+                    'bg-green-100 text-green-800': cita?.statusId === 2,
+                    'bg-red-100 text-red-800': cita?.statusId === 3
+                    }"
+                >
+                    {{
+                    cita?.statusId === 1 ? 'Pendiente' :
+                    cita?.statusId === 2 ? 'Aceptado' :
+                    cita?.statusId === 3 ? 'Rechazado' :
+                    'Desconocido'
+                    }}
+                </span>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-span-3">
+      <div class="flex flex-col flex-auto m-4 items-end">
+        <mat-icon
+          class="cursor-pointer"
+          (click)="close()"
+          svgIcon="heroicons_outline:x">
+        </mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <form
+    [formGroup]="formCita"
+    class="m-6 grid grid-cols-12 gap-4">
+
+    <!-- MOTIVE -->
+    <div class="col-span-12">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Motivo</mat-label>
+        <textarea
+          matInput
+          rows="2"
+          formControlName="motive">
+        </textarea>
+      </mat-form-field>
+    </div>
+
+    <!-- DIAGNOSTIC -->
+    <div class="col-span-12">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Diagnóstico</mat-label>
+        <textarea
+          matInput
+          rows="2"
+          formControlName="diagnostic">
+        </textarea>
+      </mat-form-field>
+    </div>
+
+    <!-- OBSERVATIONS -->
+    <div class="col-span-12">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Observaciones</mat-label>
+        <textarea
+          matInput
+          rows="3"
+          formControlName="observations">
+        </textarea>
+      </mat-form-field>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="col-span-6">
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Total (Bs.)</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="totalCost">
+      </mat-form-field>
+    </div>
+
+    <!-- WAS PAID -->
+    <div class="col-span-6 flex items-center">
+      <mat-checkbox formControlName="wasPaid">
+        ¿Pagado?
+      </mat-checkbox>
+    </div>
+
+    <!-- BOTONES -->
+    <div class="col-span-12 flex justify-end gap-3 mt-6">
+      <button
+        mat-stroked-button
+        color="warn"
+        type="button"
+        (click)="close()">
+        Cancelar
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="updateCita()">
+        Editar
+      </button>
+    </div>
+
+  </form>
+
+</div>

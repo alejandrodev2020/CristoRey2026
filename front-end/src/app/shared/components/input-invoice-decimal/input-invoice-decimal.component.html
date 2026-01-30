@@ -1,0 +1,21 @@
+
+<div class="item-input"  [class.active-card] = "active">
+    <div class="contenedor-center mb-1" [style.justify-content]="justifyContent" (click)="handleClick()">
+        <div style="display: contents;">
+            <img *ngIf="image !==null" style="width: 50px; height: 50px;"  [src]="image" />
+            <label class="ml-2">{{label}}</label>
+        </div>
+    </div>
+    <div *ngIf="this.isRecording">
+        <div class="icon-record">
+            <img style="width: 50px;" src="https://static.vecteezy.com/system/resources/thumbnails/013/083/621/small/recording-icon-red-logo-camera-video-recording-signs-rec-illustrations-png.png" />
+        </div>
+    </div>
+    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+        <input [formControl]="formControl" (keyup)="onInputChange($event)" matInput
+            [value]="transcribedText" name="miname" type="text">
+        <button (mousedown)="startRecording()" (mouseup)="stopRecording()" mat-icon-button="" class="absolute right-0">
+            <mat-icon>mic</mat-icon>
+        </button>
+    </mat-form-field>
+</div>

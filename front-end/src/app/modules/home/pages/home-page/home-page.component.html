@@ -1,0 +1,111 @@
+<!-- <settings></settings> -->
+<div class="contenido ">
+    <div class="w-full max-w-screen-xl mx-auto" style="overflow: hidden;">
+        <!-------------------------------------------->
+        <!-- <div *ngIf="isAdmin" style="background: #D5D8DC; padding: 10px; border-radius: 7px;">
+            <div style="text-align:center">
+                <apx-chart
+                  [series]="chartOptions.series"
+                  [chart]="chartOptions.chart"
+                  [xaxis]="chartOptions.xaxis"
+                  [colors]="chartOptions.colors"
+                  [title]="chartOptions.title"
+                ></apx-chart>
+              </div>
+        </div> -->
+        <div *ngIf="isSeller && pettyCashDefault" style="background: #e2e8f0; padding: 10px; border-radius: 7px;" class="shadow">
+
+         <!--==================================================-->
+         <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 w-full min-w-0">
+
+          <div class="sm:col-span-9 md:col-span-8 lg:col-span-10 ">
+              <div class="flex flex-col flex-auto">
+                <div>
+                  <p class="welcome-text" style="color: #1e293b; font-size: 50px;">Bienvenido - Consultorio Dental</p>
+                  <p style="color: #1e293b; font-size: 20px;">{{userSellerDefault?.firstName}} eres responsable de la caja # {{ pettyCashDefault?.id}}</p>
+                </div>
+              </div>
+          </div>
+          <div class="sm:col-span-3 md:col-span-4 lg:col-span-2 ">
+              <div class="flex flex-col flex-auto">
+                <button
+                style="background: #5FB960; color:#e2e8f0"
+                class="px-6 ml-3"
+                mat-flat-button
+
+                (click)="closePettyCash()">
+                 Cerrar Caja
+                <mat-icon svgIcon="heroicons_outline:badge-check"></mat-icon>
+
+                </button>
+                <br>
+                <button
+                style="background: orange; color:#e2e8f0"
+                class="px-6 ml-3"
+                mat-flat-button
+
+                (click)="viewMovements()">
+                  Ver Movimientos
+                <mat-icon class="ml-4  mr-4" svgIcon="heroicons_outline:eye"></mat-icon>
+
+                </button>
+               </div>
+          </div>
+      </div>
+
+         <!--==================================================-->
+         <br>
+         <div>
+            <div style="background: #1e293b; width: 100%; height: 1px;"></div>
+            <br>
+            <div class="text-3x2 font-extrabold tracking-tight leading-none">Detalles de Caja</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full mt-4 md:mt-6" >
+              <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500">
+                <div class="text-3x2 font-extrabold tracking-tight leading-none">Apertura:</div>
+                 <p>Fecha : {{pettyCashDefault?.pettyCashInit | dateFormat}}</p>
+                 <p>Efectivo Inicial : Bs.{{pettyCashDefault?.amountInit | number : '1.2-2'}}</p>
+              </div>
+              <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-purple-800 bg-purple-100 dark:text-purple-50 dark:bg-purple-500">
+                <div class="text-3x2 font-extrabold tracking-tight leading-none">Ventas</div>
+                <p>Efectivo por ventas: Bs. {{pettyCashDefault?.amountSale | number : '1.2-2'}}</p>
+                <p>Cantidad de ventas : {{pettyCashDefault?.amountSales}}</p>
+              </div>
+              <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-orange-800 bg-orange-100 dark:text-orange-50 dark:bg-orange-500">
+                <div class="text-3x2 font-extrabold tracking-tight leading-none">Cobros/Creditos</div>
+                <p>Efectivo por cobros: Bs. {{pettyCashDefault?.amountCreditPaid | number : '1.2-2'}}</p>
+                <p>Ventas al credito : Bs.{{pettyCashDefault?.amountCreditCredit| number : '1.2-2'}}</p>
+              </div>
+              <div style="border-radius: 6px;" class="py-0.4 px-1 pt-3 pl-2  text-sm text-start font-semibold text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500">
+                  <div class="text-3x2 font-extrabold tracking-tight leading-none">Efectivo Total:</div>
+                  <div class="text-3x1 font-extrabold tracking-tight leading-none" style="font-size:30px"> Bs.{{ pettyCashDefault?.amountSale + pettyCashDefault?.amountInit | number : '1.2-2'}}</div>
+
+              </div>
+            </div>
+
+         </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full mt-4 md:mt-6">
+          <div *ngFor="let item of modules" (click)="changeModule(item.link)"
+                class="card-module flex flex-col flex-auto bg-card shadow  overflow-hidden p-6">
+              <div class="flex items-start justify-between">
+                <mat-icon
+                 style="color:rgb(255, 255, 255); width: 40px; height: 40px;"
+                 [svgIcon]="item.icon">
+              </mat-icon>
+                    <div class="mt-4 mb-1 text-3xl font-bold">
+                       <p> {{item?.title}} </p>
+                    </div>
+                   <br>
+                    <div class="ml-2">
+
+                  </div>
+              </div>
+              <div class="w-50 h-1 mt-6 border-t-2"></div>
+          </div>
+          <br>
+      </div>
+     <!-------------------------------------------->
+
+    </div>
+</div>

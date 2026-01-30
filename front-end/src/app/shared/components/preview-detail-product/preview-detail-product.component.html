@@ -1,0 +1,33 @@
+
+
+<div class="grid grid-cols-12 sm:grid-cols-12 gap-6 w-full min-w-0">
+    <div class="col-span-5 sm:col-span-2 lg:col-span-2">
+        <div class="flex flex-col flex-auto">
+            <img [src]="image" />
+        </div>
+    </div>
+    <div class="col-span-7 sm:col-span-4 lg:col-span-4">
+        <div class="flex flex-col flex-auto">
+            <p style="font-weight: 700; color:#5FB960">{{name | truncate:35 }} </p>
+            <p> {{description  | truncate:35  }} </p>
+         </div>
+    </div>
+    <div class="col-span-4 sm:col-span-2 lg:col-span-2">
+        <div class="flex flex-col flex-auto">
+            <p class="text-center" style="font-weight: 700; color:#000">Cant.</p>
+            <p class="text-center">{{amount }}</p>
+         </div>
+    </div>
+    <div class="col-span-4 sm:col-span-2 lg:col-span-2">
+        <div class="flex flex-col flex-auto">
+            <p class="center-text"  style="font-weight: 700; color:#000">U. Med.</p>
+            <p class="center-text" >{{ unitMeasurementLabel }}</p>
+         </div>
+    </div>
+    <div class="col-span-4 sm:col-span-2 lg:col-span-2">
+        <div class="flex flex-col flex-auto">
+            <p  class="center-text" style="font-weight: 700; color:#000">Sub T:</p>
+            <p  class="center-text" style="font-weight: 700; color:#ec9e29">{{ subTotalLabel }}
+         </div>
+    </div>
+</div>

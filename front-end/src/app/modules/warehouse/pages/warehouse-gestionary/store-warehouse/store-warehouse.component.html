@@ -1,0 +1,63 @@
+<div class="contenido">
+    <div class="pd-20 card-box mb-30">
+        <div class="">
+            <div class="">
+                <div class="w-full mt-4">
+                    <div class="text-2xl font-semibold tracking-tight leading-6">Getion de sucursal</div>
+                    <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para sucursal</div>
+                </div>
+                <br>
+                <hr>
+                <form [formGroup]="form" ngNativeValidate autocomplete="off">
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <div class="sm:col-span-2">
+                            <input-text [formControl]="control('name')" [label]="'Nombre:'" [maxLength]="45"
+                                [minLength]="3" [icon]="'heroicons_outline:library'" [disabled]="false"
+                                [placeholder]="'Nombre.'"></input-text>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <input-text [formControl]="control('description')" [label]="'Descripción:'" [maxLength]="50"
+                                [minLength]="3" [icon]="'heroicons_outline:document-text'" [disabled]="false"
+                                [placeholder]="'Descripción.'"></input-text>
+                        </div>
+                    </div>
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <div class="sm:col-span-2">
+                            <input-text [formControl]="control('code')" [label]="'Codigo:'" [maxLength]="30"
+                                [minLength]="3" [icon]="'heroicons_outline:qrcode'" [disabled]="false"
+                                [placeholder]="'Codigo.'"></input-text>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <input-text [formControl]="control('location')" [label]="'Ubicación:'" [maxLength]="100"
+                                [minLength]="3" [icon]="'heroicons_outline:location-marker'" [disabled]="false"
+                                [placeholder]="'Ubicación.'"></input-text>
+                        </div>
+                    </div>
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="w-full">
+                                <mat-label>Tipo</mat-label>
+                                <mat-select [formControlName]="'warehouseTypeId'">
+                                    <mat-option *ngFor="let item of listType" [value]="item.id">
+                                        {{item.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between dark:bg-gray-700">
+                        <div></div>
+                        <div>
+                            <btn-generic class="px-6 ml-3" [color]="'secondary'" [label]="' Cancelar'" [icon]="'close'"
+                                [withFull]="false" [disabled]="false" (buttonClick)="cancelStore()">
+                            </btn-generic>
+                            <btn-generic class="px-6 ml-3" [color]="'green'" [label]="' Guardar'" [icon]="'save'"
+                                [withFull]="false" [disabled]="isSaving" (buttonClick)="save()">
+                            </btn-generic>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

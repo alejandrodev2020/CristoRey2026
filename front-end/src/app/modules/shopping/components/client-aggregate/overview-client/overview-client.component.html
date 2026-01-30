@@ -1,0 +1,78 @@
+
+
+<div class="flex flex-col flex-auto min-w-10">
+    <div class="flex items-center justify-between dark:bg-gray-700">
+        <div>
+            <!-- <div class="text-2xl font-semibold leading-tight">Vista general</div>
+            <p>Cliente</p> -->
+        </div>
+        <div (click)="close()">
+             <mat-icon aria-hidden="false" aria-label="Example add icon" fontIcon="close"></mat-icon>
+         </div>
+     </div>
+    <!-- Header -->
+    <div class="flex flex-col bg-card">
+
+        <!-- Cover image -->
+        <div>
+            <img
+                class="h-20 lg:h-40 object-cover"
+                src="https://angular-material.fusetheme.com/assets/images/pages/profile/cover.jpg"
+                alt="Cover image">
+        </div>
+
+        <!-- User info -->
+        <div class="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-full mx-auto px-8 lg:h-18 bg-card">
+
+            <!-- Avatar -->
+            <div class="-mt-26 lg:-mt-22 rounded-full">
+                <img
+                    class="w-32 h-32 rounded-full ring-4 ring-bg-card"
+                    src="https://icon-library.com/images/default-user-icon/default-user-icon-13.jpg"
+                    alt="User avatar">
+            </div>
+
+            <!-- Details -->
+            <div class="flex flex-col items-center lg:items-start mt-4 lg:mt-0 lg:ml-8">
+                <div class="text-lg font-bold leading-none">{{ myClient?.firstName}}</div>
+                <div class="text-secondary">{{myClient?.ubication}}</div>
+            </div>
+
+            <!-- Separator -->
+            <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+
+            <!-- Stats -->
+            <div class="flex items-center mt-6 lg:mt-0 space-x-6">
+                <div class="flex flex-col items-center">
+                    <span class="font-bold">75</span>
+                    <span class="text-sm font-medium text-secondary">COMPRAS</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <span class="font-bold">Bs. 1.234</span>
+                    <span class="text-sm font-medium text-secondary">APORTE</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div>
+        <div class="text-lg font-bold leading-none">Nombre Completo:</div>
+        <div class="text-secondary">{{myClient?.firstName}} {{myClient?.lastName}}</div>
+        <br>
+
+        <div class="text-lg font-bold leading-none">Celular:</div>
+        <div class="text-secondary">{{myClient?.phone}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none">N° Carnet:</div>
+        <div class="text-secondary">{{myClient?.ci}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none">N° Nit:</div>
+        <div class="text-secondary">{{myClient?.nit}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none"> Ubicación:</div>
+        <div class="text-secondary">{{myClient?.ubication}}</div>
+        <br>
+        <div class="text-lg font-bold leading-none"> Compañía:</div>
+        <div class="text-secondary">{{myClient?.company}}</div>
+    </div>
+</div>

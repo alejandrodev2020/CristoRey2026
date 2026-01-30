@@ -1,0 +1,183 @@
+<div class="base-content" [ngClass]="{ 'modal-mode': isModal, 'page-mode': !isModal }">
+    <div class="contenido">
+        <!-------------------------------------------->
+        <div class="pd-20 card-box ">
+            <div class="">
+                <div class="">
+                    <div class="w-full mt-4">
+                        <div *ngIf="isCreate" class="text-2xl font-semibold tracking-tight leading-6">Registro de Doctor</div>
+                        <div *ngIf="!isCreate" class="text-2xl font-semibold tracking-tight leading-6">Actualización de Doctor</div>
+                        <div class="font-medium tracking-tight text-secondary">Modulo de gestiones para proveedores</div>
+                    </div>
+                    <br>
+                    <hr>
+                    <form [formGroup]="form" ngNativeValidate autocomplete="off" (ngSubmit)="save()">
+                        <!-------------------------------------------------------------------------------------------------------------------------------->
+                        <div>
+                            <div class="flex items-center justify-center">
+                                <img class="image" [src]="imageSource" alt="Image Source">
+                            </div>
+                            <div class="flex items-center justify-center mt-1">
+                                <div style="width: 200px;" class="flex items-center justify-center">
+                                    <div class="flex items-center justify-center bg-primary-500 p-1" style="border-radius: 5px; width: 100%;">
+                                        <input
+                                            id="avatar-file-input"
+                                            class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                            type="file"
+                                            [multiple]="false"
+                                            [accept]="'image/jpeg, image/png'"
+                                            (change)="uploadAvatar(avatarFileInput.files)"
+                                            #avatarFileInput>
+                                        <label class="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer hover:bg-hover" for="avatar-file-input" matRipple>
+                                            <mat-icon class="text-white" [svgIcon]="'heroicons_outline:camera'"></mat-icon>
+                                        </label>
+                                    </div>
+                                    <div (click)="removeAvatar()" class=" flex items-center justify-center bg-gray-300 p-1"
+                                            style="border-radius: 5px;width: 100%; height: 48px;">
+                                        <mat-icon
+                                        class="text-white"
+                                        [svgIcon]="'heroicons_outline:trash'"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-------------------------------------------------------------------------------------------------------------------------------->
+                        <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
+                                <input-text
+                                    [formControl]="control('firstName')"
+                                    [label]="'Nombres:'"
+                                    [maxLength]="50"
+                                    [minLength]="3"
+                                    [icon]="'heroicons_solid:briefcase'"
+                                    [disabled]="false"
+                                    [placeholder]="'nombre..'"
+                                    >
+                                </input-text>
+                            </div>         
+                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
+                                <input-text
+                                [formControl]="control('lastName')"
+                                [label]="'Apellidos:'"
+                                [maxLength]="50"
+                                [minLength]="3"
+                                [icon]="'heroicons_outline:user-circle'"
+                                [disabled]="false"
+                                [placeholder]="'apellido..'"
+                                >
+                              </input-text>
+                            </div>
+                        </div>
+                        <!-------------------------------------------------------------------------------------------------------------------------------->
+                        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
+                                <input-text
+                                [formControl]="control('phone')"
+                                [label]="'Celular:'"
+                                [maxLength]="40"
+                                [minLength]="3"
+                                [icon]="'heroicons_outline:phone'"
+                                [disabled]="false"
+                                [placeholder]="'celular..'"
+                                >
+                              </input-text>
+                            </div>
+                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
+                                <input-text
+                                [formControl]="control('ci')"
+                                [label]="'N° Carnet:'"
+                                [maxLength]="40"
+                                [minLength]="3"
+                                [icon]="'heroicons_outline:identification'"
+                                [disabled]="false"
+                                [placeholder]="'Carnet..'"
+                                >
+                              </input-text>
+                            </div>
+                        </div>
+                        <!-------------------------------------------------------------------------------------------------------------------------------->
+                        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
+                                <input-text
+                                [formControl]="control('nit')"
+                                [label]="'N° Nit:'"
+                                [maxLength]="40"
+                                [minLength]="3"
+                                [icon]="'heroicons_solid:briefcase'"
+                                [disabled]="false"
+                                [placeholder]="'Nit..'"
+                                >
+                              </input-text>
+                            </div>
+                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
+                                <input-text
+                                [formControl]="control('businessName')"
+                                [label]="'Razon Social:'"
+                                [maxLength]="50"
+                                [minLength]="3"
+                                [icon]="'heroicons_outline:identification'"
+                                [disabled]="false"
+                                [placeholder]="'Razon Social..'"
+                                >
+                              </input-text>
+                            </div>
+                        </div>
+                        <!-------------------------------------------------------------------------------------------------------------------------------->
+                        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
+                               <mat-checkbox
+                                class="-ml-2"
+                                [color]="'primary'"
+                                [formControl]="control('isEmergency')"
+                                >
+                                Es Emergencia?
+                            </mat-checkbox>
+                            </div>
+              
+                        </div>
+                        <!-------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <br>
+                        <br>
+                        <div class="flex items-center justify-between dark:bg-gray-700">
+                            <div></div>
+                            <div>
+                                <btn-generic
+                                class="px-6 ml-3"
+                                [color]="'secondary'"
+                                [label]="' Cancelar'"
+                                [icon]="'close'"
+                                [withFull]="false"
+                                [disabled]="false"
+                                (buttonClick)="cancelStore()">
+                            </btn-generic>
+                            <btn-generic
+                                class="px-6 ml-3"
+                                [color]="'green'"
+                                [label]="' Guardar'"
+                                [icon]="'save'"
+                                [withFull]="false"
+                                [disabled]="isSaving"
+                                (buttonClick)="save()">
+                            </btn-generic>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

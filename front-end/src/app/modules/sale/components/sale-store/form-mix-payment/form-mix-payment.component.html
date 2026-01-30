@@ -1,0 +1,108 @@
+<div class="m-4 w-80">
+    <div class="flex items-center justify-between  dark:bg-gray-700">
+        <div>
+            <div class="w-full">
+                <div class="text-2xl font-semibold tracking-tight leading-6">Multiple Tipo de Pago</div>
+            </div>
+        </div>
+        <div>
+            <mat-icon (click)="close()" svgIcon="heroicons_outline:x"></mat-icon>
+         </div>
+     </div>
+     <mat-divider></mat-divider>
+    <form
+        [formGroup]="form"
+        ngNativeValidate
+        autocomplete="off"
+        (ngSubmit)="save()"
+    >
+<!-------------------------------------------------------------------------------------------------------------------------------->
+    <div class="center m-4">
+        <div>
+            <p style="color:green; font-size: 18px; font-weight: 500;"><strong  style="color:#000">Total a Pagar:</strong> {{amountTotal }} Bs</p>
+            <p style="color:orange; font-size: 18px; font-weight: 500;"><strong  style="color:#000">Ingresando :</strong> {{ingresTotal }} Bs</p>
+            <p style="color:red; font-size: 18px; font-weight: 500;"><strong  style="color:#000">Faltante :</strong> {{amountTotal - ingresTotal }} Bs</p>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+        <div class="sm:col-span-4">
+            <mat-form-field
+                class="w-full"
+                [subscriptSizing]="'dynamic'">
+                <mat-label>Dinero Efectivo:</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:cash'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'amountCahs'"
+                    (keyup)="calculateSubTotal()"
+                    matInput>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+        <div class="sm:col-span-4">
+            <mat-form-field
+                class="w-full"
+                [subscriptSizing]="'dynamic'">
+                <mat-label>Dinero Qr:</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:cash'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'amountQr'"
+                    (keyup)="calculateSubTotal()"
+                    matInput>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-4">
+        <div class="sm:col-span-4">
+            <mat-form-field
+                class="w-full"
+                [subscriptSizing]="'dynamic'">
+                <mat-label>Dinero Tarjeta:</mat-label>
+                <mat-icon
+                    class="icon-size-5"
+                    [svgIcon]="'heroicons_solid:cash'"
+                    matPrefix></mat-icon>
+                <input
+                    [formControlName]="'amountCard'"
+                    (keyup)="calculateSubTotal()"
+                    matInput>
+            </mat-form-field>
+        </div>
+    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<!-------------------------------------------------------------------------------------------------------------------------------->
+
+            <div class="mt-4 flex items-center justify-center  dark:bg-gray-700">
+            <div style="display: flex;">
+
+
+                <btn-generic
+                    class="px-6 "
+                    [color]="'secondary'"
+                    [label]="' Cancelar'"
+                    [icon]="'close'"
+                    [withFull]="false"
+                    [disabled]="false"
+                    (click)="cancelStore()">
+                </btn-generic>
+                <btn-generic
+                    class="px-6"
+                    [color]="'green'"
+                    [label]="' Guardar'"
+                    [icon]="'save'"
+                    [withFull]="false"
+                    [disabled]="false"
+                    (buttonClick)="save()"
+                >
+                </btn-generic>
+
+             </div>
+         </div>
+    </form>
+</div>

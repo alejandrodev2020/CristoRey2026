@@ -1,0 +1,59 @@
+<div class="m-4 ">
+    <div class="flex items-center justify-between  dark:bg-gray-700">
+        <div></div>
+        <div>
+            <mat-icon (click)="close()" svgIcon="heroicons_outline:x"></mat-icon>
+         </div>
+     </div>
+     <mat-divider></mat-divider>
+    <form  
+        [formGroup]="form"
+        ngNativeValidate
+        autocomplete="off"
+    >
+<!-------------------------------------------------------------------------------------------------------------------------------->
+<div class="w-full mt-1">
+    <div class="text-2xl text-center font-semibold tracking-tight leading-6">¿Para que almacen deseas realizar la venta?</div>
+  </div>
+    <div class="flex items-center justify-center ">
+        <img style="width: 170px;" src="https://cdn-icons-png.flaticon.com/128/3880/3880107.png">
+    </div>
+    <div class="w-full mt-1">
+            <div class="font-medium tracking-tight text-secondary">Al ser administrador, puedes realizar ventas a distintos almacenes</div>
+    </div>
+    <div class="grid sm:grid-cols-4 gap-6 w-full mt-1">
+        <div class="sm:col-span-4">
+            <mat-form-field
+                    class="w-full"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-label>Almacen: </mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:library'"
+                        matPrefix></mat-icon>
+                        <mat-select [formControlName]="'warehouseId'" >
+                            <mat-option *ngFor="let warehouse of listWarehouse" [value]="warehouse.id">
+                              {{warehouse.name}}
+                            </mat-option>
+                          </mat-select>
+                </mat-form-field>
+        </div>
+    </div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
+            <div class="flex items-center justify-between  dark:bg-gray-700">
+            <div></div>
+            <div>
+                <br>
+                   <btn-generic
+                      [color]="'green'"
+                      class="px-6 ml-3"
+                      [label]="'Seleccionar'"
+                      [icon]="'check'"
+                      [withFull]="false"
+                      [disabled]="false" 
+                      (buttonClick)="save()">
+                   </btn-generic>
+             </div>
+         </div>
+    </form>
+</div>

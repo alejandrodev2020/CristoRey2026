@@ -1,0 +1,22 @@
+<div class="contenido">
+    <google-map
+      [height]="'100%'"
+      [width]="'100%'"
+      [center]="center"
+      [zoom]="zoom">
+      
+      <map-marker
+        *ngFor="let marker of markers"
+        [position]="marker"
+        [icon]="imageIcon"
+        (markerClick)="onMarkerClick(marker)">
+      </map-marker>
+  
+      <!-- <map-polygon *ngFor="let polygon of polygons"
+        [paths]="polygon.paths"
+        [options]="polygon.options">
+      </map-polygon> -->
+  
+    </google-map>
+  </div>
+  
