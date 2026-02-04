@@ -1,4 +1,4 @@
-using Api.Controllers;
+﻿using Api.Controllers;
 using Data.Command;
 using Data.Query;
 using MediatR;
@@ -11,11 +11,30 @@ using Google.Apis.Auth.OAuth2;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cargar configuraci�n
+// Cargar configuración
 builder.Configuration
        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
        .AddEnvironmentVariables();
+
+//var firebasePath = Path.Combine(
+//    builder.Environment.ContentRootPath,
+//    "admin",
+//    "firebase-admin.json"
+//);
+
+//if (!File.Exists(firebasePath))
+//{
+//    throw new Exception($"No se encontró firebase-admin.json en: {firebasePath}");
+//}
+
+//if (FirebaseApp.DefaultInstance == null)
+//{
+//    FirebaseApp.Create(new AppOptions
+//    {
+//        Credential = GoogleCredential.FromFile(firebasePath)
+//    });
+//}
 
 var firebasePath = Path.Combine(
     builder.Environment.ContentRootPath,
@@ -23,17 +42,24 @@ var firebasePath = Path.Combine(
     "firebase-admin.json"
 );
 
+Console.WriteLine($"🔥 Firebase path: {firebasePath}");
+Console.WriteLine($"🔥 Existe archivo: {File.Exists(firebasePath)}");
+
 if (!File.Exists(firebasePath))
 {
-    throw new Exception($"No se encontr� firebase-admin.json en: {firebasePath}");
+    throw new Exception($"No se encontró firebase-admin.json en: {firebasePath}");
 }
 
 if (FirebaseApp.DefaultInstance == null)
 {
+    Console.WriteLine("🚀 Inicializando FirebaseApp...");
+
     FirebaseApp.Create(new AppOptions
     {
         Credential = GoogleCredential.FromFile(firebasePath)
     });
+
+    Console.WriteLine("✅ FirebaseApp inicializado");
 }
 
 var connectionStr = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -105,7 +131,7 @@ app.UseSwaggerUI(c =>
 
 
 app.UseCors("AllowMyOrigin");
-//app.UseHttpsRedirection(); // Elimina esta l�nea si no est�s usando HTTPS
+//app.UseHttpsRedirection(); // Elimina esta línea si no estás usando HTTPS
 app.UseAuthorization();
 app.MapHub<ClienteHub>("/clienteHub");
 app.MapControllers();

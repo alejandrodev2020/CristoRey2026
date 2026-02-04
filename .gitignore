@@ -3,7 +3,13 @@
 ############################
 
 
+# Visual Studio
+.vs/
+**/.vs/
 
+# Firebase Admin (secreto)
+firebase-admin.json
+**/firebase-admin.json
 
 
 # Node modules (frontend)
