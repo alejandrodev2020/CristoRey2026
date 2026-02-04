@@ -1,4 +1,4 @@
-package com.ventaky.beta
+package com.cristorey.beta
 
 import android.app.Application
 import com.facebook.react.PackageList

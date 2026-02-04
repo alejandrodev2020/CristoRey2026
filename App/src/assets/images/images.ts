@@ -6,6 +6,7 @@ const Images = {
     icon_qr: require('./ui/qr.png'),
     icon_cash: require('./ui/cash.png'),
     icon_mixto: require('./ui/payment-mix.png'),
+    lock_dent:  require('./ui/lock-dent.png'),
   },
   bacground:{
     welcome : require('./background/login-welcome.png'),

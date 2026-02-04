@@ -49,22 +49,22 @@ export const lightTheme: AppTheme = {
 export const darkTheme: AppTheme = {
   mode: 'dark',
   colors: {
-    background: '#6b6b6bff',
-    text: '#aaaaaa',
-    primary: '#000000',
-    secondary: '#03DAC6',
-    gradient: ['#1e3c72', '#2a5298'],
+    background: '#0f172a', // fallback SOLO si no hay gradient
+    text: '#e5e7eb',
+    primary: '#0f172a',
+    secondary: '#1e293b',
+    gradient: ['#0f172a', '#1e293b'], // 👈 ESTE ES EL FONDO REAL
     button: {
-      background: '#2980b9',
-      color: '#ffffff', // ✅ Corregido
+      background: '#1e40af',
+      color: '#ffffff',
     },
     card: {
-      background: '#b5b7bbff',
-      border: '#2d2d2d',
+      background: 'rgba(255,255,255,0.08)',
+      border: 'rgba(255,255,255,0.12)',
       text: '#ffffff',
-      productName:{
-        color:'#ffffff'
-      }
+      productName: {
+        color: '#ffffff',
+      },
     },
   },
 };

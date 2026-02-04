@@ -10,4 +10,5 @@ export type AuthStackParamList = {
   SaleListScreen: undefined;
   LogoutScreen: undefined;
   Vinculation: undefined;
+  Login3: undefined;
 };

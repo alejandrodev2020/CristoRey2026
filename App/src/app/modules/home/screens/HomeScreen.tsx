@@ -1,13 +1,6 @@
 // HomeScreen.tsx
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  StatusBar,
-  TouchableOpacity,
-  Text,
-  Dimensions,
-} from 'react-native';
+import {  View,  StyleSheet,TouchableOpacity,  Text,  Dimensions} from 'react-native';
 import TestModal, {TestModalHandle} from '../../sale/components/TestModal';
 import BottomBar from '../../../shared/components/BottomBar';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
@@ -59,17 +52,17 @@ export default function HomeScreen() {
     loadUser();
   }, []);
   useEffect(() => {
-    const fetchLastDay = async () => {
-      try {
-        const data = await saleService.getLastDaySale();
-        const firstTen = data.slice(0, 10);
-        setListSales(firstTen);
-      } catch (err) {
-        console.error(' Error al cargar última venta', err);
-      }
-    };
+    // const fetchLastDay = async () => {
+    //   try {
+    //     const data = await saleService.getLastDaySale();
+    //     const firstTen = data.slice(0, 10);
+    //     setListSales(firstTen);
+    //   } catch (err) {
+    //     console.error(' Error al cargar última venta', err);
+    //   }
+    // };
 
-    fetchLastDay();
+    // fetchLastDay();
   }, []);
 
   const WaveDivider = () => (
@@ -111,7 +104,7 @@ export default function HomeScreen() {
 
               <Text style={{fontSize: 12, color: '#fff'}}>
                 {' '}
-                {user?.firstName ? capitalize(role?.description) : 'Sin Rol'}
+                {user?.firstName ? capitalize(role?.name) : 'Sin Rol'}
               </Text>
             </View>
             <TouchableOpacity onPress={() => console.log('Perfil')}>
@@ -122,7 +115,12 @@ export default function HomeScreen() {
         <WaveDivider />
         <View style={{height: 50}}></View>
 
-        <View style={{paddingHorizontal: 15, height:'100%', backgroundColor:'#ffffff'}}>
+        <View
+          style={{
+            paddingHorizontal: 15,
+            height: '100%',
+            backgroundColor: '#ffffff',
+          }}>
           <Text
             style={{
               fontSize: 25,
@@ -139,104 +137,9 @@ export default function HomeScreen() {
               fontFamily: 'Poppins-SemiBold',
               color: '#000',
             }}>
-            Periodo:
+            Mis Datos:
           </Text>
-  
-
-          {/* <LinearGradient
-          colors={['#369d9dff', '#317ae1ff']}
-          start={{x: 1, y: 0}}
-          end={{x: 0, y: 1}}
-          style={styles.gradientContainer2}>
-          <View
-            style={{
-              paddingVertical: 0,
-              borderRadius: 10,
-            }}>
-            <Text
-              style={{
-                fontSize: 35,
-                paddingHorizontal: 0,
-                fontFamily: 'Poppins-SemiBold',
-                color: '#e4e9e5ff',
-              }}>
-              Bs. 1500,00
-            </Text>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                marginTop: 0,
-                paddingHorizontal: 0,
-                paddingBottom: 10,
-                height: 140,
-              }}>
-              <View style={styles.cardAmount}>
-                <Text style={styles.textMoney}>Efectivo</Text>
-                <ProgressChart
-                  style={{borderRadius: 15}}
-                  data={data}
-                  width={90}
-                  height={90}
-                  strokeWidth={10}
-                  radius={20}
-                  chartConfig={chartConfig}
-                  hideLegend={true}
-                />
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#41ece6ff',
-                    fontFamily: 'Poppins-SemiBold',
-                  }}>
-                  Bs. 234.70
-                </Text>
-              </View>
-              <View style={styles.cardAmount}>
-                <Text style={styles.textMoney}>Efectivo</Text>
-          
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#41ece6ff',
-                    fontFamily: 'Poppins-SemiBold',
-                  }}>
-                  Bs. 234.70
-                </Text>
-              </View>
-              <View style={styles.cardAmount}>
-                <Text style={styles.textMoney}>Efectivo</Text>
-          
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    color: '#41ece6ff',
-                    fontFamily: 'Poppins-SemiBold',
-                  }}>
-                  Bs. 234.70
-                </Text>
-              </View>
-            </View>
-          </View>
-        </LinearGradient> */}
-
-          {/* <ProgressBarExample progress={10} /> */}
-
-          {/* <StackedBarChartExample /> */}
         </View>
-
-        {/* 
-      <View style={styles.container}>
-        
-
-        <View style={{flex: 2}}>
-          <ChartExample />
-          <ChartExample />
-        </View>
-      </View> */}
-
-        <BottomBar />
       </SafeAreaView>
     </>
   );
@@ -249,13 +152,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     height: screenHeight * 0.085,
   },
-  gradientContainer2: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    marginBottom: 20,
-    height: screenHeight * 0.28,
-    borderRadius: 15,
-  },
+
   header: {
     fontFamily: 'Poppins-Regular',
     fontSize: 18,
@@ -271,17 +168,5 @@ const styles = StyleSheet.create({
   centerSection: {
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  textMoney: {
-    textAlign: 'center',
-    color: '#f8f8f8ff',
-    fontFamily: 'Poppins-SemiBold',
-  },
-  cardAmount: {
-    flex: 1,
-    height: 25,
-    marginRight: 10,
-    borderRadius: 10,
-    alignContent: 'center',
   },
 });

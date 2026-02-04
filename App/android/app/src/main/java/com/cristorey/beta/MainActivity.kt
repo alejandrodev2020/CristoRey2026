@@ -1,4 +1,4 @@
-package com.ventaky.beta
+package com.cristorey.beta
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

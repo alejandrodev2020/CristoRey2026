@@ -2,15 +2,17 @@ import React, { useEffect } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { StackActions, useNavigation } from '@react-navigation/native';
 
-import { showMessage } from 'react-native-flash-message';
-import authStorageService from '../services/AuthStorageService';
-
 export default function SplashScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
-   
+    const timer = setTimeout(() => {
+      navigation.dispatch(
+        StackActions.replace('Login3')
+      );
+    }, 2000); // ⏱️ 2 segundos
 
+    return () => clearTimeout(timer);
   }, []);
 
   return (

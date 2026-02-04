@@ -9,6 +9,8 @@ import VinculationScreen from './screens/VinculationScreen';
 import Login2 from './screens/Login2Screen';
 import LoginScreen from './screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import SplashScreen from './screens/SplashScreen';
+import Login3Screen from './screens/Login3Screen';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -33,7 +35,8 @@ export function AuthModuleNavigator() {
 
   return (
     <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen name="Welcome" component={SplashScreen} />
+      <Stack.Screen name="Login3" component={Login3Screen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Vinculation" component={VinculationScreen} />
     </Stack.Navigator>

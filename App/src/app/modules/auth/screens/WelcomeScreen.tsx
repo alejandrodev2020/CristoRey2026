@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, Image, TouchableOpacity, Animated, Easing, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Animated,
+  Easing,
+  StatusBar,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AuthStackParamList} from '../routes/AuthRoutes';
@@ -42,7 +50,7 @@ export default function WelcomeScreen({navigation}: Props) {
         if (option === 'Iniciar Sessión') {
           navigation.navigate('Login');
         } else {
-          navigation.navigate('Vinculation'); // Asegúrate de que esta ruta exista
+          navigation.navigate('Vinculation');
         }
       }, 50);
     });
@@ -64,14 +72,17 @@ export default function WelcomeScreen({navigation}: Props) {
         translucent
         backgroundColor="transparent"
       />
+
+      {/* TOP SECTION (MOCKUP VISUAL) */}
       <LinearGradient colors={theme.colors.gradient} style={styles.topSection}>
         <Image
-          source={Images.bacground.welcomeSplash}
+          source={Images.bacground.bluetooth} // 👈 IMAGEN DEL MOCKUP
           style={styles.illustration}
           resizeMode="contain"
         />
       </LinearGradient>
 
+      {/* BOTTOM SECTION */}
       <View style={styles.bottomSection}>
         <Text style={styles.title}>
           Bienvenido a{'\n'}
@@ -79,8 +90,11 @@ export default function WelcomeScreen({navigation}: Props) {
         </Text>
 
         <Text style={styles.subtitle}>
-          Estás en la sección para vincular la aplicación con tu entorno de trabajo, asegurando que toda la información esté correctamente conectada.
-¡Gracias por confiar en nosotros y permitirnos ser parte del crecimiento de tu negocio!
+          Estás en la sección para vincular la aplicación con tu entorno de
+          trabajo, asegurando que toda la información esté correctamente
+          conectada. {'\n\n'}
+          ¡Gracias por confiar en nosotros y permitirnos ser parte del
+          crecimiento de tu negocio!
         </Text>
 
         <View style={styles.container2}>

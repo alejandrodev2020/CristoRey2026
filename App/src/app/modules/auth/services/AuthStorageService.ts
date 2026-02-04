@@ -5,19 +5,19 @@ class AuthStorageService {
     await AsyncStorage.setItem('token', data.token);
 
     await AsyncStorage.setItem('userLogged', JSON.stringify({
-      id: data.id,
+      // id: data.id,
       firstName: data.firstName,
       lastName: data.lastName,
-      userName: data.userName,
-      avatar: data.avatar,
-      warehouseId : data.warehouseId
+      // userName: data.userName,
+      // avatar: data.avatar,
+      // warehouseId : data.warehouseId
     }));
 
-    await AsyncStorage.setItem('role', JSON.stringify(data.authRole));
-    await AsyncStorage.setItem('configuration', JSON.stringify(data.configuration));
-    await AsyncStorage.setItem('company', JSON.stringify(data.company));
-    await AsyncStorage.setItem('userConfiguration', JSON.stringify(data.authUserConfiguration));
-    await AsyncStorage.setItem('viewAlert', 'false');
+     await AsyncStorage.setItem('role', JSON.stringify(data.authRole));
+    // await AsyncStorage.setItem('configuration', JSON.stringify(data.configuration));
+    // await AsyncStorage.setItem('company', JSON.stringify(data.company));
+    // await AsyncStorage.setItem('userConfiguration', JSON.stringify(data.authUserConfiguration));
+    // await AsyncStorage.setItem('viewAlert', 'false');
   }
 
   async getToken(): Promise<string | null> {

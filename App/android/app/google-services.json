@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "590699957200",
+    "firebase_url": "https://push-e0d5b.firebaseio.com",
+    "project_id": "push-e0d5b",
+    "storage_bucket": "push-e0d5b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590699957200:android:b78403b068a9f16e8b47d5",
+        "android_client_info": {
+          "package_name": "com.app.cristorey"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD-U_fGxYAYv67ucdyVr-e6frYGXfv0Bg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590699957200:android:1a21f3df6f9d53968b47d5",
+        "android_client_info": {
+          "package_name": "com.cristorey.beta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD-U_fGxYAYv67ucdyVr-e6frYGXfv0Bg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

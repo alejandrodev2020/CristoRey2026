@@ -5,6 +5,9 @@ using MediatR;
 using Microsoft.OpenApi.Models;
 using OpenAI;
 using Service;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +15,26 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-       .AddEnvironmentVariables(); // Carga variables de entorno
+       .AddEnvironmentVariables();
+
+var firebasePath = Path.Combine(
+    builder.Environment.ContentRootPath,
+    "admin",
+    "firebase-admin.json"
+);
+
+if (!File.Exists(firebasePath))
+{
+    throw new Exception($"No se encontró firebase-admin.json en: {firebasePath}");
+}
+
+if (FirebaseApp.DefaultInstance == null)
+{
+    FirebaseApp.Create(new AppOptions
+    {
+        Credential = GoogleCredential.FromFile(firebasePath)
+    });
+}
 
 var connectionStr = builder.Configuration.GetConnectionString("DefaultConnection");
 
