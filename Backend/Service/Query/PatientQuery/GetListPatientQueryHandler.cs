@@ -25,53 +25,57 @@ namespace Service.Query.PatientQuery
             var codeStore = Environment.GetEnvironmentVariable("CodeStore");
             if (string.IsNullOrEmpty(codeStore))
                 throw new InvalidOperationException("CodeStore no configurado");
-
-            foreach (var patient in patients)
+            if (request.ReturnImage == true) 
             {
-                if (!patient.HasPhoto.GetValueOrDefault())
-                    continue;
-
-                var cacheKey = $"{patient.Id}_{codeStore}_PATIENT_PHOTO";
-
-                var cachedPhoto = await _cache.GetStringAsync(cacheKey, cancellationToken);
-                if (!string.IsNullOrEmpty(cachedPhoto))
+                foreach (var patient in patients)
                 {
-                    patient.Photo = cachedPhoto;
-                    continue;
-                }
+                    if (!patient.HasPhoto.GetValueOrDefault())
+                        continue;
 
-                var photoFile = _repository.GetPhoto(patient.Id);
+                    var cacheKey = $"{patient.Id}_{codeStore}_PATIENT_PHOTO";
 
-                if (photoFile == null || photoFile.Length == 0)
-                {
-                    // cache negativo (evita hits repetidos a DB)
+                    var cachedPhoto = await _cache.GetStringAsync(cacheKey, cancellationToken);
+                    if (!string.IsNullOrEmpty(cachedPhoto))
+                    {
+                        patient.Photo = cachedPhoto;
+                        continue;
+                    }
+
+                    var photoFile = _repository.GetPhoto(patient.Id);
+
+                    if (photoFile == null || photoFile.Length == 0)
+                    {
+                        // cache negativo (evita hits repetidos a DB)
+                        await _cache.SetStringAsync(
+                            cacheKey,
+                            string.Empty,
+                            new DistributedCacheEntryOptions
+                            {
+                                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                            },
+                            cancellationToken
+                        );
+                        continue;
+                    }
+
+                    var base64 = Convert.ToBase64String(photoFile);
+
                     await _cache.SetStringAsync(
                         cacheKey,
-                        string.Empty,
+                        base64,
                         new DistributedCacheEntryOptions
                         {
-                            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
+                            SlidingExpiration = TimeSpan.FromHours(1)
                         },
                         cancellationToken
                     );
-                    continue;
+
+                    patient.Photo = base64;
                 }
-
-                var base64 = Convert.ToBase64String(photoFile);
-
-                await _cache.SetStringAsync(
-                    cacheKey,
-                    base64,
-                    new DistributedCacheEntryOptions
-                    {
-                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
-                        SlidingExpiration = TimeSpan.FromHours(1)
-                    },
-                    cancellationToken
-                );
-
-                patient.Photo = base64;
             }
+
+
 
             return patients;
         }

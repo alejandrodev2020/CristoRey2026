@@ -1,9 +1,11 @@
-﻿using Dapper;
+﻿using AutoMapper;
+using Dapper;
 using Resources.Data.Query.Repository;
 using Service.Models.AuthUser;
 using Service.Models.Classifier;
 using Service.Query.AuthUserQuery;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Data.Query.Repository
@@ -121,8 +123,9 @@ namespace Data.Query.Repository
                      "LEFT JOIN" + quote + "AuthUserConfiguration" + quote + " " + quote + "AC" + quote +
                             "ON " + quote + "AC" + quote + "." + quote + "nAuthUserId" + quote + "=" + quote + "A" + quote + "." + quote + "nAuthUserId" + quote +
 
-                            "WHERE " + quote + "A" + quote + "." + quote + "sUserName" + quote + "=" + quoteString + userName + quoteString +
-                            "AND" + quote + "A" + quote + "." + quote + "sUserKey" + quote + "=" + quoteString + userKey + quoteString;
+                        " WHERE UPPER(" + quote + "A" + quote + "." + quote + "sUserName" + quote + ") = UPPER(" + quoteString + userName + quoteString + ") " +
+                                " AND " + quote + "A" + quote + "." + quote + "sUserKey" + quote + " = " + quoteString + userKey + quoteString +
+                                " AND " + quote + "A" + quote + "." + quote + "bIsActive" + quote + " = true";
 
             var values = ExecutionContext(connection =>
             {
@@ -143,17 +146,18 @@ namespace Data.Query.Repository
         public AuthUserModel GetUserNameValidate(string userName)
         {
             const string quote = "\"";
-            const string quoteString = "\'";
-            var sql = @"SELECT  " + quote + "A" + quote + "." + quote + "nAuthUserId" + quote + " " + quote + "Id" + quote +
-                         " FROM " + quote + "AuthUser" + quote + " " + quote + "A" + quote +
-                         "WHERE " + quote + "A" + quote + "." + quote + "sUserName" + quote + "=" + quoteString + userName + quoteString;
+            var sql = @"SELECT " + quote + "A" + quote + "." + quote + "nAuthUserId" + quote + " " + quote + "Id" + quote +
+                        " FROM " + quote + "AuthUser" + quote + " " + quote + "A" + quote +
+                        " WHERE UPPER(" + quote + "A" + quote + "." + quote + "sUserName" + quote + ") = UPPER(@userName)" +
+                        " AND " + quote + "A" + quote + "." + quote + "bIsActive" + quote + " = true";
 
             var values = ExecutionContext(connection =>
             {
-                var returnVale = connection.Query<AuthUserModel                                                
-                                                  >(sql).LastOrDefault();
+                var returnVale = connection.Query<AuthUserModel>(sql, new { userName = userName.Trim() })
+                                           .LastOrDefault();
                 return returnVale;
             });
+
             return values;
         }
 

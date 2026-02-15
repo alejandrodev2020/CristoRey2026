@@ -23,7 +23,6 @@ namespace Data.Command.Configurations
             builder.Property(x => x.IsActive)
                    .IsRequired();
 
-            // 🔽 OPCIONALES
             builder.Property(x => x.LastName)
                    .IsRequired(false);
 
@@ -37,7 +36,7 @@ namespace Data.Command.Configurations
                    .IsRequired(false);
 
             builder.Property(x => x.Avatar)
-                   .IsRequired(false);   // ⭐ ESTA ES LA QUE TE ROMPÍA TODO
+                   .IsRequired(false);   
 
             builder.Property(x => x.IsAdmin)
                    .IsRequired(false);
@@ -45,7 +44,15 @@ namespace Data.Command.Configurations
             builder.Property(x => x.AuthRoleId)
                    .IsRequired(false);
 
+            builder
+               .HasMany(p => p.Devices)
+               .WithOne()
+               .HasForeignKey(p => p.AuthUserId);
 
+            builder
+                .Metadata
+                .FindNavigation(nameof(AuthUser.Devices))
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
 
             builder.HasData(
               new AuthUser("Favian Alejandro","Avila Mancilla","67394939", "12890978", "12890978018", null,"kuper","jtgmad1wp",true,1,true,1),

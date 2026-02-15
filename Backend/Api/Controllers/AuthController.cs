@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.AuthAggregate;
+using Service.Command.UtilsAggregate;
 using Service.Middleware;
 using Service.Models.AuthUser;
 using Service.Query.AuthUserQuery;
@@ -144,5 +145,21 @@ namespace Api.Controllers
         {
             return await _mediator.Send(command);
         }
+
+        /// <summary>
+        /// actualizacion de contraseña.
+        /// </summary>
+        /// <param name="id">Parametro identificador de la entidad</param>
+        /// <param name="command">Modelo de datoa a actualizar</param>
+        /// <returns></returns>
+        [HttpPut("register-device")]
+        [Authorize]
+        public async Task<ActionResult<ResponseGenericCommand<Unit>>> CreateAuthDevice(CreateAuthUserDeviceCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+
+        
     }
 }

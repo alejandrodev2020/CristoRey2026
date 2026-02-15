@@ -25,6 +25,7 @@ namespace Domain.Entities.AuthAggregate
         }
         internal AuthUser()
         {
+            _devices = new List<AuthUserDevice>();
         }
 
         /// <summary>
@@ -104,6 +105,17 @@ namespace Domain.Entities.AuthAggregate
 
         public AuthUserConfiguration AuthUserConfiguration { get; set; }
 
+        /// <summary>
+        /// Listado de  dispositivos 
+        /// </summary>
+        private List<AuthUserDevice> _devices;
+
+        /// <summary>
+        /// Listado de dispositivos
+        /// </summary>
+        public IReadOnlyList<AuthUserDevice> Devices => _devices;
+
+
         #region
         public static AuthUser CreateUser(string firstname, string lastName, string phone, string ci, byte[] avatar, string userName, string userKey, bool? isAdmin, int? authRoleId) 
         {
@@ -130,6 +142,11 @@ namespace Domain.Entities.AuthAggregate
             Nit = nit;
             Avatar = avatar;
             UserName = userName;
+        }
+        public void RegisterDevice(string device, string token, string platform, string version)
+        {
+            var record = new AuthUserDevice(device : device, deviceToken: token, platform: platform, systemVersion: version, isActive: true);
+            _devices.Add(record);    
         }
 
         public void UpdatePasswordReset(string newpassword)

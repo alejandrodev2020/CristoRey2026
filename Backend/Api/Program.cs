@@ -1,40 +1,24 @@
 ﻿using Api.Controllers;
 using Data.Command;
 using Data.Query;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OpenAI;
 using Service;
-using FirebaseAdmin;
-using Google.Apis.Auth.OAuth2;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cargar configuración
+
 builder.Configuration
        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
        .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
        .AddEnvironmentVariables();
-
-//var firebasePath = Path.Combine(
-//    builder.Environment.ContentRootPath,
-//    "admin",
-//    "firebase-admin.json"
-//);
-
-//if (!File.Exists(firebasePath))
-//{
-//    throw new Exception($"No se encontró firebase-admin.json en: {firebasePath}");
-//}
-
-//if (FirebaseApp.DefaultInstance == null)
-//{
-//    FirebaseApp.Create(new AppOptions
-//    {
-//        Credential = GoogleCredential.FromFile(firebasePath)
-//    });
-//}
 
 var firebasePath = Path.Combine(
     builder.Environment.ContentRootPath,
@@ -87,6 +71,27 @@ builder.Services.AddControllers();
 builder.Services.AddPersistenceInfraestructure(connectionStr);
 builder.Services.RegisterDataQuery(connectionStr);
 
+var jwtKey = builder.Configuration["Jwt:Key"]; // Asegúrate de tener esto en appsettings.json
+var keyBytes = Encoding.ASCII.GetBytes(jwtKey);
+
+builder.Services.AddAuthentication(config =>
+{
+    config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(config =>
+{
+    config.RequireHttpsMetadata = false;
+    config.SaveToken = true;
+    config.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi Initial", Version = "v1" });
@@ -132,6 +137,7 @@ app.UseSwaggerUI(c =>
 
 app.UseCors("AllowMyOrigin");
 //app.UseHttpsRedirection(); // Elimina esta línea si no estás usando HTTPS
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapHub<ClienteHub>("/clienteHub");
 app.MapControllers();

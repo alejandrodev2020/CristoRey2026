@@ -79,8 +79,8 @@ namespace Data.Query.Repository
         {
             const string quote = "\"";
             var sql = @"SELECT  " + quote + "sPhoto" + quote + " " + quote + "File" + quote +
-                         " FROM " + quote + "Client" + quote + " " + quote + "C" + quote +
-                         "WHERE " + quote + "nClientId" + quote + "=" + id;
+                         " FROM " + quote + "Doctor" + quote + " " + quote + "C" + quote +
+                         "WHERE " + quote + "nDoctorId" + quote + "=" + id;
 
             var values = ExecutionContext(connection =>
             {

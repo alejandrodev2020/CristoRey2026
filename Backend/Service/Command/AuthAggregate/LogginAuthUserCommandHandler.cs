@@ -19,15 +19,15 @@ namespace Service.Command.AuthAggregate
 
         public async Task<AuthUserModel> Handle(LogginAuthUserCommand request, CancellationToken cancellationToken)
         {
-            var validateUser = _repository.GetUserNameValidate(request.UserName);
+            string cleanUserName = request.UserName?.Trim();
+            string cleanUserKey = request.UserKey?.Trim();
+            var validateUser = _repository.GetUserNameValidate(cleanUserName);
 
             if (validateUser != null)
             {
-                var record = _repository.GetAuthUserByUserNameAndUserKey(request.UserName, request.UserKey);
+                var record = _repository.GetAuthUserByUserNameAndUserKey(cleanUserName, cleanUserKey);
                 if (record != null)
                 {
-                    //var configuration = await _mediator.Send(new GetConfigurationQuery());
-                    //record.Configuration = configuration;
                     if (record.AvatarByte != null)
                     {
                         record.Avatar = Convert.ToBase64String(record.AvatarByte);
@@ -44,7 +44,9 @@ namespace Service.Command.AuthAggregate
                     };
 
                     var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.ASCII.GetBytes("EstaEsUnaClaveSecretaDe32Bytes!!");
+                    var claveLarga = "EstaClaveEsSuperSecretaYTieneMasDe32Caracteres2026!";
+                    var key = Encoding.ASCII.GetBytes(claveLarga);
+
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(claims),

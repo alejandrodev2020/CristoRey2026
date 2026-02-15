@@ -63,6 +63,7 @@ namespace Data.Command.Contexts
             modelBuilder.ApplyConfiguration(new ClinicalHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new OptionsConfiguration());
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthUserDeviceConfiguration());
 
 
         }
