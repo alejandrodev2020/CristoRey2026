@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.PatientAggregate;
@@ -40,7 +41,7 @@ namespace Api.Controllers
         /// <returns></returns>
         [HttpGet("list")]
         //[Authorize]
-        public async Task<ActionResult<IEnumerable<ClientModel>>> GetAllClient([FromQuery] GetListPatientQuery model)
+        public async Task<ActionResult<IEnumerable<PatientModel>>> GetAllClient([FromQuery] GetListPatientQuery model)
         {
             return Ok(await _mediator.Send(model));
         }
