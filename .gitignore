@@ -11,6 +11,8 @@
 firebase-admin.json
 **/firebase-admin.json
 
+# Firebase Admin SDK
+Backend/Api/admin/firebase-admin.json
 
 # Node modules (frontend)
 node_modules/
