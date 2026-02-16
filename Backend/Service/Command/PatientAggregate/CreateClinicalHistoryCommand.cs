@@ -1,11 +1,11 @@
 ﻿using MediatR;
+using Service.Command.UtilsAggregate;
 using System;
 
 namespace Service.Command.PatientAggregate
 {
-    public class CreateClinicalHistoryCommand : IRequest<Unit>
+    public class CreateClinicalHistoryCommand : IRequest<ResponseGenericCommand<Unit>>
     {
-        internal int Id { get; private set; }
         public DateTime? DateQuery { get; set; }
         public string Motive { get; set; }
         public string Diagnostic { get; set; }
@@ -14,10 +14,5 @@ namespace Service.Command.PatientAggregate
         public int OptionId { get; set; }
         public int DoctorId { get; set; }
         public bool? WasPaid { get; set; }
-
-        public void setId(int id)
-        {
-            Id = id;
-        }
     }
 }

@@ -28,6 +28,15 @@ namespace Data.Command.Repository
             return await _context.Doctor.Where(ele => ele.Id.Equals(id)).SingleOrDefaultAsync();
         }
 
+        public async Task<Doctor> FindDoctorWithDevicesAsync(int doctorId)
+        {
+            return await _context.Doctor
+                .Include(d => d.AuthUser)                 // Traemos al usuario de autenticación
+                    .ThenInclude(u => u.Devices)          // De ese usuario, traemos sus dispositivos (Tokens FCM)
+                .Where(d => d.Id == doctorId)
+                .SingleOrDefaultAsync();
+        }
+
         public Doctor Update(Doctor entity)
         {
             return UpdateAux(entity);

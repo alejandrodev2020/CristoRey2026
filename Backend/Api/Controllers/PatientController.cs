@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.PatientAggregate;
+using Service.Command.UtilsAggregate;
 using Service.Middleware;
 using Service.Models.Client;
 using Service.Models.Patient;
@@ -116,10 +117,10 @@ namespace Api.Controllers
         /// <param name="id">Parametro identificador de la entidad</param>
         /// <param name="command">Modelo de datoa a actualizar</param>
         /// <returns></returns>
-        [HttpPut("{id}/clinical-history")]
-        public async Task<ActionResult<Unit>> CreateClinicalHistory(int id, CreateClinicalHistoryCommand command)
+        [HttpPut("clinical-history")]
+        [Authorize]
+        public async Task<ActionResult<ResponseGenericCommand<Unit>>> CreateClinicalHistory(CreateClinicalHistoryCommand command)
         {
-            command.setId(id);
             return await _mediator.Send(command);
         }
 
