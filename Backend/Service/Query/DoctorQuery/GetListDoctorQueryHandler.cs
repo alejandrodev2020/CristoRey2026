@@ -1,9 +1,5 @@
 ﻿using MediatR;
 using Service.Models.Doctor;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Query.DoctorQuery
 {
@@ -18,7 +14,7 @@ namespace Service.Query.DoctorQuery
         public Task<IEnumerable<DoctorModel>> Handle(GetListDoctorQuery request, CancellationToken cancellationToken)
         {
 
-            var record = _repository.GetListProvider();
+            var record = _repository.GetListDoctor(request.IsEmergency);
             foreach (var item  in record)
             {
                 var currentItem = item;
@@ -27,9 +23,7 @@ namespace Service.Query.DoctorQuery
                     item.Photo = Convert.ToBase64String(item.PhotoByte);
                 }
             }
-
             return Task.FromResult(record);
-
         }
     }
 }

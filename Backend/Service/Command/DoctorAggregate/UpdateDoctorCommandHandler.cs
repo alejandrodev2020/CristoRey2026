@@ -1,9 +1,6 @@
 ﻿using Domain.Entities.DoctorAggregate;
 using MediatR;
-using System;
 using System.Globalization;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Command.DoctorAggregate
 {
@@ -19,8 +16,8 @@ namespace Service.Command.DoctorAggregate
         public async Task<Unit> Handle(UpdateDoctorCommand request, CancellationToken cancellationToken)
         {
             byte[] file = null;
-            var Provider = await _repository.FindByIdAsync(request.Id);
-            if (Provider != null)
+            var doctor = await _repository.FindByIdAsync(request.Id);
+            if (doctor != null)
             {
                 // Procesar foto si existe
                 if (!string.IsNullOrWhiteSpace(request.Photo))
@@ -29,14 +26,12 @@ namespace Service.Command.DoctorAggregate
                     file = Convert.FromBase64String(parts[1]);
                 }
 
-                // LAT / LNG → convertir correctamente a double
                 double lat = 0;
                 double lng = 0;
 
                 double.TryParse(request.Latitude, NumberStyles.Any, CultureInfo.InvariantCulture, out lat);
                 double.TryParse(request.Longitude, NumberStyles.Any, CultureInfo.InvariantCulture, out lng);
 
-                // Crear URL solo si lat y lng tienen valores válidos
                 string link = string.Empty;
 
                 if (!string.IsNullOrWhiteSpace(request.Latitude) &&
@@ -45,8 +40,7 @@ namespace Service.Command.DoctorAggregate
                     link = $"https://www.google.com/maps?q={request.Latitude},{request.Longitude}";
                 }
 
-                // Llamar a tu método UpdateDoctor con los nuevos parámetros
-                Provider.UpdateDoctor(
+                doctor.UpdateDoctor(
                     firstname: request.FirstName,
                     lastName: request.LastName,
                     phone: request.Phone,
@@ -60,8 +54,21 @@ namespace Service.Command.DoctorAggregate
                     link: link,
                     isEmergency: request.IsEmergency
                 );
+                if (doctor.AuthUser != null)
+                {
+                    doctor.AuthUser.UpdateUser(
+                        firstname: request.FirstName,
+                        lastName: request.LastName,
+                        phone: request.Phone,
+                        nit: request.Nit,
+                        ci: request.Ci,
+                        avatar: file,
+                        userName: request.Ci,
+                        userKey: request.Phone
+                    );
+                }
 
-                _repository.Update(Provider);
+                _repository.Update(doctor);
                 await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             }
             else

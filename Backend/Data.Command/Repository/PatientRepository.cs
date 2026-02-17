@@ -23,20 +23,22 @@ namespace Data.Command.Repository
             DeleteAux(entity);
         }
 
-        public async Task<Patient> FindByAuthUserIdAsync(int id)
+        public async Task<Patient?> FindByAuthUserIdAsync(int id)
         {
-            // Buscamos en la tabla Patient el registro donde AuthUserId coincida con el id enviado
             return await _context.Patient
                 .Where(p => p.AuthUserId == id)
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Patient> FindByIdAsync(int id)
+        public async Task<Patient?> FindByIdAsync(int id)
         {
-            return await _context.Patient.Where(ele => ele.Id.Equals(id)).SingleOrDefaultAsync();
+            return await _context.Patient
+                .Include(ele => ele.AuthUser)
+                .Where(ele => ele.Id.Equals(id))
+                .SingleOrDefaultAsync();
         }
 
-        public async Task<Patient> FindClinicalHistoryById(int id)
+        public async Task<Patient?> FindClinicalHistoryById(int id)
         {
             return await _context.Patient
              .Include(p => p.ClinicalHistorys)

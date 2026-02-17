@@ -6,7 +6,7 @@ namespace Service.Query.DoctorQuery
 {
     public interface IDoctorQueryRepository
     {
-        public IEnumerable<DoctorModel> GetListProvider();
+        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency);
         public DoctorModel GetProviderById(int id);
         public DoctorModel GetUserNameValidate(string ci);
         public DoctorModel GetAuthUserByCiAndPhone(string ci, string phone);

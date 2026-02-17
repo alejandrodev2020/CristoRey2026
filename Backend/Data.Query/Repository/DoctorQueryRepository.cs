@@ -36,34 +36,38 @@ namespace Data.Query.Repository
             return values;
         }
 
-        public IEnumerable<DoctorModel> GetListProvider()
+        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency)
         {
             const string quote = "\"";
-            var sql = @"SELECT  " + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
-                             ", " + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
-                             ", " + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
-                             ", " + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
-                             ", " + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
-                             ", " + quote + "sCi" + quote + " " + quote + "Ci" + quote +
-                             ", " + quote + "sNit" + quote + " " + quote + "Nit" + quote +
-                             ", " + quote + "sCompany" + quote + " " + quote + "BusinessName" + quote +
+            var sql = @"SELECT " + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
+                      ", " + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
+                      ", " + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
+                      ", " + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
+                      ", " + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
+                      ", " + quote + "sCi" + quote + " " + quote + "Ci" + quote +
+                      ", " + quote + "sNit" + quote + " " + quote + "Nit" + quote +
+                      ", " + quote + "sCompany" + quote + " " + quote + "BusinessName" + quote +
+                      ", " + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
+                      ", " + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
+                      ", " + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
+                      ", " + quote + "sLink" + quote + " " + quote + "Link" + quote +
+                      ", " + quote + "bIsEmergency" + quote + " " + quote + "IsEmergency" + quote +
+                      ", " + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
+                      " FROM " + quote + "Doctor" + quote + " " + quote + "P" + quote;
 
-                                                          ", " + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
-                             ", " + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
-                             ", " + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
-                             ", " + quote + "sLink" + quote + " " + quote + "Link" + quote +
+            string whereClause = "";
+            if (isEmergency.HasValue)
+            {
+                whereClause = " WHERE " + quote + "bIsEmergency" + quote + " = @isEmergency";
+            }
 
-
-                             ", " + quote + "bIsEmergency" + quote + " " + quote + "IsEmergency" + quote +
-                             ", " + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
-                         " FROM " + quote + "Doctor" + quote + " " + quote + "P" + quote +
-                         "ORDER BY" + quote + "nDoctorId" + quote + "  ASC";
-
+            sql += whereClause + " ORDER BY " + quote + "nDoctorId" + quote + " ASC";
             var values = ExecutionContext(connection =>
             {
-                var returnVale = connection.Query<DoctorModel>(sql).ToList();
+                var returnVale = connection.Query<DoctorModel>(sql, new { isEmergency }).ToList();
                 return returnVale;
             });
+
             return values;
         }
 

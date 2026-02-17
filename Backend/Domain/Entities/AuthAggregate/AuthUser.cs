@@ -133,7 +133,7 @@ namespace Domain.Entities.AuthAggregate
             return record;
         }
 
-        public void UpdateUser(string firstname, string lastName, string phone, string ci, string nit, byte[] avatar, string userName) 
+        public void UpdateUser(string firstname, string lastName, string phone, string ci, string nit, byte[] avatar, string userName, string userKey) 
         {
             FirstName = firstname;
             LastName = lastName;
@@ -142,6 +142,7 @@ namespace Domain.Entities.AuthAggregate
             Nit = nit;
             Avatar = avatar;
             UserName = userName;
+            UserKey = userKey;  
         }
         public void RegisterDevice(string device, string token, string platform, string version)
         {

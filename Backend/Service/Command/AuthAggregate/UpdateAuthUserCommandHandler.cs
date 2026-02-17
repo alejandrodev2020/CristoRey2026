@@ -25,7 +25,8 @@ namespace Service.Command.AuthAggregate
                     file = Convert.FromBase64String(tmp);
                 }
 
-                Provider.UpdateUser(request.FirstName, request.LastName, request.Phone, request.Ci, request.Nit, file, request.UserName);
+                Provider.UpdateUser(request.FirstName, request.LastName, request.Phone, request.Ci, 
+                                    request.Nit, file, request.UserName, request.UserKey);
                 _repository.Update(Provider);
                 await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
             }

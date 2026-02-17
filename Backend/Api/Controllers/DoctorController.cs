@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.DoctorAggregate;
@@ -41,9 +42,10 @@ namespace Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("list")]
-        public async Task<ActionResult<IEnumerable<DoctorModel>>> GetListProvider()
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<DoctorModel>>> GetListProvider([FromQuery] GetListDoctorQuery model)
         {
-            return Ok(await _mediator.Send(new GetListDoctorQuery()));
+            return Ok(await _mediator.Send(model));
         }
 
 

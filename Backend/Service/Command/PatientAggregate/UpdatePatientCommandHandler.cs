@@ -1,11 +1,5 @@
 ﻿using Domain.Entities.PatientAggregate;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Command.PatientAggregate
 {
@@ -33,9 +27,36 @@ namespace Service.Command.PatientAggregate
             var record = await _repository.FindByIdAsync(request.Id);
             if (record != null)
             {
-                record.UpdatePatient(request.FirstName, request.LastName, request.Phone, request.Ci,
-                request.Nit, file, hasPhoto, request.DepartamentId,  request.CityId, request.GenderId, request.PatientZoneId,
-                request.Ubication, request.Company, request.Latitude, request.Longitude, request.Reference, request.Link);
+                record.UpdatePatient(request.FirstName,
+                                     request.LastName, 
+                                     request.Phone,
+                                     request.Ci,
+                                     request.Nit, 
+                                     file,
+                                     hasPhoto,
+                                     request.DepartamentId,
+                                     request.CityId, 
+                                     request.GenderId,
+                                     request.PatientZoneId,
+                                     request.Ubication, 
+                                     request.Company,
+                                     request.Latitude, 
+                                     request.Longitude, 
+                                     request.Reference, 
+                                     request.Link);
+                if (record.AuthUser != null)
+                {
+                    record.AuthUser.UpdateUser(
+                        firstname: request.FirstName,
+                        lastName: request.LastName,
+                        phone: request.Phone,
+                        ci: request.Ci,
+                        nit:request.Nit,
+                        avatar: file,
+                        userName: request.Ci,
+                        userKey: request.Phone
+                    );
+                }
                 _repository.Update(record);
                 await _repository.UnitOfWork.SaveEntitiesAsync();
             }
