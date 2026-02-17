@@ -78,8 +78,6 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy
         this.user.avatar = (userJson.avatar)? 'data:image/avif;base64,'+ userJson?.avatar : imageUser;
         this.user.id = userJson.id;
         this.user.name = userJson?.firstName + ' ' + userJson?.lastName;
-        debugger;
-        // this.user.email = userJson?.userName;
         this.user.email = roleJson?.name;
 
         this._navigationService.navigation$

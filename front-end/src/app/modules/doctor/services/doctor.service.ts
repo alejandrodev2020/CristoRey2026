@@ -1,44 +1,36 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Provider } from '../models/provider';
-import { environment } from 'environments/enviroments';
+import { BaseService } from 'app/shared/services/base.service';
+import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 
-    'Access-Control-Allow-Origin':'*',
-    'Authorization':'authkey',
-    'userid':'1'
-  })
-};
 
 @Injectable({
   providedIn: "root"
 })
 
 
-export class DoctorService {
-  baseUri : string = '';
-
-  constructor(private http: HttpClient) {
-    this.baseUri = (environment.production)? environment.apiUrlProd: environment.apiUrlLocal;
-   }
+export class DoctorService extends BaseService{
+    constructor(http: HttpClient, authStorage: AuthStorageService) {
+        super(http, authStorage); 
+    }
 
   getListDoctors(){
-     return  this.http.get(`${this.baseUri}api/doctor/list`,httpOptions);
+     return  this.http.get(`${this.baseUri}api/doctor/list`,this.getHttpOptions());
   }
   store(data:Provider){
     if(data?.id){
-      return  this.http.put(`${this.baseUri}api/doctor/${data.id}`,data);
+      return  this.http.put(`${this.baseUri}api/doctor/${data.id}`,data,this.getHttpOptions());
     }
     else{
-      return  this.http.post(`${this.baseUri}api/doctor`,data);
+      return  this.http.post(`${this.baseUri}api/doctor`,data,this.getHttpOptions());
     }
  }
  getById( id : number){
-  return  this.http.get<Provider>(`${this.baseUri}api/doctor/`+ id);
+  return  this.http.get<Provider>(`${this.baseUri}api/doctor/`+ id,this.getHttpOptions());
   }
   lowById( id : number){
-    return  this.http.put(`${this.baseUri}api/provider/${id}/low`,{});
+    return  this.http.put(`${this.baseUri}api/provider/${id}/low`,{},this.getHttpOptions());
   }
 
 }

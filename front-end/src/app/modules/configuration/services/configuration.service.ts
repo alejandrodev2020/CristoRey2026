@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from 'environments/enviroments';
 import { BaseService } from 'app/shared/services/base.service';
+import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -38,11 +39,9 @@ const httpHeaderWhatsApp = {
 
 
 export class ConfigurationService extends BaseService {
-
-  constructor(http: HttpClient) {
-    super(http);
-  }
-
+    constructor(http: HttpClient, authStorage: AuthStorageService) {
+        super(http, authStorage); 
+    }
 
 
 

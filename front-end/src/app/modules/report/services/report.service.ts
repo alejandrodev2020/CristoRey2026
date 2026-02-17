@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { BaseService } from 'app/shared/services/base.service';
+import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
 
 
 @Injectable({
@@ -10,9 +11,9 @@ import { BaseService } from 'app/shared/services/base.service';
 
 export class ReportService extends BaseService{
 
-  constructor(http: HttpClient) {
-    super(http); 
-}
+    constructor(http: HttpClient, authStorage: AuthStorageService) {
+        super(http, authStorage); 
+    }
 getListSaleReport(query : string){ 
    return  this.http.get(`${this.baseUri}api/reporting/sales/data${query}`,this.getHttpOptions());
 }

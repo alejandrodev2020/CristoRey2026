@@ -7,6 +7,7 @@ const baseUrl = 'http://localhost:8080/api/tutorials';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   baseUri : string = '';
   constructor(private http: HttpClient) {
@@ -19,7 +20,7 @@ export class AuthService {
 
   singIn(data:any){
       return  this.http.post(`${this.baseUri}api/auth/user/loggin`,data);  
- }
+  }
 
  
 }

@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from '../../services/auth.service';
 import { environment } from 'environments/enviroments';
+import { AuthStorageService } from '../../services/authStorage.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +29,8 @@ export class LoginComponent implements OnInit
     constructor(
         private fb: FormBuilder,
         private router: Router,
-        private service : AuthService
+        private service : AuthService,
+        private sessionService: AuthStorageService
     )
     {
         this.form = this.fb.group({
@@ -82,6 +84,8 @@ export class LoginComponent implements OnInit
         
 
     }
+
+
     addInput(){
     }
     signIn()
@@ -89,10 +93,10 @@ export class LoginComponent implements OnInit
         const data = this.form.value;
         if(this.isValidForm())
         {
-
           this.service.singIn(data).subscribe((resp)=>{           
             this.userLogger = resp;
-            this.setDataLocalStorage(resp);
+            // this.setDataLocalStorage(resp);
+            this.sessionService.setSession(resp);
             Swal.fire({
               position: 'top-end',
               icon: 'success',

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Product } from '../models/product';
 import { BaseService } from 'app/shared/services/base.service';
+import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 
@@ -18,9 +19,9 @@ const httpOptions = {
 
 export class ShoppingService  extends BaseService {
   
-  constructor(http: HttpClient) {
-    super(http); // Llama al constructor del servicio base
-}
+    constructor(http: HttpClient, authStorage: AuthStorageService) {
+        super(http, authStorage); 
+    }
       // ESTE ES EL SERVICIO QUE VOY A UTILIZAR 
    getAllShopping(query :string){
      return  this.http.get(`${this.baseUri}api/shopping/list${query}`,httpOptions);

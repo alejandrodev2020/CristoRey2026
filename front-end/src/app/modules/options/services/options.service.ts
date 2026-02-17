@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { BaseService } from 'app/shared/services/base.service';
 import { Product } from 'app/modules/product/models/product';
+import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
 
 @Injectable({
     providedIn: "root"
@@ -10,8 +11,8 @@ import { Product } from 'app/modules/product/models/product';
 
 export class OptionsService extends BaseService {
 
-    constructor(http: HttpClient) {
-        super(http); 
+    constructor(http: HttpClient, authStorage: AuthStorageService) {
+        super(http, authStorage); 
     }
 
     getListOptions() {

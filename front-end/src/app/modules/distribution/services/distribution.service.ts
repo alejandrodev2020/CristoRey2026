@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { of } from 'rxjs';
 import { BaseService } from 'app/shared/services/base.service';
+import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
 
 @Injectable({
     providedIn: "root"
@@ -10,8 +11,8 @@ import { BaseService } from 'app/shared/services/base.service';
 
 export class DistributionService  extends BaseService {
 
-    constructor(http: HttpClient) {
-        super(http); // Llama al constructor del servicio base
+    constructor(http: HttpClient, authStorage: AuthStorageService) {
+        super(http, authStorage); 
     }
 
     getListDistribution(query: string) {

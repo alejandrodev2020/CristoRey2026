@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Warehouse } from '../models/warehouse';
 import { BaseService } from 'app/shared/services/base.service';
+import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
 
 
 @Injectable({
@@ -9,10 +10,9 @@ import { BaseService } from 'app/shared/services/base.service';
 })
 
 export class WarehouseService  extends BaseService{   
-    constructor(http: HttpClient) {
-        super(http); 
+    constructor(http: HttpClient, authStorage: AuthStorageService) {
+        super(http, authStorage); 
     }
-
 
     getAllWarehouse() {
         return this.http.get(`${this.baseUri}api/warehouse/list`, this.getHttpOptions());
