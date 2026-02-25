@@ -55,8 +55,8 @@ namespace Data.Command.Configurations
                    .HasMaxLength(200)
                    .IsRequired(false);
 
-            builder.Property(d => d.Company)
-                   .HasColumnName("sCompany")
+            builder.Property(d => d.Specialty)
+                   .HasColumnName("sSpecialty")
                    .HasMaxLength(100)
                    .IsRequired(false);
 

@@ -47,7 +47,7 @@ namespace Service.Command.DoctorAggregate
                     ci: request.Ci,
                     nit: request.Nit,
                     photo: file,
-                    businessName: request.BusinessName,
+                    specialty: request.Specialty,
                     ubication: request.Ubication,
                     latitude: lat,
                     longitude: lng,

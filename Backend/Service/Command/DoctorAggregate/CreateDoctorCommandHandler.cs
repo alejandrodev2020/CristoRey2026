@@ -64,7 +64,7 @@ namespace Service.Command.DoctorAggregate
                                             latitude: lat,
                                             longitude: lng,
                                             link : url,
-                                            company:request.businessName,
+                                            specialty: request.Specialty,
                                             isEmergency: request.IsEmergency);
             
             var auth = AuthUser.CreateUser(firstname: request.FirstName,

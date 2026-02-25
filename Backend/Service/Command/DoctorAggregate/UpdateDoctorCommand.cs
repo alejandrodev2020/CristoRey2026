@@ -14,7 +14,7 @@ namespace Service.Command.DoctorAggregate
         public string? Ubication { get; set; }
         public string? Latitude { get; set; }
         public string? Longitude { get; set; }
-        public string? BusinessName { get; set; }
+        public string? Specialty { get; set; }
         public bool? IsEmergency { get; set; }
         public void setId(int id)
         {

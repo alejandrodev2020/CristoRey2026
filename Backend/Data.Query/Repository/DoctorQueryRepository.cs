@@ -25,7 +25,7 @@ namespace Data.Query.Repository
                       ", " + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
                       ", " + quote + "sCi" + quote + " " + quote + "Ci" + quote +
                       ", " + quote + "sNit" + quote + " " + quote + "Nit" + quote +
-                      ", " + quote + "sCompany" + quote + " " + quote + "BusinessName" + quote +
+                      ", " + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
                       ", " + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
                       ", " + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
                       ", " + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
@@ -61,7 +61,7 @@ namespace Data.Query.Repository
                              ", " + quote + "sCi" + quote + " " + quote + "Ci" + quote +
                              ", " + quote + "sNit" + quote + " " + quote + "Nit" + quote +
                              ", " + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
-                             ", " + quote + "sCompany" + quote + " " + quote + "BusinessName" + quote +
+                             ", " + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
                              
                              ", " + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
                              ", " + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
@@ -105,7 +105,6 @@ namespace Data.Query.Repository
                              ", " + quote + "P" + quote + "." + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
                              ", " + quote + "P" + quote + "." + quote + "nPatientZoneId" + quote + " " + quote + "PatientZoneId" + quote +
                              ", " + quote + "P" + quote + "." + quote + "bHasPhoto" + quote + " " + quote + "HasPhoto" + quote +
-                             ", " + quote + "P" + quote + "." + quote + "sCompany" + quote + " " + quote + "Company" + quote +
                              ", " + quote + "P" + quote + "." + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
                              ", " + quote + "P" + quote + "." + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sReference" + quote + " " + quote + "Reference" + quote +
@@ -127,7 +126,7 @@ namespace Data.Query.Repository
                              ", " + quote + "D" + quote + "." + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " " + quote + "Ci" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " " + quote + "Nit" + quote +
-                             ", " + quote + "D" + quote + "." + quote + "sCompany" + quote + " " + quote + "BusinessName" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
                              ", " + quote + "D" + quote + "." + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
                              ", " + quote + "D" + quote + "." + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +

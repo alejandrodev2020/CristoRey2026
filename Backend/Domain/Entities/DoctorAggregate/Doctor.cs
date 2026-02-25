@@ -8,7 +8,7 @@ namespace Domain.Entities.DoctorAggregate
     public class Doctor : BaseModel, IAggregateRoot
     {
         public Doctor( string firstname, string lastName, string phone, string ci, string nit,
-                        byte[] photo, string ubication, string company, int? clientZoneId, bool? hasPhoto, bool? isActive, int id = default) : this()
+                        byte[] photo, string ubication, string specialty, int? clientZoneId, bool? hasPhoto, bool? isActive, int id = default) : this()
         {
             Id = id;
             FirstName = firstname;
@@ -18,7 +18,7 @@ namespace Domain.Entities.DoctorAggregate
             Nit = nit;
             Photo = photo;
             Ubication = ubication;
-            Company = company;
+            Specialty = specialty;
             ClientZoneId = clientZoneId;
             HasPhoto = hasPhoto;
             IsActive = isActive;
@@ -26,7 +26,7 @@ namespace Domain.Entities.DoctorAggregate
         }
 
         public Doctor(string firstname, string lastName, string phone, string ci, string nit,
-              byte[] photo, string ubication, string company, int? clientZoneId, bool? hasPhoto,
+              byte[] photo, string ubication, string specialty, int? clientZoneId, bool? hasPhoto,
               bool? isActive, double? latitude = null, double? longitude = null, string reference = null,
               string link = null, int id = default) : this()
         {
@@ -38,7 +38,7 @@ namespace Domain.Entities.DoctorAggregate
             Nit = nit;
             Photo = photo;
             Ubication = ubication;
-            Company = company;
+            Specialty = specialty;
             ClientZoneId = clientZoneId;
             HasPhoto = hasPhoto;
             IsActive = isActive;
@@ -106,8 +106,8 @@ namespace Domain.Entities.DoctorAggregate
         /// <summary>
         /// Compañia
         /// </summary>
-        [Column("sCompany")]
-        public string Company { get; private set; }
+        [Column("sSpecialty")]
+        public string Specialty { get; private set; }
 
         /// <summary>
         /// Identificador de la Zona
@@ -171,7 +171,7 @@ namespace Domain.Entities.DoctorAggregate
         #region
         public static Doctor CreateDoctor(string firstname, string lastName, string phone, string ci, string nit, byte[] file,
                                           bool? hasPhoto, int? clientZoneId, string ubication,
-                                          double? latitude , double?  longitude, string link, string company,
+                                          double? latitude , double?  longitude, string link, string specialty,
                                            bool? isEmergency)
         {
             var record = new Doctor();
@@ -184,7 +184,7 @@ namespace Domain.Entities.DoctorAggregate
             record.HasPhoto = hasPhoto;
             record.Ubication = ubication;
             record.ClientZoneId = clientZoneId;
-            record.Company = company;
+            record.Specialty = specialty;
             record.Latitude = latitude;
             record.Longitude = longitude;
             record.Link = link; 
@@ -205,7 +205,7 @@ namespace Domain.Entities.DoctorAggregate
             string ci,
             string nit,
             byte[] photo,
-            string businessName,
+            string specialty,
             string ubication,
             double latitude,
             double longitude,
@@ -219,7 +219,7 @@ namespace Domain.Entities.DoctorAggregate
             Ci = ci;
             Nit = nit;
             Photo = photo;
-            Company = businessName;
+            Specialty = specialty;
             Ubication = ubication;
             Latitude = latitude;
             Longitude = longitude;

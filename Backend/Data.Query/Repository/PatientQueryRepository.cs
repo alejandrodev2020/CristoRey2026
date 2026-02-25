@@ -273,14 +273,17 @@ namespace Data.Query.Repository
                              // -------- PATIENT --------
                              ", " + quote + "P" + quote + "." + quote + "nPatientId" + quote + " " + quote + "Id" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
-                             ", " + quote + "P" + quote + "." + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
-                             ", " + quote + "P" + quote + "." + quote + "sBusinessName" + quote + " " + quote + "BusinessName" + quote +
+                             ", " + quote + "P" + quote + "." + quote + "sLastName" + quote + " " + quote + "LastName" + quote +                             
                              ", " + quote + "P" + quote + "." + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
 
                              // -------- DOCTOR --------
                              ", " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " " + quote + "Ci" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " " + quote + "Nit" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
 
                       " FROM " + quote + "ClinicalHistory" + quote + " " + quote + "CH" + quote +
                 " INNER JOIN " + quote + "Patient" + quote + " " + quote + "P" + quote +
