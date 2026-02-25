@@ -74,33 +74,6 @@ namespace Api.Controllers
             return await _mediator.Send(command);
         }
 
-        /// <summary>
-        /// Realiza un guardado de registro.
-        /// </summary>
-        /// <param name="command">modelo de datos a guardar</param>
-        /// <returns></returns>
-        [HttpPost("loggin")]
-        public async Task<ActionResult<DoctorModel>> LogginAuthUser(LogginDoctorCommand command)
-        {
-            try
-            {
-                var user = await _mediator.Send(command);
-                return Ok(user);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidCredentialsException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error interno del servidor.", error = ex.Message });
-            }
-        }
-
 
         /// <summary>
         /// Realiza una busqueda dado el Identificador.

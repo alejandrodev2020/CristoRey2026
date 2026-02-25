@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Service.Command.PatientAggregate;
 using Service.Command.UtilsAggregate;
 using Service.Middleware;
+using Service.Models.BaseModel;
 using Service.Models.Client;
 using Service.Models.Patient;
 using Service.Query.PatientQuery;
@@ -72,33 +73,6 @@ namespace Api.Controllers
         }
 
         /// <summary>
-        /// Realiza un guardado de registro.
-        /// </summary>
-        /// <param name="command">modelo de datos a guardar</param>
-        /// <returns></returns>
-        [HttpPost("loggin")]
-        public async Task<ActionResult<PatientModel>> LogginAuthUser(LogginPatientCommand command)
-        {
-            try
-            {
-                var user = await _mediator.Send(command);
-                return Ok(user);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (InvalidCredentialsException ex)
-            {
-                return Unauthorized(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new { message = "Error interno del servidor.", error = ex.Message });
-            }
-        }
-
-        /// <summary>
         /// Realiza una actualizacion de un registro dado el Identificador.
         /// </summary>
         /// <param name="id">Parametro identificador de la entidad</param>
@@ -130,7 +104,8 @@ namespace Api.Controllers
         /// <param name="id">parametro para realizar la busqueda</param>
         /// <returns></returns>
         [HttpGet("{id}/clinical-history")]
-        public async Task<ActionResult<IEnumerable<ClinicalHistoryModel>>> GetClientById(int id, [FromQuery] GetListClinicalHistoryByPatientIdQuery model)
+        [Authorize]
+        public async Task<ActionResult<ResponseGenericModel<GetListClinicalHistoryByPatientIdModel>>> GetClientById(int id, [FromQuery] GetListClinicalHistoryByPatientIdQuery model)
         {
             model.setId(id);
             return Ok(await _mediator.Send(model));

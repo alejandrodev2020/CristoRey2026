@@ -20,9 +20,8 @@ namespace Service.Query.PatientQuery
             // ======================================================
             // 📥 Datos
             // ======================================================
-            var records = _repository
-                .GetListClinicalHistoryByPatientId(request.PatientId, request.DoctorId)
-                ?.ToList();
+            var records = _repository.GetListClinicalHistoryByPatientId(request.PatientId, request.DoctorId,10,0)
+                                    ?.ClinicalHistorys.ToList();
 
             if (records == null || records.Count == 0)
                 throw new Exception("No existen registros clínicos.");

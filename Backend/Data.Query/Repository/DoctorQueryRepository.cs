@@ -13,28 +13,7 @@ namespace Data.Query.Repository
         {
         }
 
-        public DoctorModel GetAuthUserByCiAndPhone(string ci, string phone)
-        {
-            const string quote = "\"";
-            const string quoteString = "\'";
-            var sql = @"SELECT  " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
-                             ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
-                             ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
-                             ", " + quote + "D" + quote + "." + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
-                             ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " " + quote + "Ci" + quote +
-                             ", " + quote + "D" + quote + "." + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
-                             ", " + quote + "D" + quote + "." + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
-                         " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote +               
-                         "WHERE " + quote + "D" + quote + "." + quote + "sCi" + quote + "=" + quoteString + ci + quoteString +
-                            "AND" + quote + "D" + quote + "." + quote + "sPhone" + quote + "=" + quoteString + phone + quoteString;
-
-            var values = ExecutionContext(connection =>
-            {
-                var returnVale = connection.Query<DoctorModel>(sql).LastOrDefault();
-                return returnVale;
-            });
-            return values;
-        }
+   
 
         public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency)
         {
@@ -97,22 +76,6 @@ namespace Data.Query.Repository
             var values = ExecutionContext(connection =>
             {
                 var returnVale = connection.Query<DoctorModel>(sql).SingleOrDefault();
-                return returnVale;
-            });
-            return values;
-        }
-
-        public DoctorModel GetUserNameValidate(string ci)
-        {
-            const string quote = "\"";
-            const string quoteString = "\'";
-            var sql = @"SELECT  " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
-                         " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote +
-                         "WHERE " + quote + "D" + quote + "." + quote + "sCi" + quote + "=" + quoteString + ci + quoteString;
-
-            var values = ExecutionContext(connection =>
-            {
-                var returnVale = connection.Query<DoctorModel>(sql).LastOrDefault();
                 return returnVale;
             });
             return values;

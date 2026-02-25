@@ -1,23 +1,44 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
+using Service.Middleware;
+using Service.Models.BaseModel;
 using Service.Models.Patient;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using Service.UtilsAggregate;
 
 namespace Service.Query.PatientQuery
 {
-    public class GetListClinicalHistoryByPatientIdQueryHandler : IRequestHandler<GetListClinicalHistoryByPatientIdQuery, IEnumerable<ClinicalHistoryModel>>
+    public class GetListClinicalHistoryByPatientIdQueryHandler : IRequestHandler<GetListClinicalHistoryByPatientIdQuery, ResponseGenericModel<GetListClinicalHistoryByPatientIdModel>>
     {
         private readonly IPatientQueryRepository _repository;
-        public GetListClinicalHistoryByPatientIdQueryHandler(IPatientQueryRepository repository)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public GetListClinicalHistoryByPatientIdQueryHandler(IPatientQueryRepository repository,
+                                                             IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public Task<IEnumerable<ClinicalHistoryModel>> Handle(GetListClinicalHistoryByPatientIdQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseGenericModel<GetListClinicalHistoryByPatientIdModel>> Handle(GetListClinicalHistoryByPatientIdQuery request, CancellationToken cancellationToken)
         {
-            var record = _repository.GetListClinicalHistoryByPatientId(request.Id, request.DoctorId);
-            return Task.FromResult(record);
+            try
+            {
+                var record = _repository.GetListClinicalHistoryByPatientId(request.Id, request.DoctorId,request.Limit,request.Page);
+                return ResponseHelperQuery.Success(record, "Obtención Exitosa!");
+            }
+            catch (ArgumentException ex)
+            {
+                return ResponseHelperQuery.BadRequest<GetListClinicalHistoryByPatientIdModel>(ex.Message);
+            }
+            catch (NotFoundException ex)
+            {
+                return ResponseHelperQuery.NotFound<GetListClinicalHistoryByPatientIdModel>(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelperQuery.ServerError<GetListClinicalHistoryByPatientIdModel>(
+                    $"Se produjo un error al obtener los datos. : {ex.Message}"
+                );
+            }
         }
     }
 }
