@@ -22,21 +22,22 @@ namespace Data.Command.Repository
             DeleteAux(entity);
         }
 
-        public async Task<Options> FindByIdAsync(int id)
+        public async Task<Options?> FindByIdAsync(int id)
         {
             return await _context.Options.Where(ele => ele.Id.Equals(id))
                                          .Include(p => p.Diasnostics)
+                                         .Include(p => p.Trataments)
                                          .SingleOrDefaultAsync();
         }
 
-        public async Task<Options> FindEquivalenceByIdAsync(int id)
+        public async Task<Options?> FindEquivalenceByIdAsync(int id)
         {
             return await _context.Options.Include(p => p.Diasnostics)
                                          .Where(ele => ele.Id.Equals(id))
                                          .SingleOrDefaultAsync();
         }
 
-        public async Task<Options> FindByIdAsyncAsnoTraking(int id)
+        public async Task<Options?> FindByIdAsyncAsnoTraking(int id)
         {
             return await _context.Options.Include(p => p.Diasnostics)
                                          .Where(ele => ele.Id.Equals(id))

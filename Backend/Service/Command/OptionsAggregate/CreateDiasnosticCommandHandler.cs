@@ -1,17 +1,12 @@
 ﻿using Domain.Entities.Options;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Command.OptionsAggregate
 {
     public class CreateDiasnosticCommandHandler : IRequestHandler<CreateDiasnosticCommand, Unit>
     {
         private readonly IOptionsRepository _repository;
+
         public CreateDiasnosticCommandHandler(IOptionsRepository repository)
         {
             _repository = repository;
@@ -19,34 +14,33 @@ namespace Service.Command.OptionsAggregate
 
         public async Task<Unit> Handle(CreateDiasnosticCommand request, CancellationToken cancellationToken)
         {
-            var Options = await _repository.FindByIdAsync(request.Id);
+            var options = await _repository.FindByIdAsync(request.Id);
+
+            if (options == null)
+                throw new InvalidOperationException("No existe la opción para registrar el diagnóstico");
 
             byte[] file = null;
             bool hasFile = false;
-            if (request.Picture != null && request.Picture != "")
+
+            if (!string.IsNullOrWhiteSpace(request.Picture))
             {
                 string[] codeBase64 = request.Picture.Split(",");
-                var tmp = codeBase64[1];
+                var tmp = codeBase64.Length > 1 ? codeBase64[1] : codeBase64[0];
                 file = Convert.FromBase64String(tmp);
                 hasFile = true;
             }
 
-            Options.CreateDiasnostic(optionsId: request.Id,
-                                     title: request.Title,
-                                     description: request.Description,
-                                     code: request.Code,
-                                     hasPicture : hasFile, 
-                                     picture: file) ;
+            options.CreateDiasnostic(
+                optionsId: request.Id,
+                title: request.Title,
+                description: request.Description,
+                code: request.Code,
+                hasPicture: hasFile,
+                picture: file
+            );
 
-
-
-
-
-
-
-            _repository.Update(Options);
-            await _repository.UnitOfWork.SaveEntitiesAsync();
-
+            _repository.Update(options);
+            await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
             return Unit.Value;
         }

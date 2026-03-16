@@ -138,5 +138,30 @@ namespace Api.Controllers
             model.setId(id);
             return Ok(await _mediator.Send(model));
         }
+
+        /// <summary>
+        /// Retorna ul listado de la entidad.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("tratament/{id}")]
+        public async Task<ActionResult<IEnumerable<TratamentModel>>> GetTratamentById(int id, [FromQuery] GetTratamentByIdQuery model)
+        {
+            model.setId(id);
+            return Ok(await _mediator.Send(model));
+        }
+
+        /// <summary>
+        /// Realiza una actualizacion de un registro dado el Identificador.
+        /// </summary>
+        /// <param name="id">Parametro identificador de la entidad</param>
+        /// <param name="command">Modelo de datoa a actualizar</param>
+        /// <returns></returns>
+        [HttpPut("{id}/tratament/{tratament-id}")]
+        public async Task<ActionResult<Unit>> updateTratamentById(int id, [FromRoute(Name = "tratament-id")] int tratament_id, UpdateDiasnosticCommand command)
+        {
+            command.setOptionId(id);
+            command.setDiasnosticId(tratament_id);
+            return await _mediator.Send(command);
+        }
     }
 }

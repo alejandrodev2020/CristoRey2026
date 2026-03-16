@@ -9,29 +9,46 @@ namespace Service.Query.OptionsQuery
     {
         private readonly IOptionsQueryRepository _repository;
         private readonly IDistributedCache _cache;
-        public GetListOptionsQueryHandler(IOptionsQueryRepository repository,
-                                                    IDistributedCache cache)
+
+        public GetListOptionsQueryHandler(
+            IOptionsQueryRepository repository,
+            IDistributedCache cache)
         {
             _repository = repository;
             _cache = cache;
         }
 
-
         public async Task<IEnumerable<OptionsModel>> Handle(GetListOptionsQuery request, CancellationToken cancellationToken)
         {
             var codeStore = Environment.GetEnvironmentVariable("CodeStore");
             var record = _repository.GetListOptionsByShopping();
+
             foreach (var product in record)
             {
-                if (product.PictureByte != null)
+                if (product == null || product.HasPicture != true)
+                    continue;
+
+                var currentId = product.Id.ToString() + codeStore + "_OPTIONS_" + product.Id;
+                var valueCache = await _cache.GetStringAsync(currentId, cancellationToken);
+
+                if (!string.IsNullOrEmpty(valueCache))
                 {
-                    var tmp = Convert.ToBase64String(product.PictureByte);
-                    var currentId = product.Id.ToString() + codeStore + "_OPTIONS_";
-                    var valueText = JsonSerializer.Serialize(tmp);
-                    await _cache.SetStringAsync(currentId, valueText);
-                    product.Picture = Convert.ToBase64String(product.PictureByte);
+                    product.Picture = JsonSerializer.Deserialize<string>(valueCache);
+                    continue;
+                }
+
+                var pictureByte = _repository.GetPhotoOptionsById(product.Id);
+
+                if (pictureByte != null)
+                {
+                    var base64 = Convert.ToBase64String(pictureByte);
+                    var valueText = JsonSerializer.Serialize(base64);
+
+                    await _cache.SetStringAsync(currentId, valueText, cancellationToken);
+                    product.Picture = base64;
                 }
             }
+
             return record;
         }
     }

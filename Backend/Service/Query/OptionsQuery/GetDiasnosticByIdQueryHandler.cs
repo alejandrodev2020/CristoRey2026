@@ -1,13 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Service.Models.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Query.OptionsQuery
 {
@@ -15,8 +9,10 @@ namespace Service.Query.OptionsQuery
     {
         private readonly IOptionsQueryRepository _repository;
         private readonly IDistributedCache _cache;
-        public GetDiasnosticByIdQueryHandler(IOptionsQueryRepository repository,
-                                                    IDistributedCache cache)
+
+        public GetDiasnosticByIdQueryHandler(
+            IOptionsQueryRepository repository,
+            IDistributedCache cache)
         {
             _repository = repository;
             _cache = cache;
@@ -26,16 +22,38 @@ namespace Service.Query.OptionsQuery
         {
             var codeStore = Environment.GetEnvironmentVariable("CodeStore");
             var record = _repository.GetDiasnosticById(request.Id);
-         
-            if (record.PictureByte != null)
+
+            if (record == null)
+                return null;
+
+            if (record.HasPicture != true)
+                return record;
+
+            var currentId = record.Id.ToString() + codeStore + "_DIASNOSTIC_" + record.Id;
+
+            var cacheValue = await _cache.GetStringAsync(currentId, cancellationToken);
+
+            if (!string.IsNullOrEmpty(cacheValue))
             {
-                var tmp = Convert.ToBase64String(record.PictureByte);
-                var currentId = record.Id.ToString() + codeStore + "_DIASNOSTIC_" + record.Id;
-                var valueText = JsonSerializer.Serialize(tmp);
-                await _cache.SetStringAsync(currentId, valueText);
-                record.Picture = Convert.ToBase64String(record.PictureByte);
+                record.Picture = JsonSerializer.Deserialize<string>(cacheValue);
+                return record;
             }
-            
+
+            var pictureByte = _repository.GetPhotoDiasnosticById(request.Id);
+
+            if (pictureByte != null)
+            {
+                var base64 = Convert.ToBase64String(pictureByte);
+
+                await _cache.SetStringAsync(
+                    currentId,
+                    JsonSerializer.Serialize(base64),
+                    cancellationToken
+                );
+
+                record.Picture = base64;
+            }
+
             return record;
         }
     }

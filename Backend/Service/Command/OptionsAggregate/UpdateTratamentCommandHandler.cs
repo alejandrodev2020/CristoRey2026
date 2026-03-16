@@ -1,18 +1,23 @@
 ﻿using Domain.Entities.Options;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Service.Command.OptionsAggregate
 {
-    public class UpdateOptionsCommandHandler : IRequestHandler<UpdateOptionsCommand, Unit>
+    public class UpdateTratamentCommandHandler : IRequestHandler<UpdateTratamentCommand, Unit>
     {
         private readonly IOptionsRepository _repository;
+        private readonly IDistributedCache _cache;
 
-        public UpdateOptionsCommandHandler(IOptionsRepository repository)
+        public UpdateTratamentCommandHandler(
+            IOptionsRepository repository,
+            IDistributedCache cache)
         {
             _repository = repository;
+            _cache = cache;
         }
 
-        public async Task<Unit> Handle(UpdateOptionsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateTratamentCommand request, CancellationToken cancellationToken)
         {
             byte[] file = null;
             bool hasFile = false;
@@ -30,7 +35,14 @@ namespace Service.Command.OptionsAggregate
                 hasFile = true;
             }
 
-            options.UpdateOptions(
+            var currentTratament = options.Trataments
+                .Where(ele => ele.Id.Equals(request.TratamentId))
+                .SingleOrDefault();
+
+            if (currentTratament == null)
+                throw new InvalidOperationException("No existe el tratamiento a editar");
+
+            currentTratament.UpdateTratament(
                 request.Title,
                 request.Description,
                 request.Code,
@@ -40,6 +52,11 @@ namespace Service.Command.OptionsAggregate
 
             _repository.Update(options);
             await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            var codeStore = Environment.GetEnvironmentVariable("CodeStore");
+            var currentId = currentTratament.Id.ToString() + codeStore + "_TRATAMENT_" + currentTratament.Id;
+
+            await _cache.RemoveAsync(currentId, cancellationToken);
 
             return Unit.Value;
         }

@@ -1,13 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Service.Models.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Query.OptionsQuery
 {
@@ -15,8 +9,10 @@ namespace Service.Query.OptionsQuery
     {
         private readonly IOptionsQueryRepository _repository;
         private readonly IDistributedCache _cache;
-        public GetListDiasnosticByOptionIdQueryHandler(IOptionsQueryRepository repository,
-                                                    IDistributedCache cache)
+
+        public GetListDiasnosticByOptionIdQueryHandler(
+            IOptionsQueryRepository repository,
+            IDistributedCache cache)
         {
             _repository = repository;
             _cache = cache;
@@ -26,17 +22,35 @@ namespace Service.Query.OptionsQuery
         {
             var codeStore = Environment.GetEnvironmentVariable("CodeStore");
             var record = _repository.GetListDiasnosticById(request.Id);
+
             foreach (var product in record)
             {
+                if (product == null || product.HasPicture != true)
+                    continue;
+
+                var currentId = product.Id.ToString() + codeStore + "_DIASNOSTIC_" + product.Id;
+                var valueCache = await _cache.GetStringAsync(currentId, cancellationToken);
+
+                if (!string.IsNullOrEmpty(valueCache))
+                {
+                    product.Picture = JsonSerializer.Deserialize<string>(valueCache);
+                    continue;
+                }
+
                 if (product.PictureByte != null)
                 {
-                    var tmp = Convert.ToBase64String(product.PictureByte);
-                    var currentId = product.Id.ToString() + codeStore + "_DIASNOSTIC_" + product.Id;
-                    var valueText = JsonSerializer.Serialize(tmp);
-                    await _cache.SetStringAsync(currentId, valueText);
-                    product.Picture = Convert.ToBase64String(product.PictureByte);
+                    var base64 = Convert.ToBase64String(product.PictureByte);
+
+                    await _cache.SetStringAsync(
+                        currentId,
+                        JsonSerializer.Serialize(base64),
+                        cancellationToken
+                    );
+
+                    product.Picture = base64;
                 }
             }
+
             return record;
         }
     }

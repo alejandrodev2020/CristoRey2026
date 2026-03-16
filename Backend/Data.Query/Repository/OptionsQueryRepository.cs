@@ -22,7 +22,6 @@ namespace Data.Query.Repository
                     " + quote + "sTitle" + quote + @" AS " + quote + "Title" + quote + @",
                     " + quote + "sDescription" + quote + @" AS " + quote + "Description" + quote + @",
                     " + quote + "sCode" + quote + @" AS " + quote + "Code" + quote + @",
-                    " + quote + "fPicture" + quote + @" AS " + quote + "PictureByte" + quote + @",
                     " + quote + "bHasPicture" + quote + @" AS " + quote + "HasPicture" + quote + @",
                     " + quote + "bIsActive" + quote + @" AS " + quote + "IsActive" + quote + @"
                 FROM " + quote + "OptionsDiasnostic" + quote + @"
@@ -46,7 +45,6 @@ namespace Data.Query.Repository
                     " + quote + "sTitle" + quote + @" AS " + quote + "Title" + quote + @",
                     " + quote + "sDescription" + quote + @" AS " + quote + "Description" + quote + @",
                     " + quote + "sCode" + quote + @" AS " + quote + "Code" + quote + @",
-                    " + quote + "fPicture" + quote + @" AS " + quote + "PictureByte" + quote + @",
                     " + quote + "bHasPicture" + quote + @" AS " + quote + "HasPicture" + quote + @",
                     " + quote + "bIsActive" + quote + @" AS " + quote + "IsActive" + quote + @"
                 FROM " + quote + "OptionsDiasnostic" + quote + @"
@@ -74,15 +72,14 @@ namespace Data.Query.Repository
                              ", " + quote + "O" + quote + "." + quote + "sTitle" + quote + " " + quote + "Title" + quote +
                              ", " + quote + "O" + quote + "." + quote + "sDescription" + quote + " " + quote + "Description" + quote +
                              ", " + quote + "O" + quote + "." + quote + "sCode" + quote + " " + quote + "Code" + quote +
-                             ", " + quote + "O" + quote + "." + quote + "fPicture" + quote + " " + quote + "PictureByte" + quote +
-                             ", " + quote + "O" + quote + "." + quote + "bHasPicture" + quote + " " + quote + "HasPicture" + quote +             
-                             ", " + quote + "O" + quote + "." + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +             
+                             ", " + quote + "O" + quote + "." + quote + "bHasPicture" + quote + " " + quote + "HasPicture" + quote +
+                             ", " + quote + "O" + quote + "." + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
                          " FROM " + quote + "Options" + quote + " " + quote + "O" + quote +
                       "ORDER BY " + quote + "O" + quote + "." + quote + "nOptionsId" + quote + "  ASC";
 
             var values = ExecutionContext(connection =>
             {
-                var returnVale = connection.Query<OptionsModel>(sql,  commandType: CommandType.Text).ToList();
+                var returnVale = connection.Query<OptionsModel>(sql, commandType: CommandType.Text).ToList();
                 return returnVale;
             });
             return values;
@@ -98,7 +95,6 @@ namespace Data.Query.Repository
                     " + quote + "sTitle" + quote + @" AS " + quote + "Title" + quote + @",
                     " + quote + "sDescription" + quote + @" AS " + quote + "Description" + quote + @",
                     " + quote + "sCode" + quote + @" AS " + quote + "Code" + quote + @",
-                    " + quote + "fPicture" + quote + @" AS " + quote + "PictureByte" + quote + @",
                     " + quote + "bHasPicture" + quote + @" AS " + quote + "HasPicture" + quote + @",
                     " + quote + "bIsActive" + quote + @" AS " + quote + "IsActive" + quote + @"
                 FROM " + quote + "OptionsTratament" + quote + @"
@@ -122,8 +118,6 @@ namespace Data.Query.Repository
                             quote + "sTitle" + quote + " AS " + quote + "Title" + quote + ", " +
                             quote + "sDescription" + quote + " AS " + quote + "Description" + quote + ", " +
                             quote + "sCode" + quote + " AS " + quote + "Code" + quote + ", " +
-                            quote + "fPicture" + quote + " AS " + quote + "PictureByte" + quote + ", " +
-                            quote + "bHasPicture" + quote + " AS " + quote + "HasPicture" + quote + ", " +
                             quote + "bHasPicture" + quote + " AS " + quote + "HasPicture" + quote + ", " +
                             quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
                        " FROM " + quote + "Options" + quote +
@@ -138,9 +132,80 @@ namespace Data.Query.Repository
             return result;
         }
 
-        public OptionsModel GetOptionsImageById(int id)
+        public TratamentModel GetTratamentById(int id)
         {
-            return null;
+            const string quote = "\"";
+
+            var sql = @"SELECT 
+                            " + quote + "nOptionsTratamentId" + quote + @" AS " + quote + "Id" + quote + @",
+                            " + quote + "nOptionsId" + quote + @" AS " + quote + "OptionId" + quote + @",
+                            " + quote + "sTitle" + quote + @" AS " + quote + "Title" + quote + @",
+                            " + quote + "sDescription" + quote + @" AS " + quote + "Description" + quote + @",
+                            " + quote + "sCode" + quote + @" AS " + quote + "Code" + quote + @",
+                            " + quote + "bHasPicture" + quote + @" AS " + quote + "HasPicture" + quote + @",
+                            " + quote + "bIsActive" + quote + @" AS " + quote + "IsActive" + quote + @"
+                        FROM " + quote + "OptionsTratament" + quote + @"
+                        WHERE " + quote + "nOptionsTratamentId" + quote + @" = @Id";
+
+            var result = ExecutionContext(connection =>
+            {
+                var item = connection.QueryFirstOrDefault<TratamentModel>(sql, new { Id = id }, commandType: CommandType.Text);
+                return item;
+            });
+
+            return result;
+        }
+
+        public byte[] GetPhotoTratamentById(int id)
+        {
+            const string quote = "\"";
+            var sql = @"SELECT 
+                        " + quote + "fPicture" + quote + @"
+                    FROM " + quote + "OptionsTratament" + quote + @"
+                    WHERE " + quote + "nOptionsTratamentId" + quote + @" = @Id";
+
+            var result = ExecutionContext(connection =>
+            {
+                var item = connection.QueryFirstOrDefault<byte[]>(sql, new { Id = id }, commandType: CommandType.Text);
+                return item;
+            });
+
+            return result;
+        }
+        public byte[] GetPhotoDiasnosticById(int id)
+        {
+            const string quote = "\"";
+
+            var sql = @"SELECT 
+                            " + quote + "fPicture" + quote + @"
+                        FROM " + quote + "OptionsDiasnostic" + quote + @"
+                        WHERE " + quote + "nOptionsDiasnosticId" + quote + @" = @Id";
+
+            var result = ExecutionContext(connection =>
+            {
+                var item = connection.QueryFirstOrDefault<byte[]>(sql, new { Id = id }, commandType: CommandType.Text);
+                return item;
+            });
+
+            return result;
+        }
+
+        public byte[] GetPhotoOptionsById(int id)
+        {
+            const string quote = "\"";
+
+            var sql = @"SELECT 
+            " + quote + "fPicture" + quote + @"
+        FROM " + quote + "Options" + quote + @"
+        WHERE " + quote + "nOptionsId" + quote + @" = @Id";
+
+            var result = ExecutionContext(connection =>
+            {
+                var item = connection.QueryFirstOrDefault<byte[]>(sql, new { Id = id }, commandType: CommandType.Text);
+                return item;
+            });
+
+            return result;
         }
     }
 }

@@ -5,28 +5,29 @@ using System.Text.Json;
 
 namespace Service.Query.OptionsQuery
 {
-    public class GetOptionsByIdQueryHandler : IRequestHandler<GetOptionsByIdQuery, OptionsModel>
+    public class GetTratamentByIdQueryHandler : IRequestHandler<GetTratamentByIdQuery, TratamentModel>
     {
         private readonly IOptionsQueryRepository _repository;
         private readonly IDistributedCache _cache;
-
-        public GetOptionsByIdQueryHandler(
-            IOptionsQueryRepository repository,
-            IDistributedCache cache)
+        public GetTratamentByIdQueryHandler(IOptionsQueryRepository repository,
+                                            IDistributedCache cache)
         {
             _repository = repository;
             _cache = cache;
         }
 
-        public async Task<OptionsModel> Handle(GetOptionsByIdQuery request, CancellationToken cancellationToken)
+        public async Task<TratamentModel> Handle(GetTratamentByIdQuery request, CancellationToken cancellationToken)
         {
-            var record = _repository.GetOptionsById(request.Id);
             var codeStore = Environment.GetEnvironmentVariable("CodeStore");
+            var record = _repository.GetTratamentById(request.Id);
 
-            if (record == null || record.HasPicture != true)
+            if (record == null)
+                return null;
+
+            if (record.HasPicture != true)
                 return record;
 
-            var currentId = record.Id.ToString() + codeStore + "_OPTIONS_" + record.Id;
+            var currentId = record.Id.ToString() + codeStore + "_TRATAMENT_" + record.Id;
             var valueCache = await _cache.GetStringAsync(currentId, cancellationToken);
 
             if (!string.IsNullOrEmpty(valueCache))
@@ -35,14 +36,23 @@ namespace Service.Query.OptionsQuery
                 return record;
             }
 
-            var pictureByte = _repository.GetPhotoOptionsById(record.Id);
+            var pictureByte = _repository.GetPhotoTratamentById(request.Id);
 
             if (pictureByte != null)
             {
                 var base64 = Convert.ToBase64String(pictureByte);
                 var valueText = JsonSerializer.Serialize(base64);
 
-                await _cache.SetStringAsync(currentId, valueText, cancellationToken);
+                await _cache.SetStringAsync(
+                    currentId,
+                    valueText,
+                    new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12)
+                    },
+                    cancellationToken
+                );
+
                 record.Picture = base64;
             }
 
