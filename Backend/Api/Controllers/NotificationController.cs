@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.NotificationAggregate;
@@ -31,6 +32,21 @@ namespace Api.Controllers
             return await _mediator.Send(command);
         }
 
-      
+        /// <summary>
+        /// Valida si el dispositivo ya tiene registrado su token para el usuario.
+        /// </summary>
+        /// <param name="command">Token del dispositivo</param>
+        /// <returns>true si el dispositivo está habilitado</returns>
+        [HttpPost("validate-token-device")]
+        [Authorize]
+        public async Task<ActionResult<bool>> ValidateToken(ValidateTokenDeviceCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+
+
+
     }
 }

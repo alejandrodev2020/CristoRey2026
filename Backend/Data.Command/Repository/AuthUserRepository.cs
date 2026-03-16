@@ -23,10 +23,11 @@ namespace Data.Command.Repository
             DeleteAux(entity);
         }
 
-        public async Task<AuthUser> FindByIdAsync(int id)
+        public async Task<AuthUser?> FindByIdAsync(int id)
         {
             return await _context.AuthUser.Where(ele => ele.Id.Equals(id))
                                           .Include(e => e.AuthUserConfiguration)
+                                          .Include(e => e.Devices)
                                           .SingleOrDefaultAsync();
         }
 
