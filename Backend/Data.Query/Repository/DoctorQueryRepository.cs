@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using OpenAI;
 using Resources.Data.Query.Repository;
 using Service.Models.Doctor;
 using Service.Models.Patient;
@@ -157,6 +158,36 @@ namespace Data.Query.Repository
                                                   }, new { DoctorId = id }, commandType: CommandType.Text, splitOn: "Id").ToList();
                 return returnVale;
             });
+            return values;
+        }
+
+        public IEnumerable<DoctorAppointmentHourModel> GetAppointmentHourByDoctorId(int id, DateTime date)
+        {
+            const string quote = "\"";
+            var sql = @"SELECT " +
+                             " CAST(" + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " AS time) " + quote + "Hour" + quote +
+                      " FROM " + quote + "ClinicalHistory" + quote + " " + quote + "CH" + quote +
+                      " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId" +
+                        " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " >= @DateFrom" +
+                        " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " < @DateTo" +
+                      " ORDER BY " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " ASC";
+
+            var values = ExecutionContext(connection =>
+            {
+                var returnValue = connection.Query<DoctorAppointmentHourModel>(
+                    sql,
+                    new
+                    {
+                        DoctorId = id,
+                        DateFrom = date.Date,
+                        DateTo = date.Date.AddDays(1)
+                    },
+                    commandType: CommandType.Text
+                ).ToList();
+
+                return returnValue;
+            });
+
             return values;
         }
     }

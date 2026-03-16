@@ -53,7 +53,6 @@
                             [label]="'Diasnosticos & Tratamientos'"
                             [icon]="'tune'"
                             [withFull]="false"
-                            [disabled]="false"
                             (buttonClick)="gestionaryEquivalences()">
                           </btn-actions>
                         </div>
@@ -68,7 +67,6 @@
                                 [maxLength]="50"
                                 [minLength]="3"
                                 [icon]="'heroicons_solid:briefcase'"
-                                [disabled]="false"
                                 [placeholder]="'Titulo de Opción..'"
                                 (focus)="onFocusNameInput()">
                             </input-text>
@@ -81,7 +79,6 @@
                                 [maxLength]="600"
                                 [minLength]="3"
                                 [icon]="'heroicons_solid:office-building'"
-                                [disabled]="false"
                                 [placeholder]="'Nombre producto..'">
                             </input-text>
                         </div>
@@ -96,7 +93,6 @@
                                 [maxLength]="50"
                                 [minLength]="3"
                                 [icon]="'heroicons_solid:briefcase'"
-                                [disabled]="false"
                                 [placeholder]="'Codigo producto..'">
                             </input-text>
                         </div>
@@ -115,7 +111,6 @@
                                     [label]="' Cancelar'"
                                     [icon]="'close'"
                                     [withFull]="false"
-                                    [disabled]="false"
                                     (buttonClick)="cancelStore()">
                                 </btn-generic>
                                 <btn-generic
@@ -124,7 +119,6 @@
                                     [label]="' Guardar'"
                                     [icon]="'save'"
                                     [withFull]="false"
-                                    [disabled]="false"
                                     [disabled]="isSaving"
                                     (buttonClick)="save()">
                                 </btn-generic>

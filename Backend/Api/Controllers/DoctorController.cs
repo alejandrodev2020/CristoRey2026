@@ -112,5 +112,12 @@ namespace Api.Controllers
             command.setId(id);
             return await _mediator.Send(command);
         }
+
+        [HttpGet("{id}/appointments")]
+        public async Task<ActionResult<IEnumerable<DoctorAppointmentHourModel>>> GetAppointmentsByDoctorId(int id, [FromQuery] GetAppointmentsByDoctorIdQuery query)
+        {
+            query.SetDoctorId(id);
+            return Ok(await _mediator.Send(query));
+        }
     }
 }

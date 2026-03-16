@@ -163,5 +163,8 @@ namespace Api.Controllers
             command.setTratamentId(tratament_id);
             return await _mediator.Send(command);
         }
+
+
+
     }
 }
