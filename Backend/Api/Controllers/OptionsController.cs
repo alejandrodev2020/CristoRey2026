@@ -157,10 +157,10 @@ namespace Api.Controllers
         /// <param name="command">Modelo de datoa a actualizar</param>
         /// <returns></returns>
         [HttpPut("{id}/tratament/{tratament-id}")]
-        public async Task<ActionResult<Unit>> updateTratamentById(int id, [FromRoute(Name = "tratament-id")] int tratament_id, UpdateDiasnosticCommand command)
+        public async Task<ActionResult<Unit>> updateTratamentById(int id, [FromRoute(Name = "tratament-id")] int tratament_id, UpdateTratamentCommand command)
         {
             command.setOptionId(id);
-            command.setDiasnosticId(tratament_id);
+            command.setTratamentId(tratament_id);
             return await _mediator.Send(command);
         }
     }

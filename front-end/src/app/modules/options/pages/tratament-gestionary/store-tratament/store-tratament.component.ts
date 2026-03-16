@@ -77,7 +77,7 @@ export class StoreTratamentComponent  implements OnInit {
         this.id = parseInt(this.activatedRoute.snapshot.params['tratamentId']);
         if (!this.isCreate) {
             this.form.get('unitMeasurementId')?.disable();
-            this.service.getDiasnosticById(this.id).subscribe((response: any) => {
+            this.service.getTratamentById(this.id).subscribe((response: any) => {
                 this.productTemporary = response;
                 this.prop.forEach((key) => this.form.get(key)?.setValue(response[key]));
                 if (response.picture !== null) {

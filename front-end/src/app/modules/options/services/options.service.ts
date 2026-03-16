@@ -54,6 +54,10 @@ export class OptionsService extends BaseService {
         return this.http.get<Product>(`${this.baseUri}api/options/diasnostic/${id}`,this.getHttpOptions());
     }
 
+    getTratamentById(id: number) {
+        return this.http.get<Product>(`${this.baseUri}api/options/tratament/${id}`,this.getHttpOptions());
+    }
+
     lowById(id: number) {
         return this.http.put(`${this.baseUri}api/options/${id}/low`, {},this.getHttpOptions());
     }
