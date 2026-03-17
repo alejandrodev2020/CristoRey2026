@@ -54,11 +54,14 @@ namespace Service.Command.PatientAggregate
                     motiveText = t.Description;
                 }
 
-                DateTime myDate = DateTime.Now;
+                DateTime myDate = DateTime.UtcNow;
                 if (request.DateQuery != null)
                 {
-                    myDate = request.DateQuery.Value;
+                    var boliviaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/La_Paz");
+                    var localDate = DateTime.SpecifyKind(request.DateQuery.Value, DateTimeKind.Unspecified);
+                    myDate = TimeZoneInfo.ConvertTimeToUtc(localDate, boliviaTimeZone);
                 }
+
                 record.CreateClinicHistory(request.DoctorId, myDate,
                     motiveText,
                     request.Diagnostic,
