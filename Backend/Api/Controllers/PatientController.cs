@@ -147,5 +147,19 @@ namespace Api.Controllers
         {
             return Ok(await _mediator.Send(model));
         }
+
+
+        /// <summary>
+        /// Retorna ul listado de la entidad.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("by-doctor")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<PatientModel>>> GetListPatientByDoctorLogged([FromQuery] GetListPatientByDoctorQuery model)
+        {
+            return Ok(await _mediator.Send(model));
+        }
+
+        
     }
 }

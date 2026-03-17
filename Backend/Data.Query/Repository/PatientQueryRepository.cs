@@ -313,5 +313,111 @@ namespace Data.Query.Repository
 
             return values;
         }
+
+        public DoctorModel GetDoctorByAuthUserId(int id)
+        {
+            const string quote = "\"";
+            var sql = @"SELECT " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " " + quote + "Ci" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " " + quote + "Nit" + quote +
+                      ", NULL " + quote + "PhotoByte" + quote +
+                      ", NULL " + quote + "Photo" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
+                      ", COALESCE(" + quote + "D" + quote + "." + quote + "nLatitude" + quote + ", 0) " + quote + "Latitude" + quote +
+                      ", COALESCE(" + quote + "D" + quote + "." + quote + "nLongitude" + quote + ", 0) " + quote + "Longitude" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sLink" + quote + " " + quote + "Link" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " " + quote + "IsEmergency" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
+                  " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote +
+                  " WHERE " + quote + "D" + quote + "." + quote + "nAuthUserId" + quote + " = @AuthUserId";
+
+            var values = ExecutionContext(connection =>
+            {
+                var returnVale = connection.Query<DoctorModel>(
+                    sql,
+                    new { AuthUserId = id },
+                    commandType: CommandType.Text
+                ).SingleOrDefault();
+
+                return returnVale;
+            });
+
+            return values;
+        }
+
+        public IEnumerable<PatientModel> GetListPatientByDoctorId(int doctorId, string search)
+        {
+            const string quote = "\"";
+            var sql = @"SELECT  " + quote + "P" + quote + "." + quote + "nPatientId" + quote + " " + quote + "Id" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sCi" + quote + " " + quote + "Ci" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sNit" + quote + " " + quote + "Nit" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sCompany" + quote + " " + quote + "Company" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nPatientZoneId" + quote + " " + quote + "PatientZoneId" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "bHasPhoto" + quote + " " + quote + "HasPhoto" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sReference" + quote + " " + quote + "Reference" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sLink" + quote + " " + quote + "Link" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "sCodeVerified" + quote + " " + quote + "CodeVerified" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "bIsVerified" + quote + " " + quote + "IsVerified" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nDepartamentId" + quote + " " + quote + "DepartamentId" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nCityId" + quote + " " + quote + "CityId" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nGenderId" + quote + " " + quote + "GenderId" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nDoctorId" + quote + " " + quote + "DoctorId" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "nUsercode" + quote + " " + quote + "Usercode" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "dCreate" + quote + " " + quote + "Create" + quote +
+                         ", " + quote + "P" + quote + "." + quote + "dCompDate" + quote + " " + quote + "CompDate" + quote +
+                         ", " + quote + "Z" + quote + "." + quote + "nClientZoneId" + quote + " " + quote + "Id" + quote +
+                         ", " + quote + "Z" + quote + "." + quote + "sDescription" + quote + " " + quote + "Name" + quote +
+                         ", " + quote + "Z" + quote + "." + quote + "sDescription" + quote + " " + quote + "Description" + quote +
+                         ", " + quote + "Z" + quote + "." + quote + "bStatus" + quote + " " + quote + "IsActive" + quote +
+                     " FROM " + quote + "Patient" + quote + " " + quote + "P" + quote +
+                " LEFT JOIN " + quote + "ClientZone" + quote + " " + quote + "Z" + quote +
+                     " ON " + quote + "Z" + quote + "." + quote + "nClientZoneId" + quote + " = " + quote + "P" + quote + "." + quote + "nPatientZoneId" + quote +
+                " WHERE ( " +
+                        "   " + quote + "P" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId " +
+                        "   OR EXISTS ( " +
+                        "       SELECT 1 FROM " + quote + "ClinicalHistory" + quote + " CH " +
+                        "       WHERE CH." + quote + "nPatientId" + quote + " = " + quote + "P" + quote + "." + quote + "nPatientId" + quote +
+                        "         AND CH." + quote + "nDoctorId" + quote + " = @DoctorId " +
+                        "   ) " +
+                        " ) " +
+                " AND ( @Search IS NULL OR @Search = '' OR " +
+                        "LOWER(COALESCE(" + quote + "P" + quote + "." + quote + "sFirstName" + quote + ", '')) LIKE '%' || LOWER(@Search) || '%' " +
+                        "OR LOWER(COALESCE(" + quote + "P" + quote + "." + quote + "sLastName" + quote + ", '')) LIKE '%' || LOWER(@Search) || '%' " +
+                        "OR LOWER(COALESCE(" + quote + "P" + quote + "." + quote + "sFirstName" + quote + ", '') || ' ' || COALESCE(" + quote + "P" + quote + "." + quote + "sLastName" + quote + ", '')) LIKE '%' || LOWER(@Search) || '%' " +
+                    " ) " +
+                " ORDER BY " + quote + "P" + quote + "." + quote + "sFirstName" + quote + " ASC, " + quote + "P" + quote + "." + quote + "sLastName" + quote + " ASC ";
+
+            var values = ExecutionContext(connection =>
+            {
+                var returnVale = connection.Query<PatientModel,
+                                                  BaseClassifierModel,
+                                                  PatientModel>(
+                    sql,
+                    (client, zone) =>
+                    {
+                        client.Zone = zone;
+                        return client;
+                    },
+                    param: new { DoctorId = doctorId, Search = search },
+                    commandType: CommandType.Text,
+                    splitOn: "Id"
+                ).ToList();
+
+                return returnVale;
+            });
+
+            return values;
+        }
     }
 }

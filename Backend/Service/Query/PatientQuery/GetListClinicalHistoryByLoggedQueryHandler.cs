@@ -13,7 +13,7 @@ namespace Service.Query.PatientQuery
         private readonly IPatientQueryRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public GetListClinicalHistoryByLoggedQueryHandler(IPatientQueryRepository repository,
-                                                             IHttpContextAccessor httpContextAccessor)
+                                                          IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
             _httpContextAccessor = httpContextAccessor;
