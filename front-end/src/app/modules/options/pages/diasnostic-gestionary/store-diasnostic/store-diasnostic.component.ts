@@ -75,7 +75,6 @@ export class StoreDiasnosticComponent  implements OnInit {
         this.isCreate = this.router.url.endsWith('/store');
         this.optionId = parseInt(this.activatedRoute.snapshot.params['optionId']);
         this.id = parseInt(this.activatedRoute.snapshot.params['diagnosticId']);
-        debugger;
         if (!this.isCreate) {
             this.form.get('unitMeasurementId')?.disable();
             this.service.getDiasnosticById(this.id).subscribe((response: any) => {

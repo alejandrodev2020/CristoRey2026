@@ -11,9 +11,7 @@ using OpenAI;
 using Service;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Configuration
        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -59,11 +57,14 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
 builder.Services.AddHttpClient();
-//builder.Services.AddStackExchangeRedisCache(options => options.Configuration = Environment.GetEnvironmentVariable("REDIS_CONNECTION"));
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["REDIS_CONNECTION"];
+});
 
 builder.Services.AddApplicationLayer();
 builder.Services.AddMediatR(typeof(Program).Assembly);
@@ -71,7 +72,7 @@ builder.Services.AddControllers();
 builder.Services.AddPersistenceInfraestructure(connectionStr);
 builder.Services.RegisterDataQuery(connectionStr);
 
-var jwtKey = builder.Configuration["Jwt:Key"]; // Asegúrate de tener esto en appsettings.json
+var jwtKey = builder.Configuration["Jwt:Key"];
 var keyBytes = Encoding.ASCII.GetBytes(jwtKey);
 
 builder.Services.AddAuthentication(config =>
@@ -123,20 +124,19 @@ builder.Services.AddSingleton(sp =>
     var apiKey = builder.Configuration["OpenAI:ApiKey"];
     return new OpenAIClient(apiKey);
 });
-builder.Services.AddDistributedMemoryCache();
+
 var app = builder.Build();
 
 // Configurar el pipeline de solicitud HTTP
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.RoutePrefix = "swagger"; // Configura Swagger en la ruta /swagger
+    c.RoutePrefix = "swagger";
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi v1");
 });
 
-
 app.UseCors("AllowMyOrigin");
-//app.UseHttpsRedirection(); // Elimina esta línea si no estás usando HTTPS
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapHub<ClienteHub>("/clienteHub");

@@ -16,7 +16,7 @@ export class OptionsService extends BaseService {
     }
 
     getListOptions() {
-        return this.http.get(`${this.baseUri}api/options/list?limit=1000&page=0`, this.getHttpOptions());
+        return this.http.get(`${this.baseUri}api/options/list?limit=15&page=0`, this.getHttpOptions());
     }
 
     store(data: Product) {
