@@ -135,5 +135,17 @@ namespace Api.Controllers
             var pdfBytes = await _mediator.Send(model);
             return File(pdfBytes, "application/pdf", "ReportePaciente.pdf");
         }
+
+        /// <summary>
+        /// Realiza una busqueda dado el Identificador.
+        /// </summary>
+        /// <param name="id">parametro para realizar la busqueda</param>
+        /// <returns></returns>
+        [HttpGet("clinical-history")]
+        [Authorize]
+        public async Task<ActionResult<ResponseGenericModel<GetListClinicalHistoryByPatientIdModel>>> GetClientClinicalHistory([FromQuery] GetListClinicalHistoryByLoggedQuery model)
+        {
+            return Ok(await _mediator.Send(model));
+        }
     }
 }

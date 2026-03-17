@@ -10,5 +10,6 @@ namespace Service.Query.PatientQuery
         public byte[] GetPhoto(int id);
         public PatientModel GetCiValidate(string ci);
         public GetListClinicalHistoryByPatientIdModel GetListClinicalHistoryByPatientId(int id, int? doctorId, int limit, int page);
+        public PatientModel GetPatientByAuthUserId(int id);
     }
 }

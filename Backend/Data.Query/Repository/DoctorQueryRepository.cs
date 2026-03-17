@@ -102,7 +102,7 @@ namespace Data.Query.Repository
                              ", " + quote + "P" + quote + "." + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sCi" + quote + " " + quote + "Ci" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sNit" + quote + " " + quote + "Nit" + quote +
-                             ", " + quote + "P" + quote + "." + quote + "sPhoto" + quote + " " + quote + "Photo" + quote +
+                             //", " + quote + "P" + quote + "." + quote + "sPhoto" + quote + " " + quote + "Photo" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
                              ", " + quote + "P" + quote + "." + quote + "nPatientZoneId" + quote + " " + quote + "PatientZoneId" + quote +
                              ", " + quote + "P" + quote + "." + quote + "bHasPhoto" + quote + " " + quote + "HasPhoto" + quote +
