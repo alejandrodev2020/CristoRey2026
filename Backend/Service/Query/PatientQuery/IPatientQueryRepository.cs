@@ -1,6 +1,5 @@
 ﻿using Service.Models.Doctor;
 using Service.Models.Patient;
-using System.Collections.Generic;
 
 namespace Service.Query.PatientQuery
 {
@@ -14,5 +13,6 @@ namespace Service.Query.PatientQuery
         public GetListClinicalHistoryByPatientIdModel GetListClinicalHistoryByPatientId(int id, int? doctorId, int limit, int page);
         public PatientModel GetPatientByAuthUserId(int id);
         public DoctorModel GetDoctorByAuthUserId(int id);
+        public ClinicalHistoryModel GetClinicalHistoryById(int id);
     }
 }

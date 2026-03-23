@@ -160,6 +160,19 @@ namespace Api.Controllers
             return Ok(await _mediator.Send(model));
         }
 
-        
+        /// <summary>
+        /// Realiza una actualizacion de un registro dado el Identificador.
+        /// </summary>
+        /// <param name="id">Parametro identificador de la entidad</param>
+        /// <param name="command">Modelo de datoa a actualizar</param>
+        /// <returns></returns>
+        [HttpGet("clinical-history/{id}")]
+        [Authorize]
+        public async Task<ActionResult<ResponseGenericModel<ClinicalHistoryModel>>> GetClinicalHistoryById(int id)
+        {
+            var model = new GetClinicalHistoryByIdQuery();
+            model.setId(id);
+            return await _mediator.Send(model);
+        }
     }
 }

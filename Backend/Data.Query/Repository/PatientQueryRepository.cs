@@ -419,5 +419,67 @@ namespace Data.Query.Repository
 
             return values;
         }
+
+        public ClinicalHistoryModel GetClinicalHistoryById(int id)
+        {
+            const string quote = "\"";
+
+            var sql = @"SELECT  " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " AS " + quote + "Id" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "nPatientId" + quote + " AS " + quote + "PatientId" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " AS " + quote + "DateQuery" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "sMotive" + quote + " AS " + quote + "Motive" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "sDiagnostic" + quote + " AS " + quote + "Diagnostic" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "sObservations" + quote + " AS " + quote + "Observations" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "tTotalCost" + quote + " AS " + quote + "TotalCost" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "bWasPaid" + quote + " AS " + quote + "WasPaid" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "nStatusId" + quote + " AS " + quote + "StatusId" + quote +
+                             ", " + quote + "CH" + quote + "." + quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
+
+                             // -------- PATIENT --------
+                             ", " + quote + "P" + quote + "." + quote + "nPatientId" + quote + " AS " + quote + "Id" + quote +
+                             ", " + quote + "P" + quote + "." + quote + "sFirstName" + quote + " AS " + quote + "FirstName" + quote +
+                             ", " + quote + "P" + quote + "." + quote + "sLastName" + quote + " AS " + quote + "LastName" + quote +
+                             ", " + quote + "P" + quote + "." + quote + "sPhone" + quote + " AS " + quote + "Phone" + quote +
+
+                             // -------- DOCTOR --------
+                             ", " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " AS " + quote + "Id" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " AS " + quote + "FirstName" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " AS " + quote + "LastName" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " AS " + quote + "Ci" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " AS " + quote + "Nit" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " AS " + quote + "Ubication" + quote +
+                             ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " AS " + quote + "Specialty" + quote +
+
+                      " FROM " + quote + "ClinicalHistory" + quote + " " + quote + "CH" + quote +
+                " INNER JOIN " + quote + "Patient" + quote + " " + quote + "P" + quote +
+                       " ON " + quote + "CH" + quote + "." + quote + "nPatientId" + quote +
+                       " = " + quote + "P" + quote + "." + quote + "nPatientId" + quote +
+                " LEFT JOIN " + quote + "Doctor" + quote + " " + quote + "D" + quote +
+                       " ON " + quote + "D" + quote + "." + quote + "nDoctorId" + quote +
+                       " = " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote +
+                     " WHERE " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " = @Id";
+
+            var result = ExecutionContext(connection =>
+            {
+                var record = connection.Query<ClinicalHistoryModel,
+                                              PatientModel,
+                                              DoctorModel,
+                                              ClinicalHistoryModel>(
+                    sql,
+                    (clinicalHistory, patient, doctor) =>
+                    {
+                        clinicalHistory.Patient = patient;
+                        clinicalHistory.Doctor = doctor;
+                        return clinicalHistory;
+                    },
+                    new { Id = id },
+                    splitOn: "Id"
+                ).FirstOrDefault();
+
+                return record;
+            });
+
+            return result;
+        }
     }
 }
