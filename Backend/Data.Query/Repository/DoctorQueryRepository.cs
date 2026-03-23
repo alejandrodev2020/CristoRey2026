@@ -190,5 +190,34 @@ namespace Data.Query.Repository
 
             return values;
         }
+
+        public DoctorModel GetDoctorByAuthUserId(int id)
+        {
+            const string quote = "\"";
+
+            var sql = @"SELECT  " + quote + "nDoctorId" + quote + " AS " + quote + "Id" + quote +
+                             ", " + quote + "sFirstName" + quote + " AS " + quote + "FirstName" + quote +
+                             ", " + quote + "sLastName" + quote + " AS " + quote + "LastName" + quote +
+                             ", " + quote + "sPhone" + quote + " AS " + quote + "Phone" + quote +
+                             ", " + quote + "sCi" + quote + " AS " + quote + "Ci" + quote +
+                             ", " + quote + "sNit" + quote + " AS " + quote + "Nit" + quote +
+                             ", " + quote + "sPhoto" + quote + " AS " + quote + "PhotoByte" + quote +
+                             ", " + quote + "sSpecialty" + quote + " AS " + quote + "Specialty" + quote +
+                             ", " + quote + "sUbication" + quote + " AS " + quote + "Ubication" + quote +
+                             ", " + quote + "nLatitude" + quote + " AS " + quote + "Latitude" + quote +
+                             ", " + quote + "nLongitude" + quote + " AS " + quote + "Longitude" + quote +
+                             ", " + quote + "sLink" + quote + " AS " + quote + "Link" + quote +
+                             ", " + quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
+                         " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote +
+                         " WHERE " + quote + "D" + quote + "." + quote + "nAuthUserId" + quote + " = @AuthUserId";
+
+            var values = ExecutionContext(connection =>
+            {
+                var result = connection.Query<DoctorModel>(sql, new { AuthUserId = id }).SingleOrDefault();
+                return result;
+            });
+
+            return values;
+        }
     }
 }

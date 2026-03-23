@@ -88,6 +88,19 @@ namespace Api.Controllers
         }
 
         /// <summary>
+        /// Realiza una busqueda dado el Identificador.
+        /// </summary>
+        /// <param name="id">parametro para realizar la busqueda</param>
+        /// <returns></returns>
+        [HttpGet("clinical-history")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<ClinicalHistoryModel>>> GetListCLinical()
+        {
+            var model = new GetListClinicalHistoryByDoctorLoggedQuery();
+            return Ok(await _mediator.Send(model));
+        }
+
+        /// <summary>
         /// Realiza una actualizacion de un registro dado el Identificador.
         /// </summary>
         /// <param name="id">Parametro identificador de la entidad</param>

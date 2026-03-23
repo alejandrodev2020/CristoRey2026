@@ -1,8 +1,5 @@
 ﻿using Domain.Entities.PatientAggregate;
 using MediatR;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Command.PatientAggregate
 {
