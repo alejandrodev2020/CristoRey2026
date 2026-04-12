@@ -6,7 +6,7 @@ namespace Service.Query.OptionsQuery
     {
         public OptionsModel GetOptionsById(int id);
         public IEnumerable<OptionsModel> GetListOptions(int limit, int page);
-        public IEnumerable<OptionsModel> GetListOptionsByShopping();
+        public IEnumerable<OptionsModel> GetListOptionsByShopping(int limit, int page);
         public IEnumerable<DiasnosticModel> GetListDiasnosticById(int id);
         public IEnumerable<TratamentModel> GetListTratamentById(int id);
         public DiasnosticModel GetDiasnosticById(int id);

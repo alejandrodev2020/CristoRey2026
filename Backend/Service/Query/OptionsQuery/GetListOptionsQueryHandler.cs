@@ -21,7 +21,7 @@ namespace Service.Query.OptionsQuery
         public async Task<IEnumerable<OptionsModel>> Handle(GetListOptionsQuery request, CancellationToken cancellationToken)
         {
             var codeStore = Environment.GetEnvironmentVariable("CodeStore");
-            var record = _repository.GetListOptionsByShopping();
+            var record = _repository.GetListOptionsByShopping(request.Limit,request.Page);
 
             foreach (var product in record)
             {

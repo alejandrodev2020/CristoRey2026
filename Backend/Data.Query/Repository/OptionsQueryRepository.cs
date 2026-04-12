@@ -65,23 +65,41 @@ namespace Data.Query.Repository
             return null;
         }
 
-        public IEnumerable<OptionsModel> GetListOptionsByShopping()
+        public IEnumerable<OptionsModel> GetListOptionsByShopping(int limit, int page)
         {
+            if (limit <= 0) limit = 5;
+            if (page < 0) page = 0;
+
+            var currentPage = page * limit;
+
             const string quote = "\"";
-            var sql = @"SELECT  " + quote + "O" + quote + "." + quote + "nOptionsId" + quote + " " + quote + "Id" + quote +
-                             ", " + quote + "O" + quote + "." + quote + "sTitle" + quote + " " + quote + "Title" + quote +
-                             ", " + quote + "O" + quote + "." + quote + "sDescription" + quote + " " + quote + "Description" + quote +
-                             ", " + quote + "O" + quote + "." + quote + "sCode" + quote + " " + quote + "Code" + quote +
-                             ", " + quote + "O" + quote + "." + quote + "bHasPicture" + quote + " " + quote + "HasPicture" + quote +
-                             ", " + quote + "O" + quote + "." + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
+
+            var sql = @"SELECT  " + quote + "O" + quote + "." + quote + "nOptionsId" + quote + " AS " + quote + "Id" + quote +
+                             ", " + quote + "O" + quote + "." + quote + "sTitle" + quote + " AS " + quote + "Title" + quote +
+                             ", " + quote + "O" + quote + "." + quote + "sDescription" + quote + " AS " + quote + "Description" + quote +
+                             ", " + quote + "O" + quote + "." + quote + "sCode" + quote + " AS " + quote + "Code" + quote +
+                             ", " + quote + "O" + quote + "." + quote + "bHasPicture" + quote + " AS " + quote + "HasPicture" + quote +
+                             ", " + quote + "O" + quote + "." + quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
                          " FROM " + quote + "Options" + quote + " " + quote + "O" + quote +
-                      "ORDER BY " + quote + "O" + quote + "." + quote + "nOptionsId" + quote + "  ASC";
+                         " WHERE (" + quote + "O" + quote + "." + quote + "bIsActive" + quote + " = TRUE) " +
+                         " ORDER BY " + quote + "O" + quote + "." + quote + "nOptionsId" + quote + " ASC " +
+                         " LIMIT @Limit OFFSET @Page";
 
             var values = ExecutionContext(connection =>
             {
-                var returnVale = connection.Query<OptionsModel>(sql, commandType: CommandType.Text).ToList();
-                return returnVale;
+                var returnValue = connection.Query<OptionsModel>(
+                    sql,
+                    param: new
+                    {
+                        Limit = limit,
+                        Page = currentPage
+                    },
+                    commandType: CommandType.Text
+                ).ToList();
+
+                return returnValue;
             });
+
             return values;
         }
 
