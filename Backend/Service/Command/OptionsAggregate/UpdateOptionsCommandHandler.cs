@@ -1,15 +1,20 @@
 ﻿using Domain.Entities.Options;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Service.Command.OptionsAggregate
 {
     public class UpdateOptionsCommandHandler : IRequestHandler<UpdateOptionsCommand, Unit>
     {
         private readonly IOptionsRepository _repository;
+        private readonly IDistributedCache _cache;
 
-        public UpdateOptionsCommandHandler(IOptionsRepository repository)
+        public UpdateOptionsCommandHandler(
+            IOptionsRepository repository,
+            IDistributedCache cache)
         {
             _repository = repository;
+            _cache = cache;
         }
 
         public async Task<Unit> Handle(UpdateOptionsCommand request, CancellationToken cancellationToken)
@@ -26,6 +31,7 @@ namespace Service.Command.OptionsAggregate
             {
                 string[] codeBase64 = request.Picture.Split(",");
                 var tmp = codeBase64.Length > 1 ? codeBase64[1] : codeBase64[0];
+
                 file = Convert.FromBase64String(tmp);
                 hasFile = true;
             }
@@ -41,7 +47,13 @@ namespace Service.Command.OptionsAggregate
             _repository.Update(options);
             await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
+            var codeStore = Environment.GetEnvironmentVariable("CodeStore");
+
+            var cacheKey = request.Id.ToString() + codeStore + "_OPTIONS_" + request.Id;
+
+            await _cache.RemoveAsync(cacheKey, cancellationToken);
+
             return Unit.Value;
         }
     }
-}
+} 
