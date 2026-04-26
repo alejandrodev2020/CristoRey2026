@@ -31,13 +31,13 @@ namespace Service.Command.OptionsAggregate
             {
                 string[] codeBase64 = request.Picture.Split(",");
                 var tmp = codeBase64.Length > 1 ? codeBase64[1] : codeBase64[0];
+
                 file = Convert.FromBase64String(tmp);
                 hasFile = true;
             }
 
             var currentDiasnostic = options.Diasnostics
-                .Where(ele => ele.Id.Equals(request.DiasnosticId))
-                .SingleOrDefault();
+                .SingleOrDefault(ele => ele.Id == request.DiasnosticId);
 
             if (currentDiasnostic == null)
                 throw new InvalidOperationException("No existe el diagnóstico a editar");
@@ -53,10 +53,14 @@ namespace Service.Command.OptionsAggregate
             _repository.Update(options);
             await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-            var codeStore = Environment.GetEnvironmentVariable("CodeStore");
-            var currentId = currentDiasnostic.Id.ToString() + codeStore + "_DIASNOSTIC_" + currentDiasnostic.Id;
+            var codeStore = Environment.GetEnvironmentVariable("CodeStore") ?? string.Empty;
 
-            await _cache.RemoveAsync(currentId, cancellationToken);
+            var cacheKey = currentDiasnostic.Id.ToString()
+                           + codeStore
+                           + "_DIASNOSTIC_"
+                           + currentDiasnostic.Id;
+
+            await _cache.RemoveAsync(cacheKey, cancellationToken);
 
             return Unit.Value;
         }
