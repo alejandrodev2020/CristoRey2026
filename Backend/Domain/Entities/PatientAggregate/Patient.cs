@@ -220,7 +220,7 @@ namespace Domain.Entities.PatientAggregate
             record.LastName = lastName;
             record.Phone = phone;
             record.Ci = ci;
-            record.Nit = nit;
+            record.Nit = "";
             record.Photo = file;
             record.HasPhoto = hasPhoto;
             record.DepartamentId = departamentId;
