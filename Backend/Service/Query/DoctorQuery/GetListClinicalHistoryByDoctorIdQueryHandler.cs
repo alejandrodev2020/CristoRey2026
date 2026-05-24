@@ -1,8 +1,5 @@
 ﻿using MediatR;
 using Service.Models.Patient;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Service.Query.DoctorQuery
 {
@@ -16,7 +13,21 @@ namespace Service.Query.DoctorQuery
 
         public Task<IEnumerable<ClinicalHistoryModel>> Handle(GetListClinicalHistoryByDoctorIdQuery request, CancellationToken cancellationToken)
         {
-            var record = _repository.GetListClinicalHistoryByDoctorId(request.Id);
+            var record = _repository.GetListClinicalHistoryByDoctorId(request.Id,request.DateQuery);
+
+            foreach (var item in record)
+            {
+                if (item.Patient?.File != null && item.Patient.File.Length > 0)
+                {
+                    item.Patient.Photo = Convert.ToBase64String(item.Patient.File);
+                }
+
+                if (item.Doctor?.PhotoByte != null && item.Doctor.PhotoByte.Length > 0)
+                {
+                    item.Doctor.Photo = Convert.ToBase64String(item.Doctor.PhotoByte);
+                }
+            }
+
             return Task.FromResult(record);
         }
     }

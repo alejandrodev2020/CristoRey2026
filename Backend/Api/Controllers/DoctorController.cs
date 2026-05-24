@@ -94,9 +94,8 @@ namespace Api.Controllers
         /// <returns></returns>
         [HttpGet("clinical-history")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ClinicalHistoryModel>>> GetListCLinical()
+        public async Task<ActionResult<IEnumerable<ClinicalHistoryModel>>> GetListCLinical([FromQuery] GetListClinicalHistoryByDoctorLoggedQuery model)
         {
-            var model = new GetListClinicalHistoryByDoctorLoggedQuery();
             return Ok(await _mediator.Send(model));
         }
 

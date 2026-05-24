@@ -40,9 +40,21 @@ namespace Service.Query.DoctorQuery
                         throw new NotFoundException("Paciente no encontrado para el usuario logueado.");
                     }
 
-                    var record = _repository.GetListClinicalHistoryByDoctorId(doctor.Id);
+                    var record = _repository.GetListClinicalHistoryByDoctorId(doctor.Id, request.DateQuery);
+                    foreach (var item in record)
+                    {
+                        if (item.Patient?.File != null && item.Patient.File.Length > 0)
+                        {
+                            item.Patient.Photo = Convert.ToBase64String(item.Patient.File);
+                        }
 
-                    return ResponseHelperQuery.Success(record, "Obtención Exitosa!");
+                        if (item.Doctor?.PhotoByte != null && item.Doctor.PhotoByte.Length > 0)
+                        {
+                            item.Doctor.Photo = Convert.ToBase64String(item.Doctor.PhotoByte);
+                        }
+                    }
+
+                return ResponseHelperQuery.Success(record, "Obtención Exitosa!");
                 }
                 catch (ArgumentException ex)
                 {

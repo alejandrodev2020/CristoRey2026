@@ -82,9 +82,10 @@ namespace Data.Query.Repository
             return values;
         }
 
-        public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id)
+        public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id, DateTime? dateQuery)
         {
             const string quote = "\"";
+
             var sql = @"SELECT  " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " " + quote + "Id" + quote +
                              ", " + quote + "CH" + quote + "." + quote + "nPatientId" + quote + " " + quote + "PatientId" + quote +
                              ", " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " " + quote + "DateQuery" + quote +
@@ -102,7 +103,7 @@ namespace Data.Query.Repository
                              ", " + quote + "P" + quote + "." + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sCi" + quote + " " + quote + "Ci" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sNit" + quote + " " + quote + "Nit" + quote +
-                             //", " + quote + "P" + quote + "." + quote + "sPhoto" + quote + " " + quote + "Photo" + quote +
+                             ", " + quote + "P" + quote + "." + quote + "sPhoto" + quote + " " + quote + "File" + quote +
                              ", " + quote + "P" + quote + "." + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
                              ", " + quote + "P" + quote + "." + quote + "nPatientZoneId" + quote + " " + quote + "PatientZoneId" + quote +
                              ", " + quote + "P" + quote + "." + quote + "bHasPhoto" + quote + " " + quote + "HasPhoto" + quote +
@@ -120,7 +121,6 @@ namespace Data.Query.Repository
                              ", " + quote + "P" + quote + "." + quote + "dCompDate" + quote + " " + quote + "CompDate" + quote +
                              ", " + quote + "P" + quote + "." + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
 
-
                              ", " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
@@ -133,31 +133,50 @@ namespace Data.Query.Repository
                              ", " + quote + "D" + quote + "." + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
                              ", " + quote + "D" + quote + "." + quote + "sLink" + quote + " " + quote + "Link" + quote +
 
-
                      " FROM " + quote + "ClinicalHistory" + quote + " " + quote + "CH" + quote +
-                "INNER JOIN " + quote + "Patient" + quote + " " + quote + "P" + quote +
-                       " ON " + quote + "CH" + quote + "." + quote + "nPatientId" + quote + " = " + quote + "P" + quote + "." + quote + "nPatientId" + quote +
 
-               "LEFT JOIN " + quote + "Doctor" + quote + " " + quote + "D" + quote +
-                       " ON " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " = " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote +
+                     " INNER JOIN " + quote + "Patient" + quote + " " + quote + "P" + quote +
+                     " ON " + quote + "CH" + quote + "." + quote + "nPatientId" + quote +
+                     " = " + quote + "P" + quote + "." + quote + "nPatientId" + quote +
 
+                     " LEFT JOIN " + quote + "Doctor" + quote + " " + quote + "D" + quote +
+                     " ON " + quote + "D" + quote + "." + quote + "nDoctorId" + quote +
+                     " = " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote +
 
-                    " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId" +
-                 " ORDER BY " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " ASC";
+                     " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId";
+
+            // 👇 NUEVO FILTRO POR FECHA
+            if (dateQuery.HasValue)
+            {
+                sql += " AND DATE(" + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + ") = @DateQuery";
+            }
+
+            sql += " ORDER BY " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " ASC";
 
             var values = ExecutionContext(connection =>
             {
                 var returnVale = connection.Query<ClinicalHistoryModel,
                                                   PatientModel,
                                                   DoctorModel,
-                                                  ClinicalHistoryModel>(sql, (clinicalHistory, patient, doctor) =>
-                                                  {
-                                                      clinicalHistory.Patient = patient;
-                                                      clinicalHistory.Doctor = doctor;
-                                                      return clinicalHistory;
-                                                  }, new { DoctorId = id }, commandType: CommandType.Text, splitOn: "Id").ToList();
+                                                  ClinicalHistoryModel>(
+                    sql,
+                    (clinicalHistory, patient, doctor) =>
+                    {
+                        clinicalHistory.Patient = patient;
+                        clinicalHistory.Doctor = doctor;
+                        return clinicalHistory;
+                    },
+                    new
+                    {
+                        DoctorId = id,
+                        DateQuery = dateQuery?.Date
+                    },
+                    commandType: CommandType.Text,
+                    splitOn: "Id").ToList();
+
                 return returnVale;
             });
+
             return values;
         }
 
