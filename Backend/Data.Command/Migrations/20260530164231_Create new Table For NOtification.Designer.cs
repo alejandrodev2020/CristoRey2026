@@ -3,6 +3,7 @@ using System;
 using Data.Command.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Command.Migrations
 {
     [DbContext(typeof(DbContexts))]
-    partial class DbContextsModelSnapshot : ModelSnapshot
+    [Migration("20260530164231_Create new Table For NOtification")]
+    partial class CreatenewTableForNOtification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -319,7 +322,7 @@ namespace Data.Command.Migrations
                         new
                         {
                             Id = 1,
-                            Computed = new DateTime(2026, 5, 30, 16, 43, 35, 203, DateTimeKind.Utc).AddTicks(3399),
+                            Computed = new DateTime(2026, 5, 30, 16, 42, 31, 65, DateTimeKind.Utc).AddTicks(6071),
                             Create = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Administrador",
                             Status = true,
@@ -328,7 +331,7 @@ namespace Data.Command.Migrations
                         new
                         {
                             Id = 2,
-                            Computed = new DateTime(2026, 5, 30, 16, 43, 35, 203, DateTimeKind.Utc).AddTicks(3411),
+                            Computed = new DateTime(2026, 5, 30, 16, 42, 31, 65, DateTimeKind.Utc).AddTicks(6083),
                             Create = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Doctor",
                             Status = true,
@@ -337,7 +340,7 @@ namespace Data.Command.Migrations
                         new
                         {
                             Id = 3,
-                            Computed = new DateTime(2026, 5, 30, 16, 43, 35, 203, DateTimeKind.Utc).AddTicks(3413),
+                            Computed = new DateTime(2026, 5, 30, 16, 42, 31, 65, DateTimeKind.Utc).AddTicks(6085),
                             Create = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Paciente",
                             Status = true,
@@ -384,7 +387,7 @@ namespace Data.Command.Migrations
                         new
                         {
                             Id = 1,
-                            Computed = new DateTime(2026, 5, 30, 16, 43, 35, 204, DateTimeKind.Utc).AddTicks(9452),
+                            Computed = new DateTime(2026, 5, 30, 16, 42, 31, 66, DateTimeKind.Utc).AddTicks(8848),
                             Create = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Santa Cruz",
                             Status = true,
@@ -503,79 +506,6 @@ namespace Data.Command.Migrations
                         .IsUnique();
 
                     b.ToTable("Doctor", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.NotificationAggregate.Notification", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("nNotificationId");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ActionUrl")
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasColumnName("sActionUrl");
-
-                    b.Property<DateTime>("Computed")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dCompDate");
-
-                    b.Property<DateTime>("Create")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dCreate");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dCreatedAt");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("boolean")
-                        .HasColumnName("bIsRead");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("sMessage");
-
-                    b.Property<DateTime?>("ReadAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("dReadAt");
-
-                    b.Property<int>("SenderUserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("nSenderUserId");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("boolean")
-                        .HasColumnName("bStatus");
-
-                    b.Property<int>("TargetUserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("nTargetUserId");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("sTitle");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("sType");
-
-                    b.Property<int>("UserCode")
-                        .HasColumnType("integer")
-                        .HasColumnName("nUsercode");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Notification", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Options.Options", b =>

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.NotificationAggregate;
+using Service.Models.BaseModel;
+using Service.Models.Notification;
+using Service.Query.NotificationQuery;
 
 namespace Api.Controllers
 {
@@ -45,8 +48,38 @@ namespace Api.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Obtiene las notificaciones del usuario autenticado.
+        /// </summary>
+        [HttpGet("my-notifications")]
+        [Authorize]
+        public async Task<ActionResult<ResponseGenericModel<IEnumerable<NotificationModel>>>> GetMyNotifications([FromQuery] GetMyNotificationsQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
 
+        /// <summary>
+        /// Cambia el estado de una notificación como vista o no vista.
+        /// </summary>
+        [HttpPut("change-read-status")]
+        [Authorize]
+        public async Task<ActionResult> ChangeReadStatus(ChangeNotificationReadStatusCommand command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
 
+        /// <summary>
+        /// Obtiene la cantidad de notificaciones no leídas del usuario autenticado.
+        /// </summary>
+        [HttpGet("unread-count")]
+        [Authorize]
+        public async Task<ActionResult> GetUnreadCount()
+        {
+            var result = await _mediator.Send(new GetUnreadNotificationsCountQuery());
+            return Ok(result);
+        }
 
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Data.Query.Repository;
 using Microsoft.Extensions.DependencyInjection;
-using Resources.Data.Query.Repository;
 using Service.Query.AuthUserQuery;
 using Service.Query.DoctorQuery;
+using Service.Query.NotificationQuery;
 using Service.Query.OptionsQuery;
 using Service.Query.PatientQuery;
 
@@ -16,9 +16,7 @@ namespace Data.Query
             services.AddScoped<IDoctorQueryRepository>(x => new DoctorQueryRepository(connectionString));
             services.AddScoped<IOptionsQueryRepository>(x => new OptionsQueryRepository(connectionString));
             services.AddScoped<IPatientQueryRepository>(x => new PatientQueryRepository(connectionString));
-
-
-
+            services.AddScoped<INotificationQueryRepository>(x => new NotificationQueryRepository(connectionString));
 
         }
     }

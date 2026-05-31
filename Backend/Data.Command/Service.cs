@@ -2,6 +2,7 @@
 using Data.Command.Repository;
 using Domain.Entities.AuthAggregate;
 using Domain.Entities.DoctorAggregate;
+using Domain.Entities.NotificationAggregate;
 using Domain.Entities.Options;
 using Domain.Entities.PatientAggregate;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,7 @@ namespace Data.Command
             services.AddScoped<IDoctorRepository, DoctorRepository>();
             services.AddScoped<IOptionsRepository, OptionsRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
-
-                
-
-
+            services.AddScoped<INotificationRepository, NotificationRepository>();
         }
     }
 }

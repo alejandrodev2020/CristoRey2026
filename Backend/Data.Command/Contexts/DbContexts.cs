@@ -2,6 +2,7 @@
 using Domain.Entities.AuthAggregate;
 using Domain.Entities.Classifiers;
 using Domain.Entities.DoctorAggregate;
+using Domain.Entities.NotificationAggregate;
 using Domain.Entities.Options;
 using Domain.Entities.PatientAggregate;
 using MediatR;
@@ -64,6 +65,7 @@ namespace Data.Command.Contexts
             modelBuilder.ApplyConfiguration(new OptionsConfiguration());
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
             modelBuilder.ApplyConfiguration(new AuthUserDeviceConfiguration());
+            modelBuilder.ApplyConfiguration(new NotificationConfiguration());
 
 
         }
@@ -73,6 +75,7 @@ namespace Data.Command.Contexts
         public DbSet<Options> Options { get; set; }
         public DbSet<Patient> Patient { get; set; }
         public DbSet<ClinicalHistory> ClinicalHistory { get; set; }
+        public DbSet<Notification> Notification { get; set; }
 
 
         #region

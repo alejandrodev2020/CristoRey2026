@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.DoctorAggregate;
 using Domain.Entities.Options;
 using Domain.Entities.PatientAggregate;
+using Domain.Entities.NotificationAggregate; // 👈 NUEVO: Namespace de tu entidad
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Service.Command.UtilsAggregate;
@@ -14,18 +15,22 @@ namespace Service.Command.PatientAggregate
         private readonly IPatientRepository _repository;
         private readonly IDoctorRepository _repositoryDoctor;
         private readonly IOptionsRepository _repositoryOptions;
+        private readonly INotificationRepository _repositoryNotification; // 👈 NUEVO
         private readonly FirebaseNotificationService _firebase;
         private readonly IHttpContextAccessor _httpContextAccessor;
+
         public CreateClinicalHistoryCommandHandler(IPatientRepository repository,
                                                    FirebaseNotificationService firebase,
-                                                   IDoctorRepository  repositoryDoctor,
+                                                   IDoctorRepository repositoryDoctor,
                                                    IOptionsRepository repositoryOptions,
+                                                   INotificationRepository repositoryNotification, // 👈 NUEVO
                                                    IHttpContextAccessor httpContextAccessor)
         {
             _firebase = firebase;
             _repository = repository;
-            _repositoryDoctor = repositoryDoctor;   
+            _repositoryDoctor = repositoryDoctor;
             _repositoryOptions = repositoryOptions;
+            _repositoryNotification = repositoryNotification; // 👈 NUEVO
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -68,24 +73,59 @@ namespace Service.Command.PatientAggregate
                     request.Observations, request.TotalCost, request.WasPaid);
 
                 _repository.Update(record);
+
+                // Guardamos la cita médica en la BD
                 bool result = await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
                 if (result)
                 {
+                    var doctor = await _repositoryDoctor.FindDoctorWithDevicesAsync(request.DoctorId);
+                    string titulo = "Nueva Cita Agendada";
+                    string mensaje = $"Hola Dr. {doctor.LastName}, tiene una nueva cita de {motiveText} para el {myDate:dd/MM/yyyy HH:mm}.";
+
+                    // ====================================================================
+                    // 👈 NUEVO: INSERT EN LA BASE DE DATOS DE LA NOTIFICACIÓN
+                    // ====================================================================
                     try
                     {
-                        var doctor = await _repositoryDoctor.FindDoctorWithDevicesAsync(request.DoctorId);
+                        if (doctor != null)
+                        {
+                            // Usamos el método de factoría estático que creamos en tu entidad
+                            var dbNotification = Notification.CreateNotification(
+                                targetUserId: doctor.AuthUserId,      // El doctor que recibe (nAuthUserId)
+                                senderUserId: userId,                 // El paciente que crea la cita
+                                title: titulo,
+                                message: mensaje,
+                                type: "NEW_APPOINTMENT",
+                                actionUrl: record.Id.ToString()       // Guardamos el ID del historial / paciente como referencia
+                            );
 
+                            _repositoryNotification.Add(dbNotification);
+
+                            // Si comparten el mismo DbContext/UnitOfWork, se guardará aquí.
+                            // Si es un repositorio aislado, puedes llamar a su propio Save o dejar que el flujo lo maneje.
+                            await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log local para que un fallo en la tabla de alertas no rompa el flujo principal
+                        Console.WriteLine($"⚠️ Error guardando notificación en BD: {ex.Message}");
+                    }
+                    // ====================================================================
+
+                    // Tu lógica existente de Firebase Push (se mantiene intacta)
+                    try
+                    {
                         if (doctor?.AuthUser?.Devices != null && doctor.AuthUser.Devices.Any())
                         {
-                            string titulo = "Nueva Cita Agendada";
-                            string mensaje = $"Hola Dr. {doctor.LastName}, tiene una nueva cita de {motiveText} para el {myDate:dd/MM/yyyy HH:mm}.";
                             foreach (var device in doctor.AuthUser.Devices.Where(x => !string.IsNullOrEmpty(x.DeviceToken)))
                             {
                                 await _firebase.SendAsync(
                                     device.DeviceToken,
                                     titulo,
                                     mensaje,
-                                    new Dictionary<string, string> {{ "type", "NEW_APPOINTMENT" },    { "patientId", record.Id.ToString() }}
+                                    new Dictionary<string, string> { { "type", "NEW_APPOINTMENT" }, { "patientId", record.Id.ToString() } }
                                 );
                             }
                         }
@@ -114,7 +154,6 @@ namespace Service.Command.PatientAggregate
             }
 
             return response;
-
         }
     }
 }
