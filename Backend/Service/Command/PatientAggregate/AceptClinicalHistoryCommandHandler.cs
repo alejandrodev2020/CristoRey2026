@@ -1,7 +1,8 @@
-﻿using Domain.Entities.NotificationAggregate; // 👈 NUEVO: Tu entidad de notificación
+﻿using Domain.Entities.NotificationAggregate;
 using Domain.Entities.PatientAggregate;
 using MediatR;
-using Microsoft.AspNetCore.Http; // 👈 NUEVO: Para leer el token del doctor
+using Microsoft.AspNetCore.Http;
+using Service.Notifications;
 using System.Security.Claims;
 
 namespace Service.Command.PatientAggregate
@@ -9,69 +10,94 @@ namespace Service.Command.PatientAggregate
     public class AceptClinicalHistoryCommandHandler : IRequestHandler<AceptClinicalHistoryCommand, Unit>
     {
         private readonly IPatientRepository _repository;
-        private readonly INotificationRepository _repositoryNotification; // 👈 NUEVO
-        private readonly IHttpContextAccessor _httpContextAccessor; // 👈 NUEVO
+        private readonly INotificationRepository _repositoryNotification;
+        private readonly FirebaseNotificationService _firebase;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AceptClinicalHistoryCommandHandler(IPatientRepository repository,
-                                                  INotificationRepository repositoryNotification, // 👈 NUEVO
-                                                  IHttpContextAccessor httpContextAccessor) // 👈 NUEVO
+        public AceptClinicalHistoryCommandHandler(
+            IPatientRepository repository,
+            INotificationRepository repositoryNotification,
+            FirebaseNotificationService firebase,
+            IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
-            _repositoryNotification = repositoryNotification; // 👈 NUEVO
-            _httpContextAccessor = httpContextAccessor; // 👈 NUEVO
+            _repositoryNotification = repositoryNotification;
+            _firebase = firebase;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(AceptClinicalHistoryCommand request, CancellationToken cancellationToken)
         {
             var statusAcept = 2;
-            var record = await _repository.FindClinicalHistoryById(request.Id); // 'record' es el Paciente (Patient)
 
-            var histoy = record.ClinicalHistorys.Where(ele => ele.Id.Equals(request.Id))
-                                                .SingleOrDefault();
+            var record = await _repository.FindClinicalHistoryById(request.Id);
+
+            var histoy = record.ClinicalHistorys
+                .Where(ele => ele.Id.Equals(request.Id))
+                .SingleOrDefault();
 
             histoy.setStatus(statusAcept);
+
             _repository.Update(record);
 
             bool result = await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-            // ====================================================================
-            // 👈 NUEVO: NOTIFICAR AL PACIENTE/CLIENTE (CITA ACEPTADA)
-            // ====================================================================
             if (result)
             {
+                string titulo = "Cita Confirmada";
+                string mensaje = $"¡Buenas noticias! Tu solicitud de cita para el {histoy.DateQuery:dd/MM/yyyy} ha sido confirmada por el doctor.";
+
                 try
                 {
-                    // 1. Extraemos el ID del doctor desde su sesión activa
-                    var doctorUserIdClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    var doctorUserIdClaim = _httpContextAccessor.HttpContext?.User
+                        .FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                     if (int.TryParse(doctorUserIdClaim, out int doctorUserId))
                     {
-                        string titulo = "Cita Confirmada";
-                        string mensaje = $"¡Buenas noticias! Tu solicitud de cita para el {histoy.DateQuery:dd/MM/yyyy} ha sido confirmada por el doctor.";
-
-                        // 2. Construimos el registro de la alerta para el paciente
                         var clientNotification = Notification.CreateNotification(
-                            targetUserId: record.AuthUserId,    // Recibe el PACIENTE
-                            senderUserId: doctorUserId,         // Envía el DOCTOR
+                            targetUserId: record.AuthUserId,
+                            senderUserId: doctorUserId,
                             title: titulo,
                             message: mensaje,
-                            type: "APPOINTMENT_ACCEPTED",       // Tipo específico para éxito
-                            actionUrl: histoy.Id.ToString()     // ID de referencia
+                            type: "APPOINTMENT_ACCEPTED",
+                            actionUrl: histoy.Id.ToString()
                         );
 
                         _repositoryNotification.Add(clientNotification);
 
-                        // Impactamos la alerta en la base de datos
                         await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Evitamos romper la respuesta si el registro del historial de alertas falla
                     Console.WriteLine($"⚠️ Error guardando notificación de aceptación en BD: {ex.Message}");
                 }
+
+                try
+                {
+                    if (record.AuthUser?.Devices != null && record.AuthUser.Devices.Any())
+                    {
+                        foreach (var device in record.AuthUser.Devices.Where(x => !string.IsNullOrEmpty(x.DeviceToken)))
+                        {
+                            await _firebase.SendAsync(
+                                device.DeviceToken,
+                                titulo,
+                                mensaje,
+                                new Dictionary<string, string>
+                                {
+                                    { "type", "APPOINTMENT_ACCEPTED" },
+                                    { "clinicalHistoryId", histoy.Id.ToString() },
+                                    { "patientId", record.Id.ToString() }
+                                }
+                            );
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"⚠️ Error enviando notificación push de aceptación: {ex.Message}");
+                }
             }
-            // ====================================================================
 
             return Unit.Value;
         }

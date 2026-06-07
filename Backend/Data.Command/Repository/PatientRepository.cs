@@ -41,9 +41,11 @@ namespace Data.Command.Repository
         public async Task<Patient?> FindClinicalHistoryById(int id)
         {
             return await _context.Patient
-             .Include(p => p.ClinicalHistorys)
-             .Where(p => p.ClinicalHistorys.Any(ch => ch.Id == id))
-             .SingleOrDefaultAsync();
+                .Include(p => p.ClinicalHistorys)
+                .Include(p => p.AuthUser)
+                    .ThenInclude(a => a.Devices)
+                .Where(p => p.ClinicalHistorys.Any(ch => ch.Id == id))
+                .SingleOrDefaultAsync();
         }
 
         public Patient Update(Patient entity)
