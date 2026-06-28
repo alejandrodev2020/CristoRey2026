@@ -14,38 +14,73 @@ namespace Data.Query.Repository
         {
         }
 
-   
 
-        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency)
+
+        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency, bool? onlyActive, bool? requiresPhoto, int limit, int page)
         {
-            const string quote = "\"";
-            var sql = @"SELECT " + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
-                      ", " + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
-                      ", " + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
-                      ", " + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
-                      ", " + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
-                      ", " + quote + "sCi" + quote + " " + quote + "Ci" + quote +
-                      ", " + quote + "sNit" + quote + " " + quote + "Nit" + quote +
-                      ", " + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
-                      ", " + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
-                      ", " + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
-                      ", " + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
-                      ", " + quote + "sLink" + quote + " " + quote + "Link" + quote +
-                      ", " + quote + "bIsEmergency" + quote + " " + quote + "IsEmergency" + quote +
-                      ", " + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
-                      " FROM " + quote + "Doctor" + quote + " " + quote + "P" + quote;
+            if (limit <= 0)
+                limit = 10;
 
-            string whereClause = "";
+            if (page < 0)
+                page = 0;
+
+            var currentPage = page * limit;
+
+            const string quote = "\"";
+            var includePhoto = requiresPhoto != false;
+
+            var sql = @"SELECT " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " AS " + quote + "Id" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " AS " + quote + "FirstName" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " AS " + quote + "LastName" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sPhone" + quote + " AS " + quote + "Phone" + quote +
+                      (includePhoto
+                          ? ", " + quote + "D" + quote + "." + quote + "sPhoto" + quote + " AS " + quote + "PhotoByte" + quote
+                          : ", NULL AS " + quote + "PhotoByte" + quote) +
+                      ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " AS " + quote + "Ci" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " AS " + quote + "Nit" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " AS " + quote + "Specialty" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " AS " + quote + "Ubication" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "nLatitude" + quote + " AS " + quote + "Latitude" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "nLongitude" + quote + " AS " + quote + "Longitude" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sLink" + quote + " AS " + quote + "Link" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " AS " + quote + "IsEmergency" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
+                      " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote;
+
+            var where = new List<string>();
+
             if (isEmergency.HasValue)
             {
-                whereClause = " WHERE " + quote + "bIsEmergency" + quote + " = @isEmergency";
+                where.Add(quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " = @IsEmergency");
             }
 
-            sql += whereClause + " ORDER BY " + quote + "nDoctorId" + quote + " ASC";
+            if (onlyActive != false)
+            {
+                where.Add(quote + "D" + quote + "." + quote + "bIsActive" + quote + " = TRUE");
+            }
+
+            if (where.Any())
+            {
+                sql += " WHERE " + string.Join(" AND ", where);
+            }
+
+            sql += " ORDER BY " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " ASC";
+            sql += " LIMIT @Limit OFFSET @Page";
+
             var values = ExecutionContext(connection =>
             {
-                var returnVale = connection.Query<DoctorModel>(sql, new { isEmergency }).ToList();
-                return returnVale;
+                var returnValue = connection.Query<DoctorModel>(
+                    sql,
+                    new
+                    {
+                        IsEmergency = isEmergency,
+                        Limit = limit,
+                        Page = currentPage
+                    },
+                    commandType: CommandType.Text
+                ).ToList();
+
+                return returnValue;
             });
 
             return values;

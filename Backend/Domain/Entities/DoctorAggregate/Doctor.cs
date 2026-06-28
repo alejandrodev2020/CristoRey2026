@@ -227,13 +227,14 @@ namespace Domain.Entities.DoctorAggregate
             IsEmergency = isEmergency;
             IsActive = true;
         }
-        public void LowClient()
+        public void LowDoctor()
         {
             IsActive = false;
         }
-
-
-        
+        public void ActiveDoctor()
+        {
+            IsActive = true;
+        }
 
         #endregion
 

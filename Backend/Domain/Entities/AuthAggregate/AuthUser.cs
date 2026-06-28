@@ -159,7 +159,10 @@ namespace Domain.Entities.AuthAggregate
         {
             IsActive = false;
         }
-
+        public void ActiveAuthUser()
+        {
+            IsActive = true;
+        }
         #endregion
 
 

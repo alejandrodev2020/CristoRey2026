@@ -74,6 +74,31 @@ namespace Api.Controllers
             return await _mediator.Send(command);
         }
 
+        /// <summary>
+        /// Realiza una actualizacion de una baja.
+        /// </summary>
+        /// <param name="id">Parametro identificador de la entidad</param>
+        /// <param name="command">Modelo de datoa a actualizar</param>
+        /// <returns></returns>
+        [HttpPut("{id}/low")]
+        public async Task<ActionResult<Unit>> UpdateLowDoctor(int id, LowDoctorCommand command)
+        {
+            command.setId(id);
+            return await _mediator.Send(command);
+        }
+
+        /// <summary>
+        /// Realiza una actualizacion de una baja.
+        /// </summary>
+        /// <param name="id">Parametro identificador de la entidad</param>
+        /// <param name="command">Modelo de datoa a actualizar</param>
+        /// <returns></returns>
+        [HttpPut("{id}/up")]
+        public async Task<ActionResult<Unit>> UpdateActiveDoctor(int id, ActivateDoctorCommand command)
+        {
+            command.setId(id);
+            return await _mediator.Send(command);
+        }
 
         /// <summary>
         /// Realiza una busqueda dado el Identificador.

@@ -14,11 +14,14 @@ namespace Service.Query.DoctorQuery
         public Task<IEnumerable<DoctorModel>> Handle(GetListDoctorQuery request, CancellationToken cancellationToken)
         {
 
-            var record = _repository.GetListDoctor(request.IsEmergency);
-            foreach (var item  in record)
+            var record = _repository.GetListDoctor(request.IsEmergency,
+                                                   request.OnlyActive,
+                                                   request.RequiresPhoto,
+                                                   request.Limit,
+                                                   request.Page);
+            if (request.RequiresPhoto != false)
             {
-                var currentItem = item;
-                if(currentItem.PhotoByte != null)
+                foreach (var item in record.Where(x => x.PhotoByte != null))
                 {
                     item.Photo = Convert.ToBase64String(item.PhotoByte);
                 }

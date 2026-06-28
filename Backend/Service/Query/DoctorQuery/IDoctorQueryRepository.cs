@@ -5,7 +5,11 @@ namespace Service.Query.DoctorQuery
 {
     public interface IDoctorQueryRepository
     {
-        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency);
+        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency,
+                                                      bool? onlyActive,
+                                                      bool? requiresPhoto,
+                                                      int limit,
+                                                      int page);
         public DoctorModel GetProviderById(int id);
         public DoctorModel GetDoctorByAuthUserId(int id);
         public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id, DateTime? dateQuery);
