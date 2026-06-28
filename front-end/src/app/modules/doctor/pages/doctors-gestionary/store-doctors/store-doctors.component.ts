@@ -35,6 +35,27 @@ export class StoreDoctorsComponent implements OnInit, AfterViewInit {
 
   imageSource = this.sanitizer.bypassSecurityTrustResourceUrl(imageUserDefault);
 
+  listZone = [
+    { id: 1, description: 'Santa Cruz' },
+    { id: 2, description: 'Montero' },
+    { id: 3, description: 'Warnes' },
+    { id: 4, description: 'Cotoca' },
+    { id: 5, description: 'La Guardia' },
+    { id: 6, description: 'Camiri' },
+    { id: 7, description: 'Puerto Suárez' },
+    { id: 8, description: 'Puerto Quijarro' },
+    { id: 9, description: 'Yapacaní' },
+    { id: 10, description: 'San Ignacio de Velasco' },
+    { id: 11, description: 'San José de Chiquitos' },
+    { id: 12, description: 'Roboré' },
+    { id: 13, description: 'Vallegrande' },
+    { id: 14, description: 'Samaipata' },
+    { id: 15, description: 'Concepción' },
+    { id: 16, description: 'Portachuelo' },
+    { id: 17, description: 'Pailón' },
+    { id: 18, description: 'San Julián' }
+  ];
+
   center: google.maps.LatLngLiteral = {
     lat: -17.783362,
     lng: -63.1847183
@@ -63,6 +84,7 @@ export class StoreDoctorsComponent implements OnInit, AfterViewInit {
     'photo',
     'specialty',
     'ubication',
+    'zoneId',
     'latitude',
     'longitude',
     'isEmergency'
@@ -90,6 +112,7 @@ export class StoreDoctorsComponent implements OnInit, AfterViewInit {
       photo: [null],
       specialty: [null],
       ubication: [null],
+      zoneId: [1, [Validators.required]],
       latitude: [null],
       longitude: [null],
       isEmergency: [false]

@@ -155,6 +155,7 @@
 //   }
 
 // }
+
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -175,16 +176,17 @@ const ELEMENT_DATA: Provider[] = [];
   styleUrls: ['./doctors-gestionary.component.scss']
 })
 export class DoctorsGestionaryComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = [
-    'id',
-    'businessName',
-    'firstName',
-    'lastName',
-    'phone',
-    'ci',
-    'isActive',
-    'acciones'
-  ];
+displayedColumns: string[] = [
+  'id',
+  'zone',
+  'businessName',
+  'firstName',
+  'lastName',
+  'phone',
+  'ci',
+  'isActive',
+  'acciones'
+];
 
   dataSource = new MatTableDataSource<Provider>(ELEMENT_DATA);
   isFilterVisible: boolean = false;
@@ -251,21 +253,22 @@ getData(): void {
   const queryString = this.getQueryString();
 
   this.service.getListDoctors(queryString).subscribe((resp: any) => {
-    const doctors = resp ?? [];
+    const doctors = resp?.listSale ?? [];
 
     this.productList = doctors;
     this.dataSource = new MatTableDataSource(doctors);
 
     this.dataSource.filterPredicate = (data, filter) => {
-      const firstName = data.firstName?.toLowerCase().includes(filter.toLowerCase());
-      const lastName = data.lastName?.toLowerCase().includes(filter.toLowerCase());
+      const value = filter.trim().toLowerCase();
 
-      return !!firstName || !!lastName;
+      return (
+        data.firstName?.toLowerCase().includes(value) ||
+        data.lastName?.toLowerCase().includes(value) ||
+        data.zone?.description?.toLowerCase().includes(value)
+      );
     };
 
-    this.lengthPaginator = doctors.length === this.currentPaginator.limit
-      ? (this.currentPaginator.page + 2) * this.currentPaginator.limit
-      : (this.currentPaginator.page * this.currentPaginator.limit) + doctors.length;
+    this.lengthPaginator = resp?.total ?? 0;
 
     this.dataSource.paginator = this.paginator;
     this.applyFilter(this.searchValue);

@@ -76,9 +76,9 @@
                         <!-------------------------------------------------------------------------------------------------------------------------------->
                         <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
                             <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
-                                <input-text [formControl]="control('nit')" [label]="'N° Nit:'" [maxLength]="40"
+                                <input-text [formControl]="control('nit')" [label]="'N° Orden:'" [maxLength]="40"
                                     [minLength]="3" [icon]="'heroicons_solid:briefcase'" [disabled]="false"
-                                    [placeholder]="'Nit..'">
+                                    [placeholder]="'orden..'">
                                 </input-text>
                             </div>
                             <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
@@ -89,22 +89,44 @@
                             </div>
                         </div>
                         <!-------------------------------------------------------------------------------------------------------------------------------->
-                        <!-------------------------------------------------------------------------------------------------------------------------------->
-                        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
-                                <input-text [formControl]="control('ubication')" [label]="'Ubicación:'" [maxLength]="40"
-                                    [minLength]="3" [icon]="'heroicons_solid:briefcase'" [disabled]="false"
-                                    [placeholder]="'Ubicacion..'">
-                                </input-text>
-                            </div>
-                            <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal" class="flex items-center">
-                                <mat-checkbox
-                                    [color]="'primary'"
-                                    [formControlName]="'isEmergency'">
-                                    ¿Atiende Emergencias?
-                                </mat-checkbox>
-                            </div>
-                        </div>
+<div class="grid grid-cols-12 gap-6 w-full mt-8">
+
+    <!-- Ubicación -->
+    <div class="col-span-12 sm:col-span-6">
+        <input-text
+            [formControl]="control('ubication')"
+            [label]="'Ubicación:'"
+            [maxLength]="80"
+            [minLength]="3"
+            [icon]="'heroicons_solid:map-pin'"
+            [disabled]="false"
+            [placeholder]="'Ubicación..'">
+        </input-text>
+    </div>
+
+    <!-- Ciudad -->
+    <div class="col-span-12 sm:col-span-3">
+        <mat-form-field class="w-full">
+            <mat-label>Ciudad</mat-label>
+            <mat-select formControlName="zoneId">
+                <mat-option *ngFor="let item of listZone" [value]="item.id">
+                    {{ item.description }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <!-- Emergencias -->
+    <div class="col-span-12 sm:col-span-3 flex items-center">
+        <mat-checkbox
+            color="primary"
+            formControlName="isEmergency">
+            ¿Atiende Emergencias?
+        </mat-checkbox>
+    </div>
+
+</div>
+<!-------------------------------------------------------------------------------------------------------------------------------->
                         <!-------------------------------------------------------------------------------------------------------------------------------->
 
                         <div class="mt-9">

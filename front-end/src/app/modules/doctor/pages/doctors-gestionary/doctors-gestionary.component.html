@@ -83,6 +83,13 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="zone">
+        <th mat-header-cell *matHeaderCellDef> Ciudad </th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.zone?.description || 'Sin ciudad' }}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="isActive">
         <th mat-header-cell *matHeaderCellDef>Estado</th>
         <td mat-cell *matCellDef="let element">
