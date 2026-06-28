@@ -216,7 +216,7 @@ namespace Data.Query.Repository
         {
             const string quote = "\"";
             var sql = @"SELECT " +
-                             " CAST(" + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " AS time) " + quote + "Hour" + quote +
+                             " CAST(" + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " AT TIME ZONE 'America/La_Paz' AS time) " + quote + "Hour" + quote +
                       " FROM " + quote + "ClinicalHistory" + quote + " " + quote + "CH" + quote +
                       " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId" +
                         " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " >= @DateFrom" +
