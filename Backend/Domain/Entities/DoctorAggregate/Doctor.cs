@@ -207,6 +207,7 @@ namespace Domain.Entities.DoctorAggregate
             byte[] photo,
             string specialty,
             string ubication,
+            int? clientZoneId,
             double latitude,
             double longitude,
             string link,
@@ -221,6 +222,7 @@ namespace Domain.Entities.DoctorAggregate
             Photo = photo;
             Specialty = specialty;
             Ubication = ubication;
+            ClientZoneId = clientZoneId;
             Latitude = latitude;
             Longitude = longitude;
             Link = link;

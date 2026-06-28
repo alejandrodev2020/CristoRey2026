@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Service.Models.Classifier;
+using System.Text.Json.Serialization;
 
 namespace Service.Models.Doctor
 {
@@ -15,10 +16,12 @@ namespace Service.Models.Doctor
         public string Photo { get; set; }
         public string Specialty { get; set; }
         public string Ubication { get; set; }
+        public int ZoneId { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string Link { get; set; }
         public bool? IsEmergency { get; set; }
         public bool? IsActive { get; set; }
+        public BaseClassifierModel Zone { get; set; }
     }
 }

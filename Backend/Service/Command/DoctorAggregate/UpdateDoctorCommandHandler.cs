@@ -49,6 +49,7 @@ namespace Service.Command.DoctorAggregate
                     photo: file,
                     specialty: request.Specialty,
                     ubication: request.Ubication,
+                    clientZoneId: request.ZoneId,
                     latitude: lat,
                     longitude: lng,
                     link: link,

@@ -5,7 +5,7 @@ namespace Service.Query.DoctorQuery
 {
     public interface IDoctorQueryRepository
     {
-        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency,
+        public GetListDoctorModel GetListDoctor(bool? isEmergency,
                                                       bool? onlyActive,
                                                       bool? requiresPhoto,
                                                       int limit,

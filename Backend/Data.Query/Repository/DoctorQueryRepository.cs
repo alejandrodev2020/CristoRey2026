@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using OpenAI;
 using Resources.Data.Query.Repository;
+using Service.Models.Classifier;
 using Service.Models.Doctor;
 using Service.Models.Patient;
 using Service.Query.DoctorQuery;
@@ -14,9 +15,7 @@ namespace Data.Query.Repository
         {
         }
 
-
-
-        public IEnumerable<DoctorModel> GetListDoctor(bool? isEmergency, bool? onlyActive, bool? requiresPhoto, int limit, int page)
+        public GetListDoctorModel GetListDoctor(bool? isEmergency, bool? onlyActive, bool? requiresPhoto, int limit, int page)
         {
             if (limit <= 0)
                 limit = 10;
@@ -26,91 +25,132 @@ namespace Data.Query.Repository
 
             var currentPage = page * limit;
 
-            const string quote = "\"";
-            var includePhoto = requiresPhoto != false;
-
-            var sql = @"SELECT " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " AS " + quote + "Id" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " AS " + quote + "FirstName" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " AS " + quote + "LastName" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "sPhone" + quote + " AS " + quote + "Phone" + quote +
-                      (includePhoto
-                          ? ", " + quote + "D" + quote + "." + quote + "sPhoto" + quote + " AS " + quote + "PhotoByte" + quote
-                          : ", NULL AS " + quote + "PhotoByte" + quote) +
-                      ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " AS " + quote + "Ci" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " AS " + quote + "Nit" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " AS " + quote + "Specialty" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " AS " + quote + "Ubication" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "nLatitude" + quote + " AS " + quote + "Latitude" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "nLongitude" + quote + " AS " + quote + "Longitude" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "sLink" + quote + " AS " + quote + "Link" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " AS " + quote + "IsEmergency" + quote +
-                      ", " + quote + "D" + quote + "." + quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
-                      " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote;
-
-            var where = new List<string>();
-
-            if (isEmergency.HasValue)
+            var result = ExecutionContext(connection =>
             {
-                where.Add(quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " = @IsEmergency");
-            }
+                const string quote = "\"";
+                var includePhoto = requiresPhoto != false;
 
-            if (onlyActive != false)
-            {
-                where.Add(quote + "D" + quote + "." + quote + "bIsActive" + quote + " = TRUE");
-            }
+                var photoSelect = includePhoto
+                    ? quote + "D" + quote + "." + quote + "sPhoto" + quote + " AS " + quote + "PhotoByte" + quote
+                    : "NULL AS " + quote + "PhotoByte" + quote;
 
-            if (where.Any())
-            {
-                sql += " WHERE " + string.Join(" AND ", where);
-            }
+                var where = " WHERE 1=1 \n";
 
-            sql += " ORDER BY " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " ASC";
-            sql += " LIMIT @Limit OFFSET @Page";
+                if (isEmergency.HasValue)
+                    where += " AND " + quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " = @IsEmergency \n";
 
-            var values = ExecutionContext(connection =>
-            {
-                var returnValue = connection.Query<DoctorModel>(
+                if (onlyActive != false)
+                    where += " AND " + quote + "D" + quote + "." + quote + "bIsActive" + quote + " = TRUE \n";
+
+                var sql =
+                    @"SELECT @Limit AS " + quote + "Limit" + quote +
+                    ", @Page AS " + quote + "Page" + quote +
+                    ", COUNT(*) AS " + quote + "Total" + quote + " " +
+                    " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote + " " +
+                    where +
+                    ";" +
+
+                    "SELECT " +
+                        quote + "D" + quote + "." + quote + "nDoctorId" + quote + " AS " + quote + "Id" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " AS " + quote + "FirstName" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " AS " + quote + "LastName" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "sPhone" + quote + " AS " + quote + "Phone" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " AS " + quote + "Ci" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " AS " + quote + "Nit" + quote +
+                        ", " + photoSelect +
+                        ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " AS " + quote + "Specialty" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " AS " + quote + "Ubication" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "nClientZoneId" + quote + " AS " + quote + "ZoneId" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "nLatitude" + quote + " AS " + quote + "Latitude" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "nLongitude" + quote + " AS " + quote + "Longitude" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "sLink" + quote + " AS " + quote + "Link" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " AS " + quote + "IsEmergency" + quote +
+                        ", " + quote + "D" + quote + "." + quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
+                        ", " + quote + "CZ" + quote + "." + quote + "nClientZoneId" + quote + " AS " + quote + "Id" + quote +
+                        ", " + quote + "CZ" + quote + "." + quote + "sDescription" + quote + " AS " + quote + "Description" + quote +
+                    " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote + " " +
+                    " LEFT JOIN " + quote + "ClientZone" + quote + " " + quote + "CZ" + quote +
+                    " ON " + quote + "CZ" + quote + "." + quote + "nClientZoneId" + quote +
+                    " = " + quote + "D" + quote + "." + quote + "nClientZoneId" + quote + " " +
+                    where +
+                    " ORDER BY " + quote + "D" + quote + "." + quote + "sNit" + quote + " ASC \n" +
+                    " LIMIT @Limit OFFSET @Offset ;";
+
+                var gridReader = connection.QueryMultiple(
                     sql,
                     new
                     {
                         IsEmergency = isEmergency,
                         Limit = limit,
-                        Page = currentPage
+                        Page = page,
+                        Offset = currentPage
                     },
                     commandType: CommandType.Text
+                );
+
+                var response = gridReader.Read<GetListDoctorModel>().Single();
+
+                var list = gridReader.Read<DoctorModel, BaseClassifierModel, DoctorModel>(
+                    (doctor, zone) =>
+                    {
+                        doctor.Zone = zone?.Id > 0 ? zone : null;
+                        return doctor;
+                    },
+                    splitOn: "Id"
                 ).ToList();
 
-                return returnValue;
+                response.ListSale = list;
+
+                return response;
             });
 
-            return values;
+            return result;
         }
 
         public DoctorModel GetProviderById(int id)
         {
             const string quote = "\"";
-            var sql = @"SELECT  " + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
-                             ", " + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
-                             ", " + quote + "sLastName" + quote + " " + quote + "LastName" + quote +
-                             ", " + quote + "sPhone" + quote + " " + quote + "Phone" + quote +
-                             ", " + quote + "sCi" + quote + " " + quote + "Ci" + quote +
-                             ", " + quote + "sNit" + quote + " " + quote + "Nit" + quote +
-                             ", " + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
-                             ", " + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
-                             ", " + quote + "bIsEmergency" + quote + " " + quote + "IsEmergency" + quote +                             
-                             ", " + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
-                             ", " + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
-                             ", " + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
-                             ", " + quote + "sLink" + quote + " " + quote + "Link" + quote +
-                             ", " + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
-                         " FROM " + quote + "Doctor" + quote + " " + quote + "P" + quote +
-                         "WHERE " + quote + "nDoctorId" + quote + "=" + id;
+
+            var sql = @"SELECT " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " AS " + quote + "Id" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sFirstName" + quote + " AS " + quote + "FirstName" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sLastName" + quote + " AS " + quote + "LastName" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sPhone" + quote + " AS " + quote + "Phone" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sCi" + quote + " AS " + quote + "Ci" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sNit" + quote + " AS " + quote + "Nit" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sPhoto" + quote + " AS " + quote + "PhotoByte" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sSpecialty" + quote + " AS " + quote + "Specialty" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "bIsEmergency" + quote + " AS " + quote + "IsEmergency" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sUbication" + quote + " AS " + quote + "Ubication" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "nClientZoneId" + quote + " AS " + quote + "ZoneId" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "nLatitude" + quote + " AS " + quote + "Latitude" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "nLongitude" + quote + " AS " + quote + "Longitude" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "sLink" + quote + " AS " + quote + "Link" + quote +
+                      ", " + quote + "D" + quote + "." + quote + "bIsActive" + quote + " AS " + quote + "IsActive" + quote +
+                      ", " + quote + "CZ" + quote + "." + quote + "nClientZoneId" + quote + " AS " + quote + "Id" + quote +
+                      ", " + quote + "CZ" + quote + "." + quote + "sDescription" + quote + " AS " + quote + "Description" + quote +
+                      " FROM " + quote + "Doctor" + quote + " " + quote + "D" + quote +
+                      " LEFT JOIN " + quote + "ClientZone" + quote + " " + quote + "CZ" + quote +
+                      " ON " + quote + "CZ" + quote + "." + quote + "nClientZoneId" + quote +
+                      " = " + quote + "D" + quote + "." + quote + "nClientZoneId" + quote +
+                      " WHERE " + quote + "D" + quote + "." + quote + "nDoctorId" + quote + " = @Id";
 
             var values = ExecutionContext(connection =>
             {
-                var returnVale = connection.Query<DoctorModel>(sql).SingleOrDefault();
-                return returnVale;
+                var returnValue = connection.Query<DoctorModel, BaseClassifierModel, DoctorModel>(
+                    sql,
+                    (doctor, zone) =>
+                    {
+                        doctor.Zone = zone?.Id > 0 ? zone : null;
+                        return doctor;
+                    },
+                    new { Id = id },
+                    splitOn: "Id",
+                    commandType: CommandType.Text
+                ).SingleOrDefault();
+
+                return returnValue;
             });
+
             return values;
         }
 

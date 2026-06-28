@@ -12,6 +12,7 @@ namespace Service.Command.DoctorAggregate
         public string? Nit { get; set; }
         public string? Photo { get; set; }
         public string? Ubication { get; set; }
+        public int ZoneId { get; set; }
         public string? Latitude { get; set; }
         public string? Longitude { get; set; }
         public string? Specialty { get; set; }

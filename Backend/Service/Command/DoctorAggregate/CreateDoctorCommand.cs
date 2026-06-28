@@ -9,6 +9,7 @@ namespace Service.Command.DoctorAggregate
         public string LastName { get; set; }
         public string Phone { get; set; }
         public string Ci { get; set; }
+        public int ZoneId   { get; set; }
         public string? Nit { get; set; }
         public string? Photo { get; set; }
         public string? Ubication { get; set; }

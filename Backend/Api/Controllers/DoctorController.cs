@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.DoctorAggregate;
 using Service.Command.PatientAggregate;
-using Service.Middleware;
 using Service.Models.Doctor;
 using Service.Models.Patient;
 using Service.Query.DoctorQuery;
@@ -31,7 +30,7 @@ namespace Api.Controllers
         /// <param name="command">modelo de datos a guardar</param>
         /// <returns></returns>
         [HttpPost]
-        //[Authorize(Policy = "AdminOnly")]
+        [Authorize]
         public async Task<ActionResult<DoctorModel>> CreateClient(CreateDoctorCommand command)
         {
             return await _mediator.Send(command);
@@ -43,7 +42,7 @@ namespace Api.Controllers
         /// <returns></returns>
         [HttpGet("list")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<DoctorModel>>> GetListProvider([FromQuery] GetListDoctorQuery model)
+        public async Task<ActionResult<GetListDoctorModel>> GetListProvider([FromQuery] GetListDoctorQuery model)
         {
             return Ok(await _mediator.Send(model));
         }

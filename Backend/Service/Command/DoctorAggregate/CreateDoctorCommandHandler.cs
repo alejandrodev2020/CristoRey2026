@@ -59,7 +59,7 @@ namespace Service.Command.DoctorAggregate
                                             nit: request.Nit,
                                             file:file,
                                             hasPhoto: hasFile,
-                                            clientZoneId: 1,
+                                            clientZoneId: request.ZoneId,
                                             ubication: request.Ubication,
                                             latitude: lat,
                                             longitude: lng,
