@@ -148,7 +148,6 @@ namespace Service.Command.PatientAggregate
                         Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
                         Console.WriteLine(ex.ToString());
                     }
-
                     try
                     {
                         Console.WriteLine("🚀 INICIO envío Firebase Push");
@@ -189,22 +188,47 @@ namespace Service.Command.PatientAggregate
 
                             foreach (var device in devicesWithToken)
                             {
-                                Console.WriteLine("📡 Enviando notificación Firebase...");
-                                Console.WriteLine($"📱 Device.Id: {device.Id}");
-                                Console.WriteLine($"📱 Token destino: {device.DeviceToken}");
+                                try
+                                {
+                                    Console.WriteLine("📡 Enviando notificación Firebase...");
+                                    Console.WriteLine($"📱 Device.Id: {device.Id}");
+                                    Console.WriteLine($"📱 Token destino: {device.DeviceToken}");
 
-                                var messageId = await _firebase.SendAsync(
-                                    device.DeviceToken,
-                                    titulo,
-                                    mensaje,
-                                    new Dictionary<string, string>
-                                    {
+                                    var messageId = await _firebase.SendAsync(
+                                        device.DeviceToken,
+                                        titulo,
+                                        mensaje,
+                                        new Dictionary<string, string>
+                                        {
                         { "type", "NEW_APPOINTMENT" },
                         { "patientId", record.Id.ToString() }
-                                    }
-                                );
+                                        }
+                                    );
 
-                                Console.WriteLine($"✅ Firebase enviado correctamente. MessageId: {messageId}");
+                                    Console.WriteLine($"✅ Firebase enviado correctamente. MessageId: {messageId}");
+                                }
+                                catch (FirebaseAdmin.Messaging.FirebaseMessagingException fbEx)
+                                {
+                                    Console.WriteLine($"❌ ERROR Firebase enviando al Device.Id: {device.Id}");
+                                    Console.WriteLine($"❌ Token problemático: {device.DeviceToken}");
+                                    Console.WriteLine($"❌ Firebase ErrorCode: {fbEx.ErrorCode}");
+                                    Console.WriteLine($"❌ Firebase Message: {fbEx.Message}");
+                                    Console.WriteLine(fbEx.ToString());
+
+                                    // Importante:
+                                    // No lanzamos throw aquí para que continúe enviando a los demás tokens.
+                                    // Este token probablemente está vencido, desinstalado o pertenece a otro proyecto Firebase.
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"❌ ERROR general enviando al Device.Id: {device.Id}");
+                                    Console.WriteLine($"❌ Token problemático: {device.DeviceToken}");
+                                    Console.WriteLine($"❌ Message: {ex.Message}");
+                                    Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                                    Console.WriteLine(ex.ToString());
+
+                                    // No lanzamos throw aquí para que continúe con los demás dispositivos.
+                                }
                             }
 
                             Console.WriteLine("🏁 FIN envío Firebase Push");
@@ -212,7 +236,7 @@ namespace Service.Command.PatientAggregate
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("❌ ERROR enviando notificación Firebase");
+                        Console.WriteLine("❌ ERROR inesperado preparando envío Firebase");
                         Console.WriteLine($"❌ Message: {ex.Message}");
                         Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
                         Console.WriteLine(ex.ToString());

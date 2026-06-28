@@ -75,27 +75,79 @@ namespace Service.Command.PatientAggregate
 
                 try
                 {
-                    if (record.AuthUser?.Devices != null && record.AuthUser.Devices.Any())
+                    Console.WriteLine("🚀 INICIO envío Firebase Push rechazo cita");
+
+                    if (record.AuthUser == null)
                     {
-                        foreach (var device in record.AuthUser.Devices.Where(x => !string.IsNullOrEmpty(x.DeviceToken)))
+                        Console.WriteLine("⚠️ No se envía Firebase porque record.AuthUser es NULL");
+                    }
+                    else if (record.AuthUser.Devices == null)
+                    {
+                        Console.WriteLine("⚠️ No se envía Firebase porque record.AuthUser.Devices es NULL");
+                    }
+                    else if (!record.AuthUser.Devices.Any())
+                    {
+                        Console.WriteLine("⚠️ No se envía Firebase porque el paciente no tiene devices");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"📱 Devices encontrados: {record.AuthUser.Devices.Count}");
+
+                        var devicesWithToken = record.AuthUser.Devices
+                            .Where(x => !string.IsNullOrWhiteSpace(x.DeviceToken))
+                            .ToList();
+
+                        Console.WriteLine($"📱 Devices con token válido: {devicesWithToken.Count}");
+
+                        foreach (var device in devicesWithToken)
                         {
-                            await _firebase.SendAsync(
-                                device.DeviceToken,
-                                titulo,
-                                mensaje,
-                                new Dictionary<string, string>
-                                {
-                                    { "type", "APPOINTMENT_REJECTED" },
-                                    { "clinicalHistoryId", histoy.Id.ToString() },
-                                    { "patientId", record.Id.ToString() }
-                                }
-                            );
+                            try
+                            {
+                                Console.WriteLine("📡 Enviando notificación Firebase rechazo...");
+                                Console.WriteLine($"📱 Device.Id: {device.Id}");
+                                Console.WriteLine($"📱 Token destino: {device.DeviceToken}");
+
+                                var messageId = await _firebase.SendAsync(
+                                    device.DeviceToken,
+                                    titulo,
+                                    mensaje,
+                                    new Dictionary<string, string>
+                                    {
+                        { "type", "APPOINTMENT_REJECTED" },
+                        { "clinicalHistoryId", histoy.Id.ToString() },
+                        { "patientId", record.Id.ToString() }
+                                    }
+                                );
+
+                                Console.WriteLine($"✅ Firebase enviado correctamente. MessageId: {messageId}");
+                            }
+                            catch (FirebaseAdmin.Messaging.FirebaseMessagingException fbEx)
+                            {
+                                Console.WriteLine($"❌ ERROR Firebase enviando al Device.Id: {device.Id}");
+                                Console.WriteLine($"❌ Token problemático: {device.DeviceToken}");
+                                Console.WriteLine($"❌ Firebase ErrorCode: {fbEx.ErrorCode}");
+                                Console.WriteLine($"❌ Firebase Message: {fbEx.Message}");
+                                Console.WriteLine(fbEx.ToString());
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"❌ ERROR general enviando al Device.Id: {device.Id}");
+                                Console.WriteLine($"❌ Token problemático: {device.DeviceToken}");
+                                Console.WriteLine($"❌ Message: {ex.Message}");
+                                Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                                Console.WriteLine(ex.ToString());
+                            }
                         }
+
+                        Console.WriteLine("🏁 FIN envío Firebase Push rechazo cita");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"⚠️ Error enviando notificación push de rechazo: {ex.Message}");
+                    Console.WriteLine("❌ ERROR inesperado preparando envío Firebase rechazo");
+                    Console.WriteLine($"❌ Message: {ex.Message}");
+                    Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                    Console.WriteLine(ex.ToString());
                 }
             }
 
