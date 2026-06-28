@@ -79,71 +79,144 @@ namespace Service.Command.PatientAggregate
 
                 if (result)
                 {
-                    var doctor = await _repositoryDoctor.FindDoctorWithDevicesAsync(request.DoctorId);
-                    string titulo = "Nueva Cita Agendada";
-                    string mensaje = $"Hola Dr. {doctor.LastName}, tiene una nueva cita de {motiveText} para el {myDate:dd/MM/yyyy HH:mm}.";
+                    Console.WriteLine("✅ RESULT TRUE: La cita se guardó correctamente en BD");
+                    Console.WriteLine($"📥 DoctorId recibido en request: {request.DoctorId}");
+                    Console.WriteLine($"👤 UserId paciente autenticado: {userId}");
+                    Console.WriteLine($"📝 Motivo: {motiveText}");
+                    Console.WriteLine($"📅 Fecha UTC usada: {myDate:dd/MM/yyyy HH:mm:ss}");
 
-                    // ====================================================================
-                    // 👈 NUEVO: INSERT EN LA BASE DE DATOS DE LA NOTIFICACIÓN
-                    // ====================================================================
+                    var doctor = await _repositoryDoctor.FindDoctorWithDevicesAsync(request.DoctorId);
+
+                    Console.WriteLine("🔎 Resultado de FindDoctorWithDevicesAsync");
+                    Console.WriteLine($"👨‍⚕️ Doctor encontrado: {(doctor != null ? "SI" : "NO")}");
+
+                    if (doctor != null)
+                    {
+                        Console.WriteLine($"👨‍⚕️ Doctor.Id: {doctor.Id}");
+                        Console.WriteLine($"👨‍⚕️ Doctor.AuthUserId: {doctor.AuthUserId}");
+                        Console.WriteLine($"👨‍⚕️ Doctor.LastName: {doctor.LastName}");
+                        Console.WriteLine($"🔐 Doctor.AuthUser cargado: {(doctor.AuthUser != null ? "SI" : "NO")}");
+                        Console.WriteLine($"📱 Devices cargados: {(doctor.AuthUser?.Devices != null ? "SI" : "NO")}");
+                        Console.WriteLine($"📱 Cantidad devices: {doctor.AuthUser?.Devices?.Count ?? 0}");
+                    }
+
+                    string titulo = "Nueva Cita Agendada";
+                    string mensaje = $"Hola Dr. {doctor?.LastName}, tiene una nueva cita de {motiveText} para el {myDate:dd/MM/yyyy HH:mm}.";
+
+                    Console.WriteLine($"🔔 Título notificación: {titulo}");
+                    Console.WriteLine($"🔔 Mensaje notificación: {mensaje}");
+
                     try
                     {
+                        Console.WriteLine("💾 INICIO guardado de notificación en BD");
+
                         if (doctor != null)
                         {
-                            // Usamos el método de factoría estático que creamos en tu entidad
+                            Console.WriteLine($"💾 Creando notificación para targetUserId: {doctor.AuthUserId}");
+                            Console.WriteLine($"💾 senderUserId: {userId}");
+                            Console.WriteLine($"💾 actionUrl record.Id: {record.Id}");
+
                             var dbNotification = Notification.CreateNotification(
-                                targetUserId: doctor.AuthUserId,      // El doctor que recibe (nAuthUserId)
-                                senderUserId: userId,                 // El paciente que crea la cita
+                                targetUserId: doctor.AuthUserId,
+                                senderUserId: userId,
                                 title: titulo,
                                 message: mensaje,
                                 type: "NEW_APPOINTMENT",
-                                actionUrl: record.Id.ToString()       // Guardamos el ID del historial / paciente como referencia
+                                actionUrl: record.Id.ToString()
                             );
+
+                            Console.WriteLine("💾 Notification.CreateNotification OK");
 
                             _repositoryNotification.Add(dbNotification);
 
-                            // Si comparten el mismo DbContext/UnitOfWork, se guardará aquí.
-                            // Si es un repositorio aislado, puedes llamar a su propio Save o dejar que el flujo lo maneje.
-                            await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+                            Console.WriteLine("💾 _repositoryNotification.Add OK");
+                            Console.WriteLine("💾 Guardando notificación en UnitOfWork...");
+
+                            var notificationSaved = await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+                            Console.WriteLine($"💾 Resultado guardado notificación: {notificationSaved}");
+                        }
+                        else
+                        {
+                            Console.WriteLine("⚠️ No se guarda notificación en BD porque doctor es NULL");
                         }
                     }
                     catch (Exception ex)
                     {
-                        // Log local para que un fallo en la tabla de alertas no rompa el flujo principal
-                        Console.WriteLine($"⚠️ Error guardando notificación en BD: {ex.Message}");
+                        Console.WriteLine("❌ ERROR guardando notificación en BD");
+                        Console.WriteLine($"❌ Message: {ex.Message}");
+                        Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                        Console.WriteLine(ex.ToString());
                     }
-                    // ====================================================================
 
-                    // Tu lógica existente de Firebase Push (se mantiene intacta)
                     try
                     {
-                        if (doctor?.AuthUser?.Devices != null && doctor.AuthUser.Devices.Any())
+                        Console.WriteLine("🚀 INICIO envío Firebase Push");
+
+                        if (doctor == null)
                         {
-                            foreach (var device in doctor.AuthUser.Devices.Where(x => !string.IsNullOrEmpty(x.DeviceToken)))
+                            Console.WriteLine("⚠️ No se envía Firebase porque doctor es NULL");
+                        }
+                        else if (doctor.AuthUser == null)
+                        {
+                            Console.WriteLine("⚠️ No se envía Firebase porque doctor.AuthUser es NULL");
+                        }
+                        else if (doctor.AuthUser.Devices == null)
+                        {
+                            Console.WriteLine("⚠️ No se envía Firebase porque doctor.AuthUser.Devices es NULL");
+                        }
+                        else if (!doctor.AuthUser.Devices.Any())
+                        {
+                            Console.WriteLine("⚠️ No se envía Firebase porque el doctor no tiene devices");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"📱 Devices encontrados: {doctor.AuthUser.Devices.Count}");
+
+                            var devicesWithToken = doctor.AuthUser.Devices
+                                .Where(x => !string.IsNullOrWhiteSpace(x.DeviceToken))
+                                .ToList();
+
+                            Console.WriteLine($"📱 Devices con token válido: {devicesWithToken.Count}");
+
+                            foreach (var device in doctor.AuthUser.Devices)
                             {
-                                await _firebase.SendAsync(
+                                Console.WriteLine("📱 DEVICE ENCONTRADO");
+                                Console.WriteLine($"📱 Device.Id: {device.Id}");
+                                Console.WriteLine($"📱 DeviceToken vacío: {string.IsNullOrWhiteSpace(device.DeviceToken)}");
+                                Console.WriteLine($"📱 DeviceToken: {device.DeviceToken}");
+                            }
+
+                            foreach (var device in devicesWithToken)
+                            {
+                                Console.WriteLine("📡 Enviando notificación Firebase...");
+                                Console.WriteLine($"📱 Device.Id: {device.Id}");
+                                Console.WriteLine($"📱 Token destino: {device.DeviceToken}");
+
+                                var messageId = await _firebase.SendAsync(
                                     device.DeviceToken,
                                     titulo,
                                     mensaje,
-                                    new Dictionary<string, string> { { "type", "NEW_APPOINTMENT" }, { "patientId", record.Id.ToString() } }
+                                    new Dictionary<string, string>
+                                    {
+                        { "type", "NEW_APPOINTMENT" },
+                        { "patientId", record.Id.ToString() }
+                                    }
                                 );
+
+                                Console.WriteLine($"✅ Firebase enviado correctamente. MessageId: {messageId}");
                             }
+
+                            Console.WriteLine("🏁 FIN envío Firebase Push");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"⚠️ Error enviando notificación: {ex.Message}");
+                        Console.WriteLine("❌ ERROR enviando notificación Firebase");
+                        Console.WriteLine($"❌ Message: {ex.Message}");
+                        Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                        Console.WriteLine(ex.ToString());
                     }
-
-                    response.Message = "Cita Registrada Exitosamente";
-                    response.Code = "COD001";
-                    response.HttpCode = "200";
-                    response.Data = Unit.Value;
-                }
-                else
-                {
-                    response.Message = "No se pudieron guardar los cambios en la base de datos";
-                    response.HttpCode = "500";
                 }
             }
             catch (Exception ex)
