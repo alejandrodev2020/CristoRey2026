@@ -82,7 +82,7 @@
                                 </input-text>
                             </div>
                             <div [class.sm:col-span-2]="!isModal" [class.sm:col-span-4]="isModal">
-                                <input-text [formControl]="control('businessName')" [label]="'Especialidad:'"
+                                <input-text [formControl]="control('specialty')" [label]="'Especialidad:'"
                                     [maxLength]="50" [minLength]="3" [icon]="'heroicons_outline:identification'"
                                     [disabled]="false" [placeholder]="'Ortodoncia..'">
                                 </input-text>
@@ -116,10 +116,15 @@
                                     </mat-expansion-panel-header>
                                     <p class="mt-1 mb-1" style="color:#000; font-weight: 700;">Aquí podrás seleccionar
                                         la ubicación de tu cliente!</p>
-
-                                    <google-map [width]="'100%'" [center]="center" [zoom]="zoom">
-                                        <map-marker [position]="markerPosition" [options]="markerOptions"
-                                            (mapDragEnd)="onMarkerDragEnd($event)">
+                                    <google-map
+                                        [width]="'100%'"
+                                        [center]="center"
+                                        [zoom]="zoom"
+                                        (mapClick)="onMapClick($event)">
+                                        <map-marker
+                                            [position]="markerPosition"
+                                            [options]="markerOptions"
+                                            (mapDragend)="onMarkerDragEnd($event)">
                                         </map-marker>
                                     </google-map>
                                 </mat-expansion-panel>

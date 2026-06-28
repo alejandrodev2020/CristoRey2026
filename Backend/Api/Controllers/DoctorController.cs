@@ -56,6 +56,7 @@ namespace Api.Controllers
         /// <param name="id">parametro para realizar la busqueda</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<DoctorModel>> GetDoctorId(int id)
         {
             return await _mediator.Send(new GetDoctorByIdQuery { Id = id });

@@ -25,46 +25,34 @@ import { imageUserDefault } from 'app/shared/models/image-user';
   styleUrls: ['./store-doctors.component.scss']
 })
 export class StoreDoctorsComponent implements OnInit, AfterViewInit {
-
   @ViewChild(GoogleMap) googleMap!: GoogleMap;
 
-  // ================= FORM =================
   form: FormGroup;
   id: number | null = null;
   isCreate = false;
   isSaving = false;
   isModal: any = false;
 
-  // ================= IMAGE =================
   imageSource = this.sanitizer.bypassSecurityTrustResourceUrl(imageUserDefault);
 
-  // ================= MAP =================
-  center: google.maps.LatLngLiteral = { lat: -17.783362, lng: -63.1847183 };
+  center: google.maps.LatLngLiteral = {
+    lat: -17.783362,
+    lng: -63.1847183
+  };
+
   zoom = 17;
 
-markerPosition: google.maps.LatLngLiteral = {
-  lat: -17.783362,
-  lng: -63.1847183
-};
+  markerPosition: google.maps.LatLngLiteral = {
+    lat: -17.783362,
+    lng: -63.1847183
+  };
 
-markerOptions: google.maps.MarkerOptions = {
-  draggable: true
-};
+  markerOptions: google.maps.MarkerOptions = {
+    draggable: true
+  };
 
-onMarkerDragEnd(event: google.maps.MapMouseEvent) {
-  if (!event.latLng) return;
+  currentClient?: any = null;
 
-  const lat = event.latLng.lat();
-  const lng = event.latLng.lng();
-
-  this.markerPosition = { lat, lng };
-
-  // 🔧 backend espera string
-  this.form.get('latitude')?.setValue(lat.toString());
-  this.form.get('longitude')?.setValue(lng.toString());
-}
-  currentClient ?: any = null;
-  // ================= PROPS =================
   prop = [
     'id',
     'firstName',
@@ -73,7 +61,7 @@ onMarkerDragEnd(event: google.maps.MapMouseEvent) {
     'ci',
     'nit',
     'photo',
-    'businessName',
+    'specialty',
     'ubication',
     'latitude',
     'longitude',
@@ -100,7 +88,7 @@ onMarkerDragEnd(event: google.maps.MapMouseEvent) {
       ci: [null],
       nit: [null],
       photo: [null],
-      businessName: [null],
+      specialty: [null],
       ubication: [null],
       latitude: [null],
       longitude: [null],
@@ -108,7 +96,6 @@ onMarkerDragEnd(event: google.maps.MapMouseEvent) {
     });
   }
 
-  // ================= INIT =================
   ngOnInit(): void {
     this.isCreate = this.router.url.endsWith('/store');
 
@@ -129,30 +116,47 @@ onMarkerDragEnd(event: google.maps.MapMouseEvent) {
     }
   }
 
-  // ================= LOCATION =================
-  private async loadMyLocation() {
+  private async loadMyLocation(): Promise<void> {
     try {
       const position = await this.geoService.getCurrentLocation();
       this.initMap(position.coords.latitude, position.coords.longitude);
     } catch (error) {
       console.error('Error obteniendo ubicación', error);
-      this.initMap(-17.783362, -63.1847183); // fallback
+      this.initMap(-17.783362, -63.1847183);
     }
   }
 
-  private initMap(lat: number, lng: number) {
-    this.center = { lat, lng };
-    this.markerPosition = { lat, lng };
-    this.applyCoordinates(lat, lng);
+  private initMap(lat: number, lng: number): void {
+    this.setMapCoordinates(lat, lng);
   }
 
-private applyCoordinates(lat: number, lng: number) {
-  this.form.get('latitude')?.setValue(lat.toString());
-  this.form.get('longitude')?.setValue(lng.toString());
-}
+  onMarkerDragEnd(event: google.maps.MapMouseEvent): void {
+    if (!event.latLng) return;
 
-  // ================= LOAD EDIT =================
-  private loadDoctor(id: number) {
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+
+    this.setMapCoordinates(lat, lng);
+  }
+
+  onMapClick(event: google.maps.MapMouseEvent): void {
+    if (!event.latLng) return;
+
+    const lat = event.latLng.lat();
+    const lng = event.latLng.lng();
+
+    this.setMapCoordinates(lat, lng);
+  }
+
+  private setMapCoordinates(lat: number, lng: number): void {
+    this.center = { lat, lng };
+    this.markerPosition = { lat, lng };
+
+    this.form.get('latitude')?.setValue(lat.toString());
+    this.form.get('longitude')?.setValue(lng.toString());
+  }
+
+  private loadDoctor(id: number): void {
     this.service.getById(id).subscribe((response: any) => {
       this.prop.forEach(key => {
         if (key === 'photo') {
@@ -163,13 +167,12 @@ private applyCoordinates(lat: number, lng: number) {
       });
 
       if (response.latitude && response.longitude) {
-        this.initMap(response.latitude, response.longitude);
+        this.initMap(Number(response.latitude), Number(response.longitude));
       }
     });
   }
 
-  // ================= IMAGE =================
-  async uploadAvatar(fileList: FileList) {
+  async uploadAvatar(fileList: FileList): Promise<void> {
     if (!fileList.length) return;
 
     const reader = new FileReader();
@@ -177,12 +180,12 @@ private applyCoordinates(lat: number, lng: number) {
     reader.onload = () => this.setPhoto(reader.result);
   }
 
-  async setPhoto(data: any) {
+  async setPhoto(data: any): Promise<void> {
     this.imageSource = this.sanitizer.bypassSecurityTrustResourceUrl(data);
     this.form.get('photo')?.setValue(data);
   }
 
-  private processPhoto(photo: any) {
+  private processPhoto(photo: any): void {
     if (photo) {
       const base64 = 'data:image/png;base64,' + photo;
       this.setPhoto(base64);
@@ -194,8 +197,7 @@ private applyCoordinates(lat: number, lng: number) {
     this.form.get('photo')?.setValue(null);
   }
 
-  // ================= ACTIONS =================
-  cancelStore() {
+  cancelStore(): void {
     if (this.isModal) {
       this.dialogRef?.close(null);
     } else {
@@ -229,6 +231,7 @@ private applyCoordinates(lat: number, lng: number) {
     Object.keys(this.form.controls).forEach(key =>
       this.form.get(key)?.markAsTouched()
     );
+
     return this.form.valid;
   }
 

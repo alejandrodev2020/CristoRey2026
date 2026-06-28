@@ -88,7 +88,6 @@ namespace Data.Query.Repository
 
         public DoctorModel GetProviderById(int id)
         {
-
             const string quote = "\"";
             var sql = @"SELECT  " + quote + "nDoctorId" + quote + " " + quote + "Id" + quote +
                              ", " + quote + "sFirstName" + quote + " " + quote + "FirstName" + quote +
@@ -98,13 +97,11 @@ namespace Data.Query.Repository
                              ", " + quote + "sNit" + quote + " " + quote + "Nit" + quote +
                              ", " + quote + "sPhoto" + quote + " " + quote + "PhotoByte" + quote +
                              ", " + quote + "sSpecialty" + quote + " " + quote + "Specialty" + quote +
-                             
+                             ", " + quote + "bIsEmergency" + quote + " " + quote + "IsEmergency" + quote +                             
                              ", " + quote + "sUbication" + quote + " " + quote + "Ubication" + quote +
                              ", " + quote + "nLatitude" + quote + " " + quote + "Latitude" + quote +
                              ", " + quote + "nLongitude" + quote + " " + quote + "Longitude" + quote +
                              ", " + quote + "sLink" + quote + " " + quote + "Link" + quote +
-
-
                              ", " + quote + "bIsActive" + quote + " " + quote + "IsActive" + quote +
                          " FROM " + quote + "Doctor" + quote + " " + quote + "P" + quote +
                          "WHERE " + quote + "nDoctorId" + quote + "=" + id;

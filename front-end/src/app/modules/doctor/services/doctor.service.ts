@@ -10,27 +10,34 @@ import { AuthStorageService } from 'app/modules/auth/services/authStorage.servic
 })
 
 
-export class DoctorService extends BaseService{
-    constructor(http: HttpClient, authStorage: AuthStorageService) {
-        super(http, authStorage); 
-    }
+export class DoctorService extends BaseService {
+  constructor(http: HttpClient, authStorage: AuthStorageService) {
+    super(http, authStorage);
+  }
 
-  getListDoctors(){
-     return  this.http.get(`${this.baseUri}api/doctor/list`,this.getHttpOptions());
+  getListDoctors(queryString: string) {
+    return this.http.get(`${this.baseUri}api/doctor/list${queryString}`, this.getHttpOptions());
   }
-  store(data:Provider){
-    if(data?.id){
-      return  this.http.put(`${this.baseUri}api/doctor/${data.id}`,data,this.getHttpOptions());
+
+  store(data: Provider) {
+    if (data?.id) {
+      return this.http.put(`${this.baseUri}api/doctor/${data.id}`, data, this.getHttpOptions());
     }
-    else{
-      return  this.http.post(`${this.baseUri}api/doctor`,data,this.getHttpOptions());
+    else {
+      return this.http.post(`${this.baseUri}api/doctor`, data, this.getHttpOptions());
     }
- }
- getById( id : number){
-  return  this.http.get<Provider>(`${this.baseUri}api/doctor/`+ id,this.getHttpOptions());
   }
-  lowById( id : number){
-    return  this.http.put(`${this.baseUri}api/provider/${id}/low`,{},this.getHttpOptions());
+
+  getById(id: number) {
+    return this.http.get<Provider>(`${this.baseUri}api/doctor/` + id, this.getHttpOptions());
+  }
+
+  lowById(id: number) {
+    return this.http.put(`${this.baseUri}api/doctor/${id}/low`, {}, this.getHttpOptions());
+  }
+
+  highById(id: number) {
+    return this.http.put(`${this.baseUri}api/doctor/${id}/up`, {}, this.getHttpOptions());
   }
 
 }
