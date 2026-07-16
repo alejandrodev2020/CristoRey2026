@@ -38,6 +38,32 @@ namespace Data.Command.Repository
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<Patient?> FindPatientWithDevicesAsync(int id)
+        {
+            return await _context.Patient
+                .Include(p => p.AuthUser)
+                    .ThenInclude(a => a.Devices)
+                .Where(p => p.Id == id)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task<bool> ClinicalHistoryExistsAsync(int doctorId, DateTime dateQuery, int? patientId = null)
+        {
+            return await _context.ClinicalHistory.AnyAsync(ch =>
+                ch.DoctorId == doctorId &&
+                ch.DateQuery == dateQuery &&
+                ch.StatusId != 3 &&
+                (!patientId.HasValue || ch.PatientId == patientId.Value));
+        }
+
+        public async Task<bool> PatientClinicalHistoryExistsAsync(int patientId, DateTime dateQuery)
+        {
+            return await _context.ClinicalHistory.AnyAsync(ch =>
+                ch.PatientId == patientId &&
+                ch.DateQuery == dateQuery &&
+                ch.StatusId != 3);
+        }
+
         public async Task<Patient?> FindClinicalHistoryById(int id)
         {
             return await _context.Patient

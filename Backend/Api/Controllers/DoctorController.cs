@@ -7,6 +7,7 @@ using Service.Command.PatientAggregate;
 using Service.Models.Doctor;
 using Service.Models.Patient;
 using Service.Query.DoctorQuery;
+using Service.Command.UtilsAggregate;
 
 namespace Api.Controllers
 {
@@ -101,6 +102,18 @@ namespace Api.Controllers
         }
 
         /// <summary>
+        /// Actualiza el estado de disponibilidad del doctor autenticado.
+        /// </summary>
+        /// <param name="command">Estado de disponibilidad: 1 libre, 2 ocupado, 3 no disponible</param>
+        /// <returns></returns>
+        [HttpPut("availability")]
+        [Authorize]
+        public async Task<ActionResult<Unit>> UpdateAvailabilityStatus(UpdateDoctorAvailabilityStatusCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        /// <summary>
         /// Realiza una busqueda dado el Identificador.
         /// </summary>
         /// <param name="id">parametro para realizar la busqueda</param>
@@ -122,6 +135,19 @@ namespace Api.Controllers
         public async Task<ActionResult<IEnumerable<ClinicalHistoryModel>>> GetListCLinical([FromQuery] GetListClinicalHistoryByDoctorLoggedQuery model)
         {
             return Ok(await _mediator.Send(model));
+        }
+
+        /// <summary>
+        /// Crea una cita aceptada para el doctor autenticado y el paciente indicado.
+        /// </summary>
+        /// <param name="command">Modelo de datos de la cita a guardar</param>
+        /// <returns></returns>
+        [HttpPost("clinical-history")]
+        [Authorize]
+        public async Task<ActionResult<ResponseGenericCommand<Unit>>> CreateClinicalHistory(CreateClinicalHistoryByDoctorCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return StatusCode(int.TryParse(response.HttpCode, out var statusCode) ? statusCode : StatusCodes.Status500InternalServerError, response);
         }
 
         /// <summary>

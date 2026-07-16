@@ -12,7 +12,7 @@ namespace Service.Query.DoctorQuery
                                                       int page);
         public DoctorModel GetProviderById(int id);
         public DoctorModel GetDoctorByAuthUserId(int id);
-        public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id, DateTime? dateQuery);
+        public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id, DateTime? dateQuery, DateTime? dateInit, DateTime? dateEnd);
         public IEnumerable<DoctorAppointmentHourModel> GetAppointmentHourByDoctorId(int id, DateTime date);
 
     }

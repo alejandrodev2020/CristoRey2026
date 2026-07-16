@@ -90,6 +90,11 @@ namespace Data.Command.Configurations
                    .HasColumnName("bIsEmergency")
                    .IsRequired(false);
 
+            builder.Property(d => d.AvailabilityStatusId)
+                   .HasColumnName("nAvailabilityStatusId")
+                   .HasDefaultValue(1)
+                   .IsRequired();
+
             builder.Property(d => d.IsActive)
                    .HasColumnName("bIsActive")
                    .IsRequired(false);

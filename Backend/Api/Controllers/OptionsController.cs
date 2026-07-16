@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Command.OptionsAggregate;
@@ -10,6 +11,7 @@ namespace Api.Controllers
     [Produces("application/json")]
     [Route("api/options")]
     [ApiController]
+    [Authorize]
     public class OptionsController : ControllerBase
     {
         private readonly IMediator _mediator;

@@ -48,23 +48,74 @@ namespace Service.Command.PatientAggregate
                 }
 
                 var record = await _repository.FindByAuthUserIdAsync(userId);
+                if (record == null || record.IsActive != true)
+                {
+                    response.Message = "No se encontró un paciente activo para el usuario autenticado";
+                    response.HttpCode = "404";
+                    return response;
+                }
+
+                if (!request.DateQuery.HasValue)
+                {
+                    response.Message = "DateQuery es obligatorio";
+                    response.HttpCode = "400";
+                    return response;
+                }
+
+                var doctor = await _repositoryDoctor.FindDoctorWithDevicesAsync(request.DoctorId);
+                if (doctor == null || doctor.IsActive != true)
+                {
+                    response.Message = "El doctor indicado no existe o no se encuentra activo";
+                    response.HttpCode = "404";
+                    return response;
+                }
+
                 var motiveText = "";
                 if (request.OptionId == 0)
                 {
+                    if (string.IsNullOrWhiteSpace(request.Motive))
+                    {
+                        response.Message = "Motive es obligatorio cuando no se envía OptionId";
+                        response.HttpCode = "400";
+                        return response;
+                    }
                     motiveText = request.Motive;
                 }
                 else
                 {
                     var t = await _repositoryOptions.FindByIdAsyncAsnoTraking(request.OptionId);
+                    if (t == null)
+                    {
+                        response.Message = "El OptionId indicado no existe";
+                        response.HttpCode = "400";
+                        return response;
+                    }
                     motiveText = t.Description;
                 }
 
-                DateTime myDate = DateTime.UtcNow;
-                if (request.DateQuery != null)
+                var boliviaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/La_Paz");
+                var localDate = DateTime.SpecifyKind(request.DateQuery.Value, DateTimeKind.Unspecified);
+                var myDate = TimeZoneInfo.ConvertTimeToUtc(localDate, boliviaTimeZone);
+
+                if (myDate <= DateTime.UtcNow)
                 {
-                    var boliviaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/La_Paz");
-                    var localDate = DateTime.SpecifyKind(request.DateQuery.Value, DateTimeKind.Unspecified);
-                    myDate = TimeZoneInfo.ConvertTimeToUtc(localDate, boliviaTimeZone);
+                    response.Message = "La fecha de la cita debe ser posterior a la fecha y hora actual";
+                    response.HttpCode = "400";
+                    return response;
+                }
+
+                if (await _repository.ClinicalHistoryExistsAsync(request.DoctorId, myDate))
+                {
+                    response.Message = "El doctor ya tiene una cita registrada en la fecha y hora indicadas";
+                    response.HttpCode = "409";
+                    return response;
+                }
+
+                if (await _repository.PatientClinicalHistoryExistsAsync(record.Id, myDate))
+                {
+                    response.Message = "El paciente ya tiene una cita registrada en la fecha y hora indicadas";
+                    response.HttpCode = "409";
+                    return response;
                 }
 
                 record.CreateClinicHistory(request.DoctorId, myDate,
@@ -79,13 +130,16 @@ namespace Service.Command.PatientAggregate
 
                 if (result)
                 {
+                    response.Code = "SUCCESS";
+                    response.HttpCode = "200";
+                    response.Data = Unit.Value;
+                    response.Message = "Cita creada correctamente";
+
                     Console.WriteLine("✅ RESULT TRUE: La cita se guardó correctamente en BD");
                     Console.WriteLine($"📥 DoctorId recibido en request: {request.DoctorId}");
                     Console.WriteLine($"👤 UserId paciente autenticado: {userId}");
                     Console.WriteLine($"📝 Motivo: {motiveText}");
                     Console.WriteLine($"📅 Fecha UTC usada: {myDate:dd/MM/yyyy HH:mm:ss}");
-
-                    var doctor = await _repositoryDoctor.FindDoctorWithDevicesAsync(request.DoctorId);
 
                     Console.WriteLine("🔎 Resultado de FindDoctorWithDevicesAsync");
                     Console.WriteLine($"👨‍⚕️ Doctor encontrado: {(doctor != null ? "SI" : "NO")}");
@@ -101,7 +155,7 @@ namespace Service.Command.PatientAggregate
                     }
 
                     string titulo = "Nueva Cita Agendada";
-                    string mensaje = $"Hola Dr. {doctor?.LastName}, tiene una nueva cita de {motiveText} para el {myDate:dd/MM/yyyy HH:mm}.";
+                    string mensaje = $"Hola Dr. {doctor?.LastName}, tiene una nueva cita de {motiveText} para el {localDate:dd/MM/yyyy HH:mm}.";
 
                     Console.WriteLine($"🔔 Título notificación: {titulo}");
                     Console.WriteLine($"🔔 Mensaje notificación: {mensaje}");
@@ -242,10 +296,15 @@ namespace Service.Command.PatientAggregate
                         Console.WriteLine(ex.ToString());
                     }
                 }
+                else
+                {
+                    response.Message = "No se pudo guardar la cita";
+                    response.HttpCode = "500";
+                }
             }
             catch (Exception ex)
             {
-                response.Message = "Error interno al procesar el registro del dispositivo";
+                response.Message = "Error interno al crear la cita";
                 response.Error = ex.Message;
                 response.HttpCode = "500";
             }

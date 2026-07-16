@@ -153,6 +153,12 @@ namespace Domain.Entities.DoctorAggregate
         public bool? IsEmergency { get; private set; }
 
         /// <summary>
+        /// Estado de disponibilidad del doctor (1 = Libre).
+        /// </summary>
+        [Column("nAvailabilityStatusId")]
+        public int AvailabilityStatusId { get; private set; } = 1;
+
+        /// <summary>
         /// IsActive
         /// </summary>
         [Column("bIsActive")]
@@ -190,6 +196,7 @@ namespace Domain.Entities.DoctorAggregate
             record.Link = link; 
             record.IsActive = true;
             record.IsEmergency = isEmergency;
+            record.AvailabilityStatusId = 1;
 
             return record;
         }
@@ -236,6 +243,11 @@ namespace Domain.Entities.DoctorAggregate
         public void ActiveDoctor()
         {
             IsActive = true;
+        }
+
+        public void UpdateAvailabilityStatus(int availabilityStatusId)
+        {
+            AvailabilityStatusId = availabilityStatusId;
         }
 
         #endregion

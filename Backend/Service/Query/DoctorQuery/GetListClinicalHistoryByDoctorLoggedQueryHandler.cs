@@ -40,7 +40,13 @@ namespace Service.Query.DoctorQuery
                         throw new NotFoundException("Paciente no encontrado para el usuario logueado.");
                     }
 
-                    var record = _repository.GetListClinicalHistoryByDoctorId(doctor.Id, request.DateQuery);
+                    ValidateDateRange(request.DateInit, request.DateEnd);
+
+                    var record = _repository.GetListClinicalHistoryByDoctorId(
+                        doctor.Id,
+                        request.DateQuery,
+                        request.DateInit,
+                        request.DateEnd);
                     foreach (var item in record)
                     {
                         if (item.Patient?.File != null && item.Patient.File.Length > 0)
@@ -71,6 +77,19 @@ namespace Service.Query.DoctorQuery
                     );
                 }
 
+        }
+
+        private static void ValidateDateRange(DateTime? dateInit, DateTime? dateEnd)
+        {
+            if (dateInit.HasValue != dateEnd.HasValue)
+            {
+                throw new ArgumentException("DateInit y DateEnd deben enviarse juntos.");
+            }
+
+            if (dateInit.HasValue && dateInit.Value.Date > dateEnd!.Value.Date)
+            {
+                throw new ArgumentException("DateInit no puede ser posterior a DateEnd.");
+            }
         }
     }
 }

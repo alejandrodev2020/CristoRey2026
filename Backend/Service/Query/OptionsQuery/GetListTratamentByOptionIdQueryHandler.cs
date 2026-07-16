@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Service.Models.Options;
-using System.Text.Json;
+using Service.UtilsAggregate;
 
 namespace Service.Query.OptionsQuery
 {
@@ -23,37 +23,21 @@ namespace Service.Query.OptionsQuery
             GetListTratamentByOptionIdQuery request,
             CancellationToken cancellationToken)
         {
-            var codeStore = Environment.GetEnvironmentVariable("CodeStore") ?? string.Empty;
+            var record = _repository.GetListTratamentById(request.Id).ToList();
 
-            var record = _repository.GetListTratamentById(request.Id);
-
-            foreach (var item in record)
+            var photoTasks = record.Select(async item =>
             {
                 if (item == null || item.HasPicture != true)
-                    continue;
+                    return;
 
-                var currentId = item.Id.ToString() + codeStore + "_TRATAMENT_" + item.Id;
+                item.Picture = await OptionsPhotoCacheHelper.GetOrCreateAsync(
+                    _cache,
+                    OptionsPhotoCacheHelper.TratamentKey(item.Id),
+                    () => _repository.GetPhotoTratamentById(item.Id),
+                    cancellationToken);
+            });
 
-                var valueCache = await _cache.GetStringAsync(currentId, cancellationToken);
-
-                if (!string.IsNullOrWhiteSpace(valueCache))
-                {
-                    item.Picture = JsonSerializer.Deserialize<string>(valueCache);
-                    continue;
-                }
-
-                var pictureByte = _repository.GetPhotoTratamentById(item.Id);
-
-                if (pictureByte == null || pictureByte.Length == 0)
-                    continue;
-
-                var base64 = Convert.ToBase64String(pictureByte);
-                var valueText = JsonSerializer.Serialize(base64);
-
-                await _cache.SetStringAsync(currentId, valueText, cancellationToken);
-
-                item.Picture = base64;
-            }
+            await Task.WhenAll(photoTasks);
 
             return record;
         }

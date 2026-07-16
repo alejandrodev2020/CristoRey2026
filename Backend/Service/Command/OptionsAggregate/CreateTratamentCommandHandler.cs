@@ -1,15 +1,20 @@
 ﻿using Domain.Entities.Options;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
+using Service.UtilsAggregate;
 
 namespace Service.Command.OptionsAggregate
 {
     public class CreateTratamentCommandHandler : IRequestHandler<CreateTratamentCommand, Unit>
     {
         private readonly IOptionsRepository _repository;
+        private readonly IDistributedCache _cache;
 
-        public CreateTratamentCommandHandler(IOptionsRepository repository)
+        public CreateTratamentCommandHandler(IOptionsRepository repository,
+                                              IDistributedCache cache)
         {
             _repository = repository;
+            _cache = cache;
         }
 
         public async Task<Unit> Handle(CreateTratamentCommand request, CancellationToken cancellationToken)
@@ -39,8 +44,16 @@ namespace Service.Command.OptionsAggregate
                 picture: file
             );
 
+            var createdTratament = options.Trataments.Last();
+
             _repository.Update(options);
             await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            await OptionsPhotoCacheHelper.SetAsync(
+                _cache,
+                OptionsPhotoCacheHelper.TratamentKey(createdTratament.Id),
+                createdTratament.Picture,
+                cancellationToken);
 
             return Unit.Value;
         }

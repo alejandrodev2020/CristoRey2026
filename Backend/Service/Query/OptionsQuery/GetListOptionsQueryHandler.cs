@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Service.Models.Options;
-using System.Text.Json;
+using Service.UtilsAggregate;
 
 namespace Service.Query.OptionsQuery
 {
@@ -20,34 +20,21 @@ namespace Service.Query.OptionsQuery
 
         public async Task<IEnumerable<OptionsModel>> Handle(GetListOptionsQuery request, CancellationToken cancellationToken)
         {
-            var codeStore = Environment.GetEnvironmentVariable("CodeStore");
-            var record = _repository.GetListOptionsByShopping(request.Limit,request.Page);
+            var record = _repository.GetListOptionsByShopping(request.Limit,request.Page).ToList();
 
-            foreach (var product in record)
+            var photoTasks = record.Select(async product =>
             {
                 if (product == null || product.HasPicture != true)
-                    continue;
+                    return;
 
-                var currentId = product.Id.ToString() + codeStore + "_OPTIONS_" + product.Id;
-                var valueCache = await _cache.GetStringAsync(currentId, cancellationToken);
+                product.Picture = await OptionsPhotoCacheHelper.GetOrCreateAsync(
+                    _cache,
+                    OptionsPhotoCacheHelper.OptionsKey(product.Id),
+                    () => _repository.GetPhotoOptionsById(product.Id),
+                    cancellationToken);
+            });
 
-                if (!string.IsNullOrEmpty(valueCache))
-                {
-                    product.Picture = JsonSerializer.Deserialize<string>(valueCache);
-                    continue;
-                }
-
-                var pictureByte = _repository.GetPhotoOptionsById(product.Id);
-
-                if (pictureByte != null)
-                {
-                    var base64 = Convert.ToBase64String(pictureByte);
-                    var valueText = JsonSerializer.Serialize(base64);
-
-                    await _cache.SetStringAsync(currentId, valueText, cancellationToken);
-                    product.Picture = base64;
-                }
-            }
+            await Task.WhenAll(photoTasks);
 
             return record;
         }

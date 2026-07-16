@@ -30,6 +30,13 @@ namespace Data.Command.Repository
                                         .SingleOrDefaultAsync();
         }
 
+        public async Task<Doctor?> FindByAuthUserIdAsync(int id)
+        {
+            return await _context.Doctor
+                .Where(d => d.AuthUserId == id)
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<Doctor> FindDoctorWithDevicesAsync(int doctorId)
         {
             return await _context.Doctor

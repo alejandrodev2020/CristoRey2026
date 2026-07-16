@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.Options;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Service.UtilsAggregate;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,10 +38,11 @@ namespace Service.Command.OptionsAggregate
 
             if (request.Picture != null && request.Picture != "")
             {
-                var codeStore = Environment.GetEnvironmentVariable("CodeStore");
-                var keyString = record.Id.ToString() + codeStore + "_OPTION_";
-                var imageBase64 = Convert.ToBase64String(record.Picture);
-                await _cache.SetStringAsync(keyString, imageBase64);
+                await OptionsPhotoCacheHelper.SetAsync(
+                    _cache,
+                    OptionsPhotoCacheHelper.OptionsKey(record.Id),
+                    record.Picture,
+                    cancellationToken);
             }
             return Unit.Value;
         }

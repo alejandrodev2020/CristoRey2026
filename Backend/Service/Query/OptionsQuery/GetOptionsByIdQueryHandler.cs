@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Service.Models.Options;
-using System.Text.Json;
+using Service.UtilsAggregate;
 
 namespace Service.Query.OptionsQuery
 {
@@ -21,30 +21,15 @@ namespace Service.Query.OptionsQuery
         public async Task<OptionsModel> Handle(GetOptionsByIdQuery request, CancellationToken cancellationToken)
         {
             var record = _repository.GetOptionsById(request.Id);
-            var codeStore = Environment.GetEnvironmentVariable("CodeStore");
 
             if (record == null || record.HasPicture != true)
                 return record;
 
-            var currentId = record.Id.ToString() + codeStore + "_OPTIONS_" + record.Id;
-            var valueCache = await _cache.GetStringAsync(currentId, cancellationToken);
-
-            if (!string.IsNullOrEmpty(valueCache))
-            {
-                record.Picture = JsonSerializer.Deserialize<string>(valueCache);
-                return record;
-            }
-
-            var pictureByte = _repository.GetPhotoOptionsById(record.Id);
-
-            if (pictureByte != null)
-            {
-                var base64 = Convert.ToBase64String(pictureByte);
-                var valueText = JsonSerializer.Serialize(base64);
-
-                await _cache.SetStringAsync(currentId, valueText, cancellationToken);
-                record.Picture = base64;
-            }
+            record.Picture = await OptionsPhotoCacheHelper.GetOrCreateAsync(
+                _cache,
+                OptionsPhotoCacheHelper.OptionsKey(record.Id),
+                () => _repository.GetPhotoOptionsById(record.Id),
+                cancellationToken);
 
             return record;
         }

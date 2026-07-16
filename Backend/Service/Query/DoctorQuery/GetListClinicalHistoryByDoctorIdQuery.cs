@@ -7,6 +7,8 @@ namespace Service.Query.DoctorQuery
     {
         internal int Id { get; private set; }
         public DateTime? DateQuery { get; set; }
+        public DateTime? DateInit { get; set; }
+        public DateTime? DateEnd { get; set; }
         public void setId(int id)
         {
             Id = id;

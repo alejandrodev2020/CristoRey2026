@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.Options;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
+using Service.UtilsAggregate;
 
 namespace Service.Command.OptionsAggregate
 {
@@ -53,14 +54,11 @@ namespace Service.Command.OptionsAggregate
             _repository.Update(options);
             await _repository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-            var codeStore = Environment.GetEnvironmentVariable("CodeStore") ?? string.Empty;
-
-            var cacheKey = currentTratament.Id.ToString()
-                           + codeStore
-                           + "_TRATAMENT_"
-                           + currentTratament.Id;
-
-            await _cache.RemoveAsync(cacheKey, cancellationToken);
+            await OptionsPhotoCacheHelper.SetAsync(
+                _cache,
+                OptionsPhotoCacheHelper.TratamentKey(currentTratament.Id),
+                currentTratament.Picture,
+                cancellationToken);
 
             return Unit.Value;
         }

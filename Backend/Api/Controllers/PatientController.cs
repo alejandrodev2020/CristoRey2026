@@ -91,11 +91,13 @@ namespace Api.Controllers
         /// <param name="id">Parametro identificador de la entidad</param>
         /// <param name="command">Modelo de datoa a actualizar</param>
         /// <returns></returns>
+        [HttpPost("clinical-history")]
         [HttpPut("clinical-history")]
         [Authorize]
         public async Task<ActionResult<ResponseGenericCommand<Unit>>> CreateClinicalHistory(CreateClinicalHistoryCommand command)
         {
-            return await _mediator.Send(command);
+            var response = await _mediator.Send(command);
+            return StatusCode(int.TryParse(response.HttpCode, out var statusCode) ? statusCode : StatusCodes.Status500InternalServerError, response);
         }
 
         /// <summary>

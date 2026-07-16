@@ -268,7 +268,7 @@ namespace Domain.Entities.PatientAggregate
         }
 
         public void CreateClinicHistory(int doctorId, DateTime dateQuery, string motive, string diagnostic, 
-                                        string observations, decimal? totalCost, bool? wasPaid)
+                                        string observations, decimal? totalCost, bool? wasPaid, int statusId = 1)
         {
             var record = new ClinicalHistory(
 
@@ -278,7 +278,7 @@ namespace Domain.Entities.PatientAggregate
                 observations: observations,
                 totalCost:totalCost,
                 doctorId: doctorId,
-                statusId: 1,
+                statusId: statusId,
                 wasPaid:wasPaid,
                 isActive:true);
             _clinicalHistorys.Add(record);

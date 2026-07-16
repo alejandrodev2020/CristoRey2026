@@ -154,9 +154,30 @@ namespace Data.Query.Repository
             return values;
         }
 
-        public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id, DateTime? dateQuery)
+        public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id, DateTime? dateQuery, DateTime? dateInit, DateTime? dateEnd)
         {
             const string quote = "\"";
+
+            DateTime dateFrom;
+            DateTime dateTo;
+
+            if (dateInit.HasValue && dateEnd.HasValue)
+            {
+                dateFrom = dateInit.Value.Date;
+                dateTo = dateEnd.Value.Date.AddDays(1);
+            }
+            else if (dateQuery.HasValue)
+            {
+                dateFrom = dateQuery.Value.Date;
+                dateTo = dateFrom.AddDays(1);
+            }
+            else
+            {
+                var today = DateTime.Today;
+                var daysSinceMonday = ((int)today.DayOfWeek + 6) % 7;
+                dateFrom = today.AddDays(-daysSinceMonday);
+                dateTo = dateFrom.AddDays(7);
+            }
 
             var sql = @"SELECT  " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " " + quote + "Id" + quote +
                              ", " + quote + "CH" + quote + "." + quote + "nPatientId" + quote + " " + quote + "PatientId" + quote +
@@ -215,13 +236,9 @@ namespace Data.Query.Repository
                      " ON " + quote + "D" + quote + "." + quote + "nDoctorId" + quote +
                      " = " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote +
 
-                     " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId";
-
-            // 👇 NUEVO FILTRO POR FECHA
-            if (dateQuery.HasValue)
-            {
-                sql += " AND DATE(" + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + ") = @DateQuery";
-            }
+                     " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId" +
+                     " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " >= @DateFrom" +
+                     " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " < @DateTo";
 
             sql += " ORDER BY " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " ASC";
 
@@ -241,7 +258,8 @@ namespace Data.Query.Repository
                     new
                     {
                         DoctorId = id,
-                        DateQuery = dateQuery?.Date
+                        DateFrom = dateFrom,
+                        DateTo = dateTo
                     },
                     commandType: CommandType.Text,
                     splitOn: "Id").ToList();
@@ -259,6 +277,8 @@ namespace Data.Query.Repository
                              " CAST(" + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " AT TIME ZONE 'America/La_Paz' AS time) " + quote + "Hour" + quote +
                       " FROM " + quote + "ClinicalHistory" + quote + " " + quote + "CH" + quote +
                       " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId" +
+                        " AND " + quote + "CH" + quote + "." + quote + "nStatusId" + quote + " IN (1, 2)" +
+                        " AND " + quote + "CH" + quote + "." + quote + "bIsActive" + quote + " = TRUE" +
                         " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " >= @DateFrom" +
                         " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " < @DateTo" +
                       " ORDER BY " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " ASC";

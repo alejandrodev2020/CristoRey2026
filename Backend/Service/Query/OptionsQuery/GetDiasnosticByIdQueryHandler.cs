@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
 using Service.Models.Options;
-using System.Text.Json;
+using Service.UtilsAggregate;
 
 namespace Service.Query.OptionsQuery
 {
@@ -20,7 +20,6 @@ namespace Service.Query.OptionsQuery
 
         public async Task<DiasnosticModel> Handle(GetDiasnosticByIdQuery request, CancellationToken cancellationToken)
         {
-            var codeStore = Environment.GetEnvironmentVariable("CodeStore");
             var record = _repository.GetDiasnosticById(request.Id);
 
             if (record == null)
@@ -29,30 +28,11 @@ namespace Service.Query.OptionsQuery
             if (record.HasPicture != true)
                 return record;
 
-            var currentId = record.Id.ToString() + codeStore + "_DIASNOSTIC_" + record.Id;
-
-            var cacheValue = await _cache.GetStringAsync(currentId, cancellationToken);
-
-            if (!string.IsNullOrEmpty(cacheValue))
-            {
-                record.Picture = JsonSerializer.Deserialize<string>(cacheValue);
-                return record;
-            }
-
-            var pictureByte = _repository.GetPhotoDiasnosticById(request.Id);
-
-            if (pictureByte != null)
-            {
-                var base64 = Convert.ToBase64String(pictureByte);
-
-                await _cache.SetStringAsync(
-                    currentId,
-                    JsonSerializer.Serialize(base64),
-                    cancellationToken
-                );
-
-                record.Picture = base64;
-            }
+            record.Picture = await OptionsPhotoCacheHelper.GetOrCreateAsync(
+                _cache,
+                OptionsPhotoCacheHelper.DiasnosticKey(record.Id),
+                () => _repository.GetPhotoDiasnosticById(record.Id),
+                cancellationToken);
 
             return record;
         }

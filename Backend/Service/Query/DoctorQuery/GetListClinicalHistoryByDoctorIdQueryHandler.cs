@@ -13,7 +13,21 @@ namespace Service.Query.DoctorQuery
 
         public Task<IEnumerable<ClinicalHistoryModel>> Handle(GetListClinicalHistoryByDoctorIdQuery request, CancellationToken cancellationToken)
         {
-            var record = _repository.GetListClinicalHistoryByDoctorId(request.Id,request.DateQuery);
+            if (request.DateInit.HasValue != request.DateEnd.HasValue)
+            {
+                throw new ArgumentException("DateInit y DateEnd deben enviarse juntos.");
+            }
+
+            if (request.DateInit.HasValue && request.DateInit.Value.Date > request.DateEnd!.Value.Date)
+            {
+                throw new ArgumentException("DateInit no puede ser posterior a DateEnd.");
+            }
+
+            var record = _repository.GetListClinicalHistoryByDoctorId(
+                request.Id,
+                request.DateQuery,
+                request.DateInit,
+                request.DateEnd);
 
             foreach (var item in record)
             {
