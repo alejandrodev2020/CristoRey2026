@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Service.Query.DoctorQuery
 {
-    public class GetListClinicalHistoryByDoctorLoggedQueryHandler : IRequestHandler<GetListClinicalHistoryByDoctorLoggedQuery, ResponseGenericModel<IEnumerable<ClinicalHistoryModel>>>
+    public class GetListClinicalHistoryByDoctorLoggedQueryHandler : IRequestHandler<GetListClinicalHistoryByDoctorLoggedQuery, ResponseGenericModel<GetListClinicalHistoryByPatientIdModel>>
     {
         private readonly IDoctorQueryRepository _repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -19,7 +19,7 @@ namespace Service.Query.DoctorQuery
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<ResponseGenericModel<IEnumerable<ClinicalHistoryModel>>> Handle(GetListClinicalHistoryByDoctorLoggedQuery request, CancellationToken cancellationToken)
+        public async Task<ResponseGenericModel<GetListClinicalHistoryByPatientIdModel>> Handle(GetListClinicalHistoryByDoctorLoggedQuery request, CancellationToken cancellationToken)
         {
                 try
                 {
@@ -42,13 +42,19 @@ namespace Service.Query.DoctorQuery
 
                     ValidateDateRange(request.DateInit, request.DateEnd);
 
-                    var record = _repository.GetListClinicalHistoryByDoctorId(
+                    var record = _repository.GetListClinicalHistoryByDoctorIdPaged(
                         doctor.Id,
                         request.DateQuery,
                         request.DateInit,
-                        request.DateEnd);
-                    foreach (var item in record)
+                        request.DateEnd,
+                        request.Limit,
+                        request.Page);
+                    foreach (var item in record.ClinicalHistorys)
                     {
+                        if (item == null)
+                        {
+                            continue;
+                        }
                         if (item.Patient?.File != null && item.Patient.File.Length > 0)
                         {
                             item.Patient.Photo = Convert.ToBase64String(item.Patient.File);
@@ -64,15 +70,15 @@ namespace Service.Query.DoctorQuery
                 }
                 catch (ArgumentException ex)
                 {
-                    return ResponseHelperQuery.BadRequest<IEnumerable<ClinicalHistoryModel>>(ex.Message);
+                    return ResponseHelperQuery.BadRequest<GetListClinicalHistoryByPatientIdModel>(ex.Message);
                 }
                 catch (NotFoundException ex)
                 {
-                    return ResponseHelperQuery.NotFound<IEnumerable<ClinicalHistoryModel>>(ex.Message);
+                    return ResponseHelperQuery.NotFound<GetListClinicalHistoryByPatientIdModel>(ex.Message);
                 }
                 catch (Exception ex)
                 {
-                    return ResponseHelperQuery.ServerError<IEnumerable<ClinicalHistoryModel>>(
+                    return ResponseHelperQuery.ServerError<GetListClinicalHistoryByPatientIdModel>(
                         $"Se produjo un error al obtener los datos. : {ex.Message}"
                     );
                 }

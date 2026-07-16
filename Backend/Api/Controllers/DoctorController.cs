@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR;
 using Service.Command.DoctorAggregate;
 using Service.Command.PatientAggregate;
 using Service.Models.Doctor;
+using Service.Models.BaseModel;
 using Service.Models.Patient;
 using Service.Query.DoctorQuery;
 using Service.Command.UtilsAggregate;
@@ -132,7 +133,7 @@ namespace Api.Controllers
         /// <returns></returns>
         [HttpGet("clinical-history")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ClinicalHistoryModel>>> GetListCLinical([FromQuery] GetListClinicalHistoryByDoctorLoggedQuery model)
+        public async Task<ActionResult<ResponseGenericModel<GetListClinicalHistoryByPatientIdModel>>> GetListCLinical([FromQuery] GetListClinicalHistoryByDoctorLoggedQuery model)
         {
             return Ok(await _mediator.Send(model));
         }

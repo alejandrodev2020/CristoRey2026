@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient} from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
 import { BaseService } from 'app/shared/services/base.service';
 import { AuthStorageService } from 'app/modules/auth/services/authStorage.service';
@@ -16,6 +16,19 @@ export class CalendarService extends BaseService{
 
     getListAppoint(id: number){
      return  this.http.get(`${this.baseUri}api/doctor/${id}/clinical-history`,this.getHttpOptions());
+    }
+
+    getLoggedDoctorAppointments(dateInit: string, dateEnd: string) {
+      const params = new HttpParams()
+        .set('DateInit', dateInit)
+        .set('DateEnd', dateEnd)
+        .set('Limit', '100')
+        .set('Page', '0');
+
+      return this.http.get(
+        `${this.baseUri}api/doctor/clinical-history`,
+        { ...this.getHttpOptions(), params }
+      );
     }
 
     aceptCita(id: number){

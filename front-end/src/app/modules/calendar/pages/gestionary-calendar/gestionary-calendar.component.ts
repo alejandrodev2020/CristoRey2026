@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarEvent } from 'angular-calendar';
 import { CalendarService } from '../../services/calendar.service';
-import { addWeeks, subWeeks } from 'date-fns';
+import { addWeeks, endOfWeek, format, startOfWeek, subWeeks } from 'date-fns';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviewConfirmationComponent } from '../../components/preview-confirmation/preview-confirmation.component';
 
@@ -21,16 +21,24 @@ export class GestionaryCalendarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let user = localStorage.getItem('userLogged');
-    let userJson = JSON.parse(user);
-    this.getListAppoint(userJson?.id);
+    this.getListAppoint();
   }
 
-  getListAppoint(id: number) {
-    this.service.getListAppoint(id).subscribe({
-      next: (resp: any[]) => {
-        this.listAppoint = resp;
-        this.events = this.mapAppointmentsToEvents(resp);  // 👈 Convertimos a eventos
+  getListAppoint() {
+    const dateInit = format(
+      startOfWeek(this.viewDate, { weekStartsOn: 1 }),
+      'yyyy-MM-dd'
+    );
+    const dateEnd = format(
+      endOfWeek(this.viewDate, { weekStartsOn: 1 }),
+      'yyyy-MM-dd'
+    );
+
+    this.service.getLoggedDoctorAppointments(dateInit, dateEnd).subscribe({
+      next: (resp: any) => {
+        const appointments = resp?.data?.clinicalHistorys ?? [];
+        this.listAppoint = appointments;
+        this.events = this.mapAppointmentsToEvents(appointments);
       },
       error: (err) => {
         console.error('Error al obtener citas:', err);
@@ -79,23 +87,38 @@ export class GestionaryCalendarComponent implements OnInit {
   }
 
   buildTitle(app: any): string {
-    const doctor = app.doctor
-      ? `${app.doctor.firstName} ${app.doctor.lastName}`
-      : 'Sin doctor';
+    const patient = app.patient
+      ? `${app.patient.firstName} ${app.patient.lastName}`
+      : 'Paciente no identificado';
 
     const motive = app.motive && app.motive.trim() !== ''
       ? app.motive
       : 'Consulta general';
 
-    return `${doctor} - ${motive}`;
+    return `${patient} - ${motive} - ${this.getStatusLabel(app.statusId)}`;
+  }
+
+  getStatusLabel(statusId: number): string {
+    switch (statusId) {
+      case 1:
+        return 'Pendiente';
+      case 2:
+        return 'Aceptada';
+      case 3:
+        return 'Cancelada';
+      default:
+        return 'Estado desconocido';
+    }
   }
 
   previousWeek() {
     this.viewDate = subWeeks(this.viewDate, 1);
+    this.getListAppoint();
   }
 
   nextWeek() {
     this.viewDate = addWeeks(this.viewDate, 1);
+    this.getListAppoint();
   }
 
   onEventClicked(event: CalendarEvent): void {
@@ -110,7 +133,7 @@ export class GestionaryCalendarComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.ngOnInit();
+      this.getListAppoint();
     });
 
     if (citaCompleta) {

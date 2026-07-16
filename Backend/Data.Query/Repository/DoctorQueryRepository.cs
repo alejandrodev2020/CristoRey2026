@@ -156,27 +156,52 @@ namespace Data.Query.Repository
 
         public IEnumerable<ClinicalHistoryModel> GetListClinicalHistoryByDoctorId(int id, DateTime? dateQuery, DateTime? dateInit, DateTime? dateEnd)
         {
-            const string quote = "\"";
-
-            DateTime dateFrom;
-            DateTime dateTo;
-
-            if (dateInit.HasValue && dateEnd.HasValue)
-            {
-                dateFrom = dateInit.Value.Date;
-                dateTo = dateEnd.Value.Date.AddDays(1);
-            }
-            else if (dateQuery.HasValue)
-            {
-                dateFrom = dateQuery.Value.Date;
-                dateTo = dateFrom.AddDays(1);
-            }
-            else
+            if (!dateQuery.HasValue && !dateInit.HasValue && !dateEnd.HasValue)
             {
                 var today = DateTime.Today;
                 var daysSinceMonday = ((int)today.DayOfWeek + 6) % 7;
-                dateFrom = today.AddDays(-daysSinceMonday);
-                dateTo = dateFrom.AddDays(7);
+                dateInit = today.AddDays(-daysSinceMonday);
+                dateEnd = dateInit.Value.AddDays(6);
+            }
+
+            var result = GetListClinicalHistoryByDoctorIdPaged(
+                id,
+                dateQuery,
+                dateInit,
+                dateEnd,
+                int.MaxValue,
+                0);
+
+            return result.ClinicalHistorys
+                .Where(item => item != null)
+                .Select(item => item!);
+        }
+
+        public GetListClinicalHistoryByPatientIdModel GetListClinicalHistoryByDoctorIdPaged(int id, DateTime? dateQuery, DateTime? dateInit, DateTime? dateEnd, int limit, int page)
+        {
+            const string quote = "\"";
+
+            if (limit <= 0) limit = 10;
+            if (page < 0) page = 0;
+
+            var offset = page * limit;
+            DateTime? dateFrom = null;
+            DateTime? dateTo = null;
+            var boliviaTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/La_Paz");
+
+            if (dateInit.HasValue && dateEnd.HasValue)
+            {
+                var localDateFrom = DateTime.SpecifyKind(dateInit.Value.Date, DateTimeKind.Unspecified);
+                var localDateTo = DateTime.SpecifyKind(dateEnd.Value.Date.AddDays(1), DateTimeKind.Unspecified);
+                dateFrom = TimeZoneInfo.ConvertTimeToUtc(localDateFrom, boliviaTimeZone);
+                dateTo = TimeZoneInfo.ConvertTimeToUtc(localDateTo, boliviaTimeZone);
+            }
+            else if (dateQuery.HasValue)
+            {
+                var localDateFrom = DateTime.SpecifyKind(dateQuery.Value.Date, DateTimeKind.Unspecified);
+                var localDateTo = DateTime.SpecifyKind(dateQuery.Value.Date.AddDays(1), DateTimeKind.Unspecified);
+                dateFrom = TimeZoneInfo.ConvertTimeToUtc(localDateFrom, boliviaTimeZone);
+                dateTo = TimeZoneInfo.ConvertTimeToUtc(localDateTo, boliviaTimeZone);
             }
 
             var sql = @"SELECT  " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " " + quote + "Id" + quote +
@@ -236,14 +261,35 @@ namespace Data.Query.Repository
                      " ON " + quote + "D" + quote + "." + quote + "nDoctorId" + quote +
                      " = " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote +
 
-                     " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId" +
-                     " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " >= @DateFrom" +
-                     " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " < @DateTo";
+                     " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId";
 
-            sql += " ORDER BY " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " ASC";
+            var countSql = "SELECT COUNT(*) FROM " + quote + "ClinicalHistory" + quote + " " + quote + "CH" + quote +
+                           " WHERE " + quote + "CH" + quote + "." + quote + "nDoctorId" + quote + " = @DoctorId";
+
+            if (dateFrom.HasValue && dateTo.HasValue)
+            {
+                var dateFilter = " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " >= @DateFrom" +
+                                 " AND " + quote + "CH" + quote + "." + quote + "dDateQuery" + quote + " < @DateTo";
+                sql += dateFilter;
+                countSql += dateFilter;
+            }
+
+            sql += " ORDER BY " + quote + "CH" + quote + "." + quote + "nClinicalHistoryId" + quote + " DESC" +
+                   " LIMIT @Limit OFFSET @Offset";
 
             var values = ExecutionContext(connection =>
             {
+                var parameters = new
+                {
+                    DoctorId = id,
+                    DateFrom = dateFrom,
+                    DateTo = dateTo,
+                    Limit = limit,
+                    Offset = offset
+                };
+
+                var total = connection.QuerySingle<int>(countSql, parameters, commandType: CommandType.Text);
+
                 var returnVale = connection.Query<ClinicalHistoryModel,
                                                   PatientModel,
                                                   DoctorModel,
@@ -255,16 +301,17 @@ namespace Data.Query.Repository
                         clinicalHistory.Doctor = doctor;
                         return clinicalHistory;
                     },
-                    new
-                    {
-                        DoctorId = id,
-                        DateFrom = dateFrom,
-                        DateTo = dateTo
-                    },
+                    parameters,
                     commandType: CommandType.Text,
                     splitOn: "Id").ToList();
 
-                return returnVale;
+                return new GetListClinicalHistoryByPatientIdModel
+                {
+                    Limit = limit,
+                    Page = page,
+                    Total = total,
+                    ClinicalHistorys = returnVale
+                };
             });
 
             return values;
