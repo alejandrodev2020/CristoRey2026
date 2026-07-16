@@ -39,6 +39,18 @@ namespace Api.Controllers
         }
 
         /// <summary>
+        /// Registra un paciente asociado al doctor autenticado.
+        /// </summary>
+        /// <param name="command">Datos del paciente a registrar</param>
+        /// <returns></returns>
+        [HttpPost("patient")]
+        [Authorize]
+        public async Task<ActionResult<PatientModel>> CreatePatient(CreatePatientByDoctorCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        /// <summary>
         /// Retorna ul listado de la entidad.
         /// </summary>
         /// <returns></returns>

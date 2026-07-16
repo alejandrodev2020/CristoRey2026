@@ -25,6 +25,10 @@ export class PatientService extends BaseService {
       return this.http.post(`${this.baseUri}api/patient`, data, this.getHttpOptions());
     }
   }
+
+  storeByDoctor(data: any) {
+    return this.http.post(`${this.baseUri}api/doctor/patient`, data, this.getHttpOptions());
+  }
   getById(id: number) {
     return this.http.get<any>(`${this.baseUri}api/patient/${id}`, this.getHttpOptions());
   }

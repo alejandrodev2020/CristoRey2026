@@ -307,8 +307,22 @@ onMarkerDragEnd(event: google.maps.MapMouseEvent): void {
       }
       data.id = this.id;
       this.isSaving = true;
-      data.doctorId = (this.userLogged)? this.userLogged.id : null;
-      this.service.store(data).subscribe((resp) => {
+      const roleString = localStorage.getItem('role');
+      const role = roleString ? JSON.parse(roleString) : null;
+      const isDoctorCreate = this.isCreate && role?.id === 2;
+
+      if (isDoctorCreate) {
+        delete data.doctorId;
+      }
+      else {
+        data.doctorId = (this.userLogged) ? this.userLogged.id : null;
+      }
+
+      const request = isDoctorCreate
+        ? this.service.storeByDoctor(data)
+        : this.service.store(data);
+
+      request.subscribe((resp) => {
         Swal.fire({
           position: 'top-end',
           icon: 'success',
