@@ -106,7 +106,7 @@ export class PatientGestionaryComponent implements AfterViewInit, OnInit {
 
   overView(data: Client) {
     const dialogRef = this.dialog.open(OverviewClientComponent, {
-      data: { id: data.id },
+      data: { id: data.id, source: 'patient' },
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -21,6 +21,7 @@ namespace Service.UtilsAggregate
                 var cachedPicture = await cache.GetStringAsync(key, cancellationToken);
                 if (!string.IsNullOrWhiteSpace(cachedPicture))
                 {
+                    Console.WriteLine($"ESTOY TRAYENDO LA FOTO DE REDIS. Key={key}");
                     return cachedPicture;
                 }
             }
@@ -29,6 +30,7 @@ namespace Service.UtilsAggregate
                 Console.WriteLine($"[CACHE][READ][ERROR] Key={key}. {ex.Message}");
             }
 
+            Console.WriteLine($"ESTOY TRAYENDO LA FOTO DE BASE DE DATOS. Key={key}");
             var picture = getPicture();
             if (picture == null || picture.Length == 0)
             {

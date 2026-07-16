@@ -12,7 +12,7 @@
           [withFull]="false" [disabled]="false" (buttonClick)="createNew()">
         </btn-generic>
       </div>
-    </div> 
+    </div>
     <div>
         <form [formGroup]="form"
               class="w-full">
@@ -36,6 +36,10 @@
             </mat-form-field>
         </form>
     </div>
+    <mat-paginator [length]="totalLength" [pageIndex]="page" [pageSize]="limit"
+      [pageSizeOptions]="[5]" showFirstLastButtons
+      (page)="pageEvent($event)">
+    </mat-paginator>
     <!-- ------------------------------table------------------------------------------------------- -->
     <div class="mat-elevation-z0 table-responsive mt-8">
       <div class="overflow-x-auto">

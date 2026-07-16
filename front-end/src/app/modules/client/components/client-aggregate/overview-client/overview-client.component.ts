@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Client } from 'app/modules/client/models/client';
 import { ClientService } from 'app/modules/client/services/client.service';
 import { image } from 'app/modules/product/models/image-default.const';
+import { PatientService } from 'app/modules/patient/services/patient.service';
 
 @Component({
   selector: 'app-overview-client',
@@ -15,21 +16,22 @@ export class OverviewClientComponent implements OnInit {
 
 
   id:number;
+  isPatient: boolean;
   myProvider : Client;
   imageSource = this.sanitizer.bypassSecurityTrustResourceUrl(image);
   constructor(  private dialogRef: MatDialogRef<any>,
                 private sanitizer: DomSanitizer,
                 private service: ClientService,
+                private patientService: PatientService,
                 @Inject(MAT_DIALOG_DATA) data) 
   {
     this.id = data.id;
-    if(this.id>0)
-    {
-      this.readData();
-    }
+    this.isPatient = data.source === 'patient';
   }
   ngOnInit(): void {
-    this.readData();
+    if (this.id > 0) {
+      this.readData();
+    }
   }
 
   close(){
@@ -42,7 +44,11 @@ export class OverviewClientComponent implements OnInit {
 
 
   readData(){
-      this.service.getById(this.id).subscribe((ele: Client)=>{
+      const request = this.isPatient
+        ? this.patientService.getById(this.id)
+        : this.service.getById(this.id);
+
+      request.subscribe((ele: Client)=>{
           this.myProvider = ele;
           if(ele.photo!== null){
             let path = 'data:image/png;base64,'+ele.photo;

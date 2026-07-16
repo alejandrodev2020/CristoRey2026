@@ -31,6 +31,25 @@ export class CalendarService extends BaseService{
       );
     }
 
+    getLoggedDoctorAppointmentsPaged(limit: number, page: number) {
+      const params = new HttpParams()
+        .set('Limit', limit.toString())
+        .set('Page', page.toString());
+
+      return this.http.get(
+        `${this.baseUri}api/doctor/clinical-history`,
+        { ...this.getHttpOptions(), params }
+      );
+    }
+
+    createDoctorAppointment(data: any) {
+      return this.http.post(
+        `${this.baseUri}api/doctor/clinical-history`,
+        data,
+        this.getHttpOptions()
+      );
+    }
+
     aceptCita(id: number){
      return  this.http.put(`${this.baseUri}api/doctor/clinical-history/${id}/acept`,{},this.getHttpOptions());
     }

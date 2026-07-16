@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { OverviewWarehouseComponent } from 'app/modules/warehouse/components/warehouse-aggregate/overview-warehouse/overview-warehouse.component';
@@ -33,6 +33,9 @@ export class OptionsGestionaryComponent implements AfterViewInit {
   searchValue: string = '';
   private recognition: SpeechRecognition | null = null;
   @ViewChild(MatPaginator) paginator: MatPaginator
+  limit = 5;
+  page = 0;
+  totalLength = 0;
 
   constructor(private service: OptionsService,
     private router: Router,
@@ -99,9 +102,7 @@ export class OptionsGestionaryComponent implements AfterViewInit {
     this.dataSource.filter = searchValue.trim().toLowerCase(); // Aplicar el filtro
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  ngAfterViewInit() { }
 
   listWarehouse: any[] = [];
   columns: any[] = [];
@@ -133,23 +134,7 @@ export class OptionsGestionaryComponent implements AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.service.getListOptions().subscribe((ele: any) => {
-      this.productList = ele.map((item: any) => {
-        item.photo = item.picture
-          ? `data:image/png;base64,${item.picture}`
-          : "https://img.freepik.com/psd-gratis/3d-ilustracion-persona-gafas-sol_23-2149436188.jpg?size=338&ext=jpg&ga=GA1.1.1788068356.1716681600&semt=ais_user";
-        return item;
-      });
-
-      this.dataSource = new MatTableDataSource(this.productList);
-
-      this.dataSource.filterPredicate = (data: any, filter: string) => {
-        this.searchValue = filter;
-        const nameMatch = data.name.toLowerCase().includes(filter);
-        const categoryMatch = data.category.name.toLowerCase().includes(filter);
-        return nameMatch || categoryMatch;
-      };
-    });
+    this.loadOptions();
 
     this.columns = [
       {
@@ -175,6 +160,43 @@ export class OptionsGestionaryComponent implements AfterViewInit {
       'Editar',
       'Eliminar'
     ];
+  }
+
+  loadOptions(): void {
+    this.service.getListOptions(this.limit, this.page).subscribe((ele: any) => {
+      const options = ele ?? [];
+
+      if (options.length === 0 && this.page > 0) {
+        this.page--;
+        this.loadOptions();
+        return;
+      }
+
+      this.productList = options.map((item: any) => {
+        item.photo = item.picture
+          ? `data:image/png;base64,${item.picture}`
+          : "https://img.freepik.com/psd-gratis/3d-ilustracion-persona-gafas-sol_23-2149436188.jpg?size=338&ext=jpg&ga=GA1.1.1788068356.1716681600&semt=ais_user";
+        return item;
+      });
+
+      this.dataSource = new MatTableDataSource(this.productList);
+
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        this.searchValue = filter;
+        const titleMatch = (data.title ?? '').toLowerCase().includes(filter);
+        const descriptionMatch = (data.description ?? '').toLowerCase().includes(filter);
+        return titleMatch || descriptionMatch;
+      };
+
+      this.totalLength = (this.page * this.limit) + options.length +
+        (options.length === this.limit ? 1 : 0);
+    });
+  }
+
+  pageEvent(event: PageEvent): void {
+    this.limit = event.pageSize;
+    this.page = event.pageIndex;
+    this.loadOptions();
   }
 
   equivalence(data: any) {
@@ -231,7 +253,7 @@ export class OptionsGestionaryComponent implements AfterViewInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.service.lowById(data?.id).subscribe((resp => {
-          this.ngOnInit();
+          this.loadOptions();
           Swal.fire(
             'Baja Exitosa!',
             'Su Almacen se dio de baja exitosamente.',
